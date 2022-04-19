@@ -1,0 +1,4 @@
+pyttsx3
+pydub
+moviepy
+imageio-ffmpeg
