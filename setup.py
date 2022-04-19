@@ -12,6 +12,7 @@ setuptools.setup(
     author_email='nikdissv.forever@protonmail.com',
     project_urls={
         'Download Voices': 'https://rhvoice.su/voices/',
+        'GitHub': 'https://github.com/NIKDISSV-Forever/FastDub'
     },
     packages=setuptools.find_packages(),
     python_requires='>=3.8',
