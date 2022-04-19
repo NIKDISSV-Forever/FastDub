@@ -13,7 +13,7 @@ setuptools.setup(
     project_urls={
         'Download Voices': 'https://rhvoice.su/voices/',
     },
-    packages=['FustDub'],
+    packages=setuptools.find_packages(),
     python_requires='>=3.8',
     classifiers=[
         'License :: OSI Approved :: MIT License',
