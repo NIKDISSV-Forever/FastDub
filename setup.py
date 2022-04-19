@@ -10,6 +10,7 @@ setuptools.setup(
     description="A Python package (+CLI) for voice over subtitles, with the ability to embed in video, audio ducking, "
                 "and dynamic voice changer for a single track.",
     long_description=readme,
+    long_description_content_type="text/markdown",
     version="2.0.1",
     author="Nikita (NIKDISSV)",
     install_requires=requires,
