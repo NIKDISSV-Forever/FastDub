@@ -2,10 +2,14 @@ import setuptools
 
 with open('requires.txt', encoding='utf-8') as f:
     requires = f.read().splitlines()
+with open('README.md', encoding='utf-8') as f:
+    readme = f.read()
+
 setuptools.setup(
     name="PyFastDub",
     description="A Python package (+CLI) for voice over subtitles, with the ability to embed in video, audio ducking, "
                 "and dynamic voice changer for a single track.",
+    long_description=readme,
     version="2.0.0",
     author="Nikita (NIKDISSV)",
     install_requires=requires,
