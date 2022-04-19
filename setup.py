@@ -14,9 +14,11 @@ setuptools.setup(
         'Download Voices': 'https://rhvoice.su/voices/',
     },
     packages=['FustDub'],
+    python_requires='>=3.8',
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.10',
         'Typing :: Typed',
     ]
 )
