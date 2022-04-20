@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os.path
 from array import array
 from copy import copy
@@ -71,7 +73,7 @@ def fit(audio: AudioSegment, left_border: float, need_duration: float, right_bor
         audio = speed_change(audio, audio_duration / free)
         audio_duration = audio.duration_ms
     silent_len = ((free - audio_duration) / align) if (
-                audio_duration > (need_duration + right_border)) else left_border
+            audio_duration > (need_duration + right_border)) else left_border
     return AudioSegment.silent(silent_len) + audio
 
 

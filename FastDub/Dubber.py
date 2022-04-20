@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os.path
 from contextlib import closing
 from typing import Container

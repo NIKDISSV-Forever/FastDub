@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from subprocess import check_output
 
 from imageio_ffmpeg import get_ffmpeg_exe

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime
 import json
 import os.path
@@ -64,7 +66,8 @@ def parse(text_or_file: str, skip_empty: bool = False) -> tuple[Line] | tuple:
     subtitles = ()
     for i in LINE_REGEX.split(f'\n\n{text.lstrip()}')[1:]:
         times_text: list[str, str] = i.split('\n', 1)
-        if not (text := times_text[1].strip()):
+        text = times_text[1].strip()
+        if not text:
             continue
         subtitles += Line(tuple(datetime.time(k.hour, k.minute, k.second, k.microsecond) for k in
                                 [datetime.datetime.strptime(j, '%H:%M:%S,%f') for j in
