@@ -6,7 +6,7 @@ Package for voice over subtitles:
   all
   subsequent ones)_
 
-> pip install [PyFastDub](https://pypi.org/project/PyFastDub/)
+> pip install -U [PyFastDub](https://pypi.org/project/PyFastDub/)
 
 > python -m FastDub --help
 
