@@ -6,7 +6,8 @@ from FastDub.FFMpeg import FFMpegWrapper
 
 
 def main():
-    arg_parser = argparse.ArgumentParser('FastDub', description="FastDub is a tool for dubbing videos by subtitle files.",
+    arg_parser = argparse.ArgumentParser('FastDub',
+                                         description="FastDub is a tool for dubbing videos by subtitle files.",
                                          formatter_class=argparse.RawTextHelpFormatter)
 
     input_group = arg_parser.add_argument_group("Input")
@@ -20,12 +21,13 @@ def main():
                                      help="Exclude files starts with underscore")
 
     ducking_group = arg_parser.add_argument_group("Audio Ducking")
-    ducking_group.add_argument("--ducking", action=argparse.BooleanOptionalAction, default=True,
+    ducking_group.add_argument('-dk', "--ducking", action=argparse.BooleanOptionalAction, default=True,
                                help="Enable audio ducking")
-    ducking_group.add_argument("--min-silence-len", default=100, type=int,
+    ducking_group.add_argument('-dk-msl', "--min-silence-len", default=100, type=int,
                                help="Minimum silence length in ms (default 100)")
-    ducking_group.add_argument("--silence-thresh", default=-inf, type=float, help="Silence threshold in dB")
-    ducking_group.add_argument("--gain-during-overlay", default=-10, type=int, help="Gain during overlay in dB")
+    ducking_group.add_argument('-dk-st', "--silence-thresh", default=-inf, type=float, help="Silence threshold in dB")
+    ducking_group.add_argument('-dk-gdo', "--gain-during-overlay", default=-10, type=int,
+                               help="Gain during overlay in dB")
 
     voicer_group = arg_parser.add_argument_group("Voicer")
     voicer_group.add_argument("-v", "--voice", choices=Voicer.VOICES_NAMES.keys(), help="Voice")
