@@ -49,7 +49,7 @@ def main():
 
     args = arg_parser.parse_args()
 
-    if args.clean:
+    if args.remove_cache:
         Voicer.Voicer().cleanup()
 
     FFMpegWrapper.DEFAULT_FFMPEG_LOG_LEVEL = args.loglevel
