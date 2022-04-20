@@ -2,7 +2,8 @@ Package for voice over subtitles:
 
 * with the ability to embed in video,
 * audio ducking,
-* dynamic voice changer for a single track. _Add **"!: voice name"** at the beginning of the subtitle line. (Applies to all
+* dynamic voice changer for a single track. _Add **"!: voice name"** at the beginning of the subtitle line. (Applies to
+  all
   subsequent ones)_
 
 > pip install [PyFastDub](https://pypi.org/project/PyFastDub/)
@@ -12,6 +13,18 @@ Package for voice over subtitles:
 # CLI
 
 ```
+usage: FastDub [-h] -i INPUT [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT] [-En EXCLUDE [EXCLUDE ...]] [-Eu EXCLUDE_UNDERSCORE]
+               [--ducking | --no-ducking] [--min-silence-len MIN_SILENCE_LEN] [--silence-thresh SILENCE_THRESH]
+               [--gain-during-overlay GAIN_DURING_OVERLAY]
+               [-v {...}]
+               [-a ALIGN] [-ll LOGLEVEL] [-y] [-rf CLEANUP_LEVEL] [-rc]
+
+FastDub is a tool for dubbing videos by subtitle files.
+
+options:
+  -h, --help            show this help message and exit
+  -rc, --remove-cache   Remove all cache files
+
 Input:
   -i INPUT, --input INPUT
                         Input file or directory.
@@ -31,12 +44,13 @@ Audio Ducking:
                         Gain during overlay in dB
 
 Voicer:
-  -v {...}, 
---voice {...}
+  -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),yuriy}, 
+--voice {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),yuriy
+}
                         Voice
   -a ALIGN, --align ALIGN
                         Audio fit align
-                                1 = right (default)
+                                1 = right
                                 2 = center
 
 Output:
@@ -48,11 +62,14 @@ Output:
                                 > 0 remove audio from video (default)
                                 > 1 = remove dubbed audio if video exists)
                                 > 2 = reomve dubbed cache files
+
 ```
+
+**If the voice set after !: is not selected during voiceover, clear the cache with the -rc argument**
 
 ## Example
 
-> python -m FastDub -i "DirToDub" -v "[Yuriy](https://rhvoice.su/downloads/?voice=yuriy&type=sapi)" --ducking
+> python -m FastDub -i "DirToDub" -v "[Yuriy](https://rhvoice.su/downloads/?voice=yuriy&type=sapi)" --no-ducking
 > --min-silence-len 200
 
 name = "Any name"

@@ -70,7 +70,8 @@ def fit(audio: AudioSegment, left_border: float, need_duration: float, right_bor
     if audio_duration > free:
         audio = speed_change(audio, audio_duration / free)
         audio_duration = audio.duration_ms
-    silent_len = ((free - audio_duration) / align) if (audio_duration > (need_duration + right_border)) else left_border
+    silent_len = ((free - audio_duration) / align) if (
+                audio_duration > (need_duration + right_border)) else left_border
     return AudioSegment.silent(silent_len) + audio
 
 
@@ -78,7 +79,6 @@ def duck(sound1: AudioSegment, sound2: AudioSegment,
          min_silence_len: int = 100, silence_thresh: float = -inf,
          gain_during_overlay: int = -10
          ) -> AudioSegment:
-    print(f'\n{min_silence_len} {silence_thresh} {gain_during_overlay}')
     for start, end in tqdm(
             pydub.silence.detect_nonsilent(sound2, min_silence_len=min_silence_len, silence_thresh=silence_thresh),
             desc="Ducking", colour='white'):

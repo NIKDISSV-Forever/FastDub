@@ -2,13 +2,14 @@ import os.path
 from contextlib import closing
 from typing import Container
 
-from moviepy.audio.io.AudioFileClip import AudioFileClip
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from tqdm import tqdm
 
 from FastDub import SrtSubtitles, Voicer, Audio
 
 __all__ = ('Dubber',)
+
+from FastDub.FFMpeg import FFMpegWrapper
 
 
 class Dubber:
@@ -67,12 +68,13 @@ class Dubber:
                  if pos == end_element_pos else
                  (subtitles[pos + 1].ms.start - current_line.ms.end)
                  ), self.fit_align)
-        audio = Audio.AudioSegment.silent(subtitles[0].ms.start) + audio
         max_duration = subtitles[-1].ms.end
         if (audio_duration := audio.duration_ms) > max_duration:
             change_speed = audio_duration / max_duration
             print(f'Changing audio speed to {round(change_speed, 3)}')
             audio = Audio.speed_change(audio, change_speed)
+        elif audio_duration != max_duration:
+            audio = Audio.AudioSegment.silent(max_duration - audio_duration) + audio
         result_dir = os.path.join(os.path.dirname(target_srt), f'_{fn}_result')
         if not os.path.isdir(result_dir):
             os.mkdir(result_dir)
@@ -87,9 +89,7 @@ class Dubber:
                 if self.DUCKING_ARGS:
                     Audio.duck(Audio.AudioSegment.from_file(target_out_audio), audio, *self.DUCKING_ARGS
                                ).export(result_out_audio)
-
-                video_clip.audio = AudioFileClip(result_out_audio)
-                video_clip.write_videofile(result_out_video, codec='mpeg4')
+            FFMpegWrapper.replace_audio_in_video(target_mp4, result_out_audio, result_out_video)
             if clean_up > 0:
                 os.remove(target_out_audio)
                 if clean_up > 1:

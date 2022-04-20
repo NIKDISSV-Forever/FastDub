@@ -6,7 +6,7 @@ from FastDub.FFMpeg import FFMpegWrapper
 
 
 def main():
-    arg_parser = argparse.ArgumentParser(description="FastDub is a tool for dubbing videos by subtitle files.",
+    arg_parser = argparse.ArgumentParser('FastDub', description="FastDub is a tool for dubbing videos by subtitle files.",
                                          formatter_class=argparse.RawTextHelpFormatter)
 
     input_group = arg_parser.add_argument_group("Input")
@@ -29,9 +29,9 @@ def main():
 
     voicer_group = arg_parser.add_argument_group("Voicer")
     voicer_group.add_argument("-v", "--voice", choices=Voicer.VOICES_NAMES.keys(), help="Voice")
-    voicer_group.add_argument("-a", "--align", default=1., type=float,
+    voicer_group.add_argument("-a", "--align", default=2., type=float,
                               help="Audio fit align\n"
-                                   "\t1 = right (default)\n"
+                                   "\t1 = right\n"
                                    "\t2 = center")
 
     output_group = arg_parser.add_argument_group("Output")
@@ -43,7 +43,12 @@ def main():
                                    "\t> 1 = remove dubbed audio if video exists)\n"
                                    "\t> 2 = reomve dubbed cache files")
 
+    arg_parser.add_argument('-rc', '--remove-cache', action='store_true', help="Remove all cache files")
+
     args = arg_parser.parse_args()
+
+    if args.clean:
+        Voicer.Voicer().cleanup()
 
     FFMpegWrapper.DEFAULT_FFMPEG_LOG_LEVEL = args.loglevel
     if args.yes:

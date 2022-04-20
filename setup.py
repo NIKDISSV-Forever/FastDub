@@ -11,7 +11,7 @@ setuptools.setup(
                 "and dynamic voice changer for a single track.",
     long_description=readme,
     long_description_content_type="text/markdown",
-    version="2.0.1",
+    version="2.0.2",
     author="Nikita (NIKDISSV)",
     install_requires=requires,
     author_email='nikdissv.forever@protonmail.com',
@@ -20,11 +20,12 @@ setuptools.setup(
         'GitHub': 'https://github.com/NIKDISSV-Forever/FastDub'
     },
     packages=setuptools.find_packages(),
-    python_requires='>=3.8',
+    python_requires='>=3.8<3.11',
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.10',
         'Typing :: Typed',
+        'Development Status :: 4 - Beta',
     ]
 )
