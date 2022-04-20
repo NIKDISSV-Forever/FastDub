@@ -34,13 +34,13 @@ Input:
                         Subtitles format (default .srt).
 
 Audio Ducking:
-  --ducking, --no-ducking
+  -dk, --ducking, --no-ducking
                         Enable audio ducking (default: True)
-  --min-silence-len MIN_SILENCE_LEN
+  -dk-msl MIN_SILENCE_LEN, --min-silence-len MIN_SILENCE_LEN
                         Minimum silence length in ms (default 100)
-  --silence-thresh SILENCE_THRESH
+  -dk-st SILENCE_THRESH, --silence-thresh SILENCE_THRESH
                         Silence threshold in dB
-  --gain-during-overlay GAIN_DURING_OVERLAY
+  -dk-gdo GAIN_DURING_OVERLAY, --gain-during-overlay GAIN_DURING_OVERLAY
                         Gain during overlay in dB
 
 Voicer:
