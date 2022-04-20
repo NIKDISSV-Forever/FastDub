@@ -11,7 +11,7 @@ setuptools.setup(
                 "and dynamic voice changer for a single track.",
     long_description=readme,
     long_description_content_type="text/markdown",
-    version="2.0.2",
+    version="2.0.3",
     author="Nikita (NIKDISSV)",
     install_requires=requires,
     author_email='nikdissv.forever@protonmail.com',
