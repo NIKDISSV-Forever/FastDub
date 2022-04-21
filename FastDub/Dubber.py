@@ -50,33 +50,56 @@ class Dubber:
 
     def dub_one(self, fn: str, target_mp4: str, target_srt: str, clean_up: int = 1):
         subtitles = SrtSubtitles.parse(target_srt)
-        end_element_pos = len(subtitles) - 1
 
         if target_mp4:
             video_clip: VideoFileClip
             with closing(VideoFileClip(target_mp4, audio=False)) as video_clip:
                 default_right_border = video_clip.end * 1000. - subtitles[-1].ms.end
-        audio = Audio.AudioSegment.empty()
 
-        current_line: SrtSubtitles.Line
-        _pb = tqdm(enumerate(subtitles), total=end_element_pos + 1, unit='line',
-                   dynamic_ncols=True, colour='white')
-        for pos, current_line in _pb:
-            _pb.desc = f'{fn} - {current_line.ms}'
-            audio += Audio.fit(
-                self.VOISER.voice(current_line.text), current_line.ms.start - audio.duration_ms,
-                current_line.ms.duration,
+        tqdm_total = len(subtitles)
+
+        tts_list = [self.VOISER.voice(line.text) for line in
+                    tqdm(subtitles, desc='TTSing', total=tqdm_total, unit='line',
+                         dynamic_ncols=True, colour='white')]
+
+        end_element_pos = tqdm_total - 1
+
+        fits = []
+        total_dubbed = 0
+        for pos, tts, line in tqdm(
+                [(i, tts, subtitles[i]) for i, tts in enumerate(tts_list)],
+                desc='Fitting Audio',
+                total=tqdm_total, unit='line',
+                dynamic_ncols=True, colour='white'):
+            one_fit = Audio.fit(
+                tts,
+                line.ms.start - total_dubbed,
+                line.ms.duration,
                 (default_right_border
                  if pos == end_element_pos else
-                 (subtitles[pos + 1].ms.start - current_line.ms.end)
+                 (subtitles[
+                      pos + 1].ms.start - line.ms.end)
                  ), self.fit_align)
+            total_dubbed += one_fit.duration_ms
+            fits.append(one_fit)
+
+        audio = Audio.AudioSegment.empty()
+        for fit in tqdm(fits, desc='Bonding Audio', total=tqdm_total, unit='segment',
+                        dynamic_ncols=True, colour='white'):
+            audio += fit
+
         max_duration = subtitles[-1].ms.end
-        if (audio_duration := audio.duration_ms) > max_duration:
+        audio_duration = audio.duration_ms
+
+        if audio_duration > max_duration:
             change_speed = audio_duration / max_duration
             print(f'Changing audio speed to {round(change_speed, 3)}')
             audio = Audio.speed_change(audio, change_speed)
         elif audio_duration != max_duration:
-            audio = Audio.AudioSegment.silent(max_duration - audio_duration) + audio
+            audio = Audio.AudioSegment.silent(
+                min((max_duration - audio_duration, subtitles[0].ms.start))
+            ) + audio
+
         result_dir = os.path.join(os.path.dirname(target_srt), f'_{fn}_result')
         if not os.path.isdir(result_dir):
             os.mkdir(result_dir)
@@ -89,8 +112,7 @@ class Dubber:
             with closing(VideoFileClip(target_mp4)) as video_clip:
                 video_clip.audio.write_audiofile(target_out_audio)
                 if self.DUCKING_ARGS:
-                    Audio.duck(Audio.AudioSegment.from_file(target_out_audio), audio, *self.DUCKING_ARGS
-                               ).export(result_out_audio)
+                    Audio.side_chain(Audio.AudioSegment.from_file(target_out_audio), audio).export(result_out_audio)
             FFMpegWrapper.replace_audio_in_video(target_mp4, result_out_audio, result_out_video)
             if clean_up > 0:
                 os.remove(target_out_audio)

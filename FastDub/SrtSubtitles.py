@@ -85,12 +85,12 @@ def from_json(json_: dict[str, dict[str, str]]) -> str:
     return srt_s.lstrip('\n')
 
 
-def download_srt(video_id: str, lang: str):
+def download_srt(video_id: str, lang: str, fp: str):
     import download_youtube_subtitle.main
     with TemporaryDirectory() as tmp_dir:
         target_json = os.path.join(tmp_dir, 'target.json')
         download_youtube_subtitle.main.main(video_id, lang, output_file=target_json, to_json=True)
         with open(target_json, encoding='UTF-8') as f:
             _json: dict[str, dict] = json.load(f)
-    with open('target.srt', 'w', encoding='UTF-8') as srt_f:
+    with open(fp, 'w', encoding='UTF-8') as srt_f:
         srt_f.write(from_json(_json))

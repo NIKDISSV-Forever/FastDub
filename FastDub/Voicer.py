@@ -7,6 +7,7 @@ from FastDub.Audio import AudioSegment
 
 
 class UnknownVoice(Exception):
+    __slots__ = ()
     pass
 
 
@@ -42,14 +43,14 @@ class Voicer:
         text = text.strip()
         if not text:
             return AudioSegment.silent(0)
+
         if change_voice and (lines := text.splitlines())[0].startswith('!:'):
             self.set_voice(lines[0][2:])
             text = '\n'.join(lines[1:])
-        # noinspection PyTypeChecker
-        cache_file = os.path.join(self.cache_dir, hashlib.md5(
-            (text + ' V ' + self.engine.getProperty('voice')).encode('UTF-8')).hexdigest() + '.wav')
-        if os.path.isfile(cache_file):
-            return AudioSegment.from_file(cache_file, format='wav')
-        self.engine.save_to_file(text, cache_file)
-        self.engine.runAndWait()
-        return AudioSegment.from_file(cache_file, format='wav')
+
+        cached = os.path.join(self.cache_dir, '{0}.wav'.format(hashlib.md5(
+            f"{text}{self.engine.getProperty('voice')}".encode('UTF-8')).hexdigest()))
+        if not os.path.isfile(cached):
+            self.engine.save_to_file(text, cached)
+            self.engine.runAndWait()
+        return AudioSegment.from_file(cached, format='wav')

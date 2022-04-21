@@ -13,34 +13,39 @@ Package for voice over subtitles:
 # CLI
 
 ```
-usage: FastDub [-h] -i INPUT [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT] [-En EXCLUDE [EXCLUDE ...]] [-Eu EXCLUDE_UNDERSCORE]
-               [--ducking | --no-ducking] [--min-silence-len MIN_SILENCE_LEN] [--silence-thresh SILENCE_THRESH]
-               [--gain-during-overlay GAIN_DURING_OVERLAY]
-               [-v {...}]
-               [-a ALIGN] [-ll LOGLEVEL] [-y] [-rf CLEANUP_LEVEL] [-rc]
+usage: FastDub [-h] -i INPUT [INPUT ...] [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT] [-En EXCLUDE [EXCLUDE ...]] [-Eu EXCLUDE_UNDERSCORE]
+               [-sc | --sidechain | --no-sidechain] [-sc-msl MIN_SILENCE_LEN] [-sc-st SILENCE_THRESH] [-sc-gdo GAIN_DURING_OVERLAY]
+               [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft david desktop - english (united sta
+tes,yuriy}]
+               [-a ALIGN] [-ll LOGLEVEL] [-y | --confirm | --no-confirm] [-rf CLEANUP_LEVEL] [-rc]
 
 FastDub is a tool for dubbing videos by subtitle files.
 
 options:
   -h, --help            show this help message and exit
+  -rf CLEANUP_LEVEL, --cleanup-level CLEANUP_LEVEL
+                        Cleanup level   0 = No removing any files
+                                > 0 remove audio from video (default)
+                                > 1 = remove dubbed audio if video exists
+                                > 2 = reomve dubbed cache files
   -rc, --remove-cache   Remove all cache files
 
 Input:
-  -i INPUT, --input INPUT
-                        Input file or directory.
+  -i INPUT [INPUT ...], --input INPUT [INPUT ...]
+                        Input directory.
   -vf VIDEO_FORMAT, --video-format VIDEO_FORMAT
                         Video format (default .mp4).
   -sf SUBTITLES_FORMAT, --subtitles-format SUBTITLES_FORMAT
                         Subtitles format (default .srt).
 
 Audio Ducking:
-  -dk, --ducking, --no-ducking
-                        Enable audio ducking (default: True)
-  -dk-msl MIN_SILENCE_LEN, --min-silence-len MIN_SILENCE_LEN
+  -sc, --sidechain, --no-sidechain
+                        Enable audio side chain compress (ducking) (default: True)
+  -sc-msl MIN_SILENCE_LEN, --min-silence-len MIN_SILENCE_LEN, --attack MIN_SILENCE_LEN
                         Minimum silence length in ms (default 100)
-  -dk-st SILENCE_THRESH, --silence-thresh SILENCE_THRESH
+  -sc-st SILENCE_THRESH, --silence-thresh SILENCE_THRESH
                         Silence threshold in dB
-  -dk-gdo GAIN_DURING_OVERLAY, --gain-during-overlay GAIN_DURING_OVERLAY
+  -sc-gdo GAIN_DURING_OVERLAY, --gain-during-overlay GAIN_DURING_OVERLAY
                         Gain during overlay in dB
 
 Voicer:
@@ -51,18 +56,13 @@ Voicer:
   -a ALIGN, --align ALIGN
                         Audio fit align
                                 1 = right
-                                2 = center
+                                2 = center (default)
 
-Output:
+FFMpeg Output:
   -ll LOGLEVEL, --loglevel LOGLEVEL
                         FFMpegWrapper loglevel
-  -y, --yes             Don't ask for confirmation
-  -rf CLEANUP_LEVEL, --cleanup-level CLEANUP_LEVEL
-                        Cleanup level (0 = No removing any files
-                                > 0 remove audio from video (default)
-                                > 1 = remove dubbed audio if video exists)
-                                > 2 = reomve dubbed cache files
-
+  -y, --confirm, --no-confirm
+                        Don't ask for confirmation (default: True)
 ```
 
 **If the voice set after !: is not selected during voiceover, clear the cache with the -rc argument**
