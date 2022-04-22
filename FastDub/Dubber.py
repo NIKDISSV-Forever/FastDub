@@ -7,7 +7,7 @@ from typing import Container
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from tqdm import tqdm
 
-from FastDub import SrtSubtitles, Voicer, Audio
+from FastDub import Subtitles, Voicer, Audio
 
 __all__ = ('Dubber',)
 
@@ -15,7 +15,12 @@ from FastDub.FFMpeg import FFMpegWrapper
 
 
 class Dubber:
-    __slots__ = ('DUCKING_ARGS', 'VIDEO_FORMAT', 'SUBTITLES_FORMAT', 'fit_align')
+    __slots__ = (
+        'VIDEO_FORMAT', 'SUBTITLES_FORMAT',
+        'fit_align',
+        'ducking', 'min_silence_len', 'silence_thresh',
+        'gain_during_overlay'
+    )
 
     VOISER = Voicer.Voicer()
 
@@ -28,7 +33,11 @@ class Dubber:
         self.fit_align = fit_align
         if voice:
             self.VOISER.set_voice(voice)
-        self.DUCKING_ARGS = (min_silence_len, silence_thresh, gain_during_overlay) if ducking else None
+
+        self.ducking = ducking
+        self.min_silence_len = min_silence_len
+        self.silence_thresh = silence_thresh
+        self.gain_during_overlay = gain_during_overlay
 
     def dub_dir(self, path_to_files: str, skip_starts_underscore: bool = True,
                 exclude_files: Container[str] = None):
@@ -49,7 +58,7 @@ class Dubber:
             self.dub_one(fn, exts.get(self.VIDEO_FORMAT), exts.get(self.SUBTITLES_FORMAT))
 
     def dub_one(self, fn: str, target_mp4: str, target_srt: str, clean_up: int = 1):
-        subtitles = SrtSubtitles.parse(target_srt)
+        subtitles = Subtitles.parse(target_srt)
 
         if target_mp4:
             video_clip: VideoFileClip
@@ -111,8 +120,14 @@ class Dubber:
         if target_mp4:
             with closing(VideoFileClip(target_mp4)) as video_clip:
                 video_clip.audio.write_audiofile(target_out_audio)
-                if self.DUCKING_ARGS:
-                    Audio.side_chain(Audio.AudioSegment.from_file(target_out_audio), audio).export(result_out_audio)
+                if self.ducking:
+                    Audio.side_chain(Audio.AudioSegment.from_file(target_out_audio), audio, self.min_silence_len,
+                                     self.silence_thresh, self.gain_during_overlay
+                                     ).export(result_out_audio)
+                else:
+                    Audio.AudioSegment.from_file(target_out_audio).overlay(audio, self.gain_during_overlay
+                                                                           ).export(result_out_audio)
+
             FFMpegWrapper.replace_audio_in_video(target_mp4, result_out_audio, result_out_video)
             if clean_up > 0:
                 os.remove(target_out_audio)

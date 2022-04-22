@@ -8,30 +8,38 @@ Package for voice over subtitles:
 
 > pip install -U [PyFastDub](https://pypi.org/project/PyFastDub/)
 
+# Youtube support
+
+> pip install PyFastDub[YT]
+
+# Usage
+
 > python -m FastDub --help
 
 # CLI
 
 ```
-usage: FastDub [-h] -i INPUT [INPUT ...] [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT] [-En EXCLUDE [EXCLUDE ...]] [-Eu EXCLUDE_UNDERSCORE]
-               [-sc | --sidechain | --no-sidechain] [-sc-msl MIN_SILENCE_LEN] [-sc-st SILENCE_THRESH] [-sc-gdo GAIN_DURING_OVERLAY]
+usage: FastDub [-h] [-rc] [-rf CLEANUP_LEVEL] -i INPUT [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT] [-En EXCLUDE [EXCLUDE ...]]
+               [-Eu EXCLUDE_UNDERSCORE] [-sc | --sidechain | --no-sidechain] [-sc-msl MIN_SILENCE_LEN] [-sc-st SILENCE_THRESH]
+               [-sc-gdo GAIN_DURING_OVERLAY]
                [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft david desktop - english (united sta
 tes,yuriy}]
-               [-a ALIGN] [-ll LOGLEVEL] [-y | --confirm | --no-confirm] [-rf CLEANUP_LEVEL] [-rc]
+               [-a ALIGN] [-ll LOGLEVEL] [-y | --confirm | --no-confirm] [-yt | --youtube | --no-youtube] [-l LANGUAGE]
+               [-ak API_KEYS [API_KEYS ...]] [-pc PROCESS_COUNT]
 
 FastDub is a tool for dubbing videos by subtitle files.
 
 options:
   -h, --help            show this help message and exit
+  -rc, --remove-cache   Remove all cache files
   -rf CLEANUP_LEVEL, --cleanup-level CLEANUP_LEVEL
                         Cleanup level   0 = No removing any files
                                 > 0 remove audio from video (default)
                                 > 1 = remove dubbed audio if video exists
                                 > 2 = reomve dubbed cache files
-  -rc, --remove-cache   Remove all cache files
 
 Input:
-  -i INPUT [INPUT ...], --input INPUT [INPUT ...]
+  -i INPUT, --input INPUT
                         Input directory.
   -vf VIDEO_FORMAT, --video-format VIDEO_FORMAT
                         Video format (default .mp4).
@@ -63,6 +71,16 @@ FFMpeg Output:
                         FFMpegWrapper loglevel
   -y, --confirm, --no-confirm
                         Don't ask for confirmation (default: True)
+
+Youtube:
+  -yt, --youtube, --no-youtube
+  -l LANGUAGE, --language LANGUAGE
+                        Subtitles language (ru)
+  -ak API_KEYS [API_KEYS ...], --api-keys API_KEYS [API_KEYS ...]
+                        Youtube API key/s
+  -pc PROCESS_COUNT, --process-count PROCESS_COUNT
+                        Process count to download (pass to cpu count, < 2 to disable)
+
 ```
 
 **If the voice set after !: is not selected during voiceover, clear the cache with the -rc argument**

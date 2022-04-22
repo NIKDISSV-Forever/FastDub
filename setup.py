@@ -2,6 +2,8 @@ import setuptools
 
 with open('requires.txt', encoding='utf-8') as f:
     requires = f.read().splitlines()
+with open('yt_requires.txt', encoding='utf-8') as f:
+    yt_requires = f.read().splitlines()
 with open('README.md', encoding='utf-8') as f:
     readme = f.read()
 
@@ -11,9 +13,10 @@ setuptools.setup(
                 "and dynamic voice changer for a single track.",
     long_description=readme,
     long_description_content_type="text/markdown",
-    version="2.2.0",
+    version="2.3.0",
     author="Nikita (NIKDISSV)",
     install_requires=requires,
+    extras_require={'YT': yt_requires},
     author_email='nikdissv.forever@protonmail.com',
     project_urls={
         'Download Voices': 'https://rhvoice.su/voices/',
