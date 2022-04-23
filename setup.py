@@ -13,7 +13,7 @@ setuptools.setup(
                 "and dynamic voice changer for a single track.",
     long_description=readme,
     long_description_content_type="text/markdown",
-    version="2.3.0",
+    version="2.3.1",
     author="Nikita (NIKDISSV)",
     install_requires=requires,
     extras_require={'YT': yt_requires},
