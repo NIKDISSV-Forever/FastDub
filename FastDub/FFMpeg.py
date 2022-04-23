@@ -21,5 +21,6 @@ class FFMpegWrapper:
 
     @staticmethod
     def replace_audio_in_video(video_path: str, audio_path: str, output_path: str):
-        FFMpegWrapper.convert('-i', video_path, '-i', audio_path, '-map', '0:0', '-map', '1:0', '-c', 'copy',
+        FFMpegWrapper.convert('-i', video_path, '-i', audio_path,
+                              '-map', '0:0', '-map', '1:0', '-c', 'copy',
                               output_path)

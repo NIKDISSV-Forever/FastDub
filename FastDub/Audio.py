@@ -38,6 +38,7 @@ def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = T
         return audio if allow_copy else copy(audio)
     if speed_changes <= 0.:
         raise ValueError(f"Speed cannot be negative ({speed_changes}).")
+
     atempo = array('d')
     if speed_changes < .5:
         _n = speed_changes
@@ -67,9 +68,7 @@ def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = T
 def fit(audio: AudioSegment, left_border: float, need_duration: float, right_border: float,
         align: float) -> AudioSegment:
     """Fits audio to the borders of the subtitles."""
-    audio_duration = audio.duration_ms
-    free = left_border + need_duration + right_border
-    if audio_duration > free:
+    if (audio_duration := audio.duration_ms) > (free := left_border + need_duration + right_border):
         audio = speed_change(audio, audio_duration / free)
         audio_duration = audio.duration_ms
     return AudioSegment.silent(((free - audio_duration) / align)

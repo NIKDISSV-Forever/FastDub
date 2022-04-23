@@ -8,28 +8,25 @@ from moviepy.video.io.VideoFileClip import VideoFileClip
 from tqdm import tqdm
 
 from FastDub import Subtitles, Voicer, Audio
+from FastDub.FFMpeg import FFMpegWrapper
 
 __all__ = ('Dubber',)
-
-from FastDub.FFMpeg import FFMpegWrapper
 
 
 class Dubber:
     __slots__ = (
-        'VIDEO_FORMAT', 'SUBTITLES_FORMAT',
-        'fit_align',
+        'fit_align', 'language',
         'ducking', 'min_silence_len', 'silence_thresh',
         'gain_during_overlay'
     )
 
     VOISER = Voicer.Voicer()
 
-    def __init__(self, voice: str, ducking: bool,
+    def __init__(self, voice: str, language: str, ducking: bool,
                  min_silence_len: int, silence_thresh: float, gain_during_overlay: int,
-                 video_format: str = '.mp4', subtitles_format: str = '.srt', fit_align: float = 1.):
+                 fit_align: float = 2.):
 
-        self.VIDEO_FORMAT = video_format if video_format.startswith('.') else f'.{video_format}'
-        self.SUBTITLES_FORMAT = subtitles_format if subtitles_format.startswith('.') else f'.{subtitles_format}'
+        self.language = language
         self.fit_align = fit_align
         if voice:
             self.VOISER.set_voice(voice)
@@ -39,8 +36,13 @@ class Dubber:
         self.silence_thresh = silence_thresh
         self.gain_during_overlay = gain_during_overlay
 
-    def dub_dir(self, path_to_files: str, skip_starts_underscore: bool = True,
-                exclude_files: Container[str] = None):
+    def dub_dir(self, videos: dict[str, dict[str, str]], video_format: str, subtitles_format: str):
+        for fn, exts in videos.items():
+            self.dub_one(fn, exts[video_format], exts[subtitles_format])
+
+    @staticmethod
+    def collect_videos(path_to_files: str, skip_starts_underscore: bool = True,
+                       exclude_files: Container[str] = None):
         path_to_files = os.path.abspath(path_to_files)
         videos = {}
         for file in os.listdir(path_to_files):
@@ -52,50 +54,44 @@ class Dubber:
             filename, ext = os.path.splitext(file)
             if videos.get(filename):
                 videos[filename][ext] = absfile
-            else:
-                videos[filename] = {ext: os.path.join(path_to_files, file)}
-        for fn, exts in videos.items():
-            self.dub_one(fn, exts.get(self.VIDEO_FORMAT), exts.get(self.SUBTITLES_FORMAT))
+                continue
+            videos[filename] = {ext: os.path.join(path_to_files, file)}
+        return videos
 
     def dub_one(self, fn: str, target_mp4: str, target_srt: str, clean_up: int = 1):
         subtitles = Subtitles.parse(target_srt)
 
+        default_right_border = 0
         if target_mp4:
             video_clip: VideoFileClip
             with closing(VideoFileClip(target_mp4, audio=False)) as video_clip:
                 default_right_border = video_clip.end * 1000. - subtitles[-1].ms.end
+        default_right_border = max((default_right_border, 0))
 
         tqdm_total = len(subtitles)
 
         tts_list = [self.VOISER.voice(line.text) for line in
-                    tqdm(subtitles, desc='TTSing', total=tqdm_total, unit='line',
-                         dynamic_ncols=True, colour='white')]
+                    tqdm(subtitles, desc='TTSing', total=tqdm_total,
+                         unit='line', dynamic_ncols=True, colour='white')]
 
         end_element_pos = tqdm_total - 1
+        audio = Audio.AudioSegment.empty()
 
-        fits = []
-        total_dubbed = 0
         for pos, tts, line in tqdm(
-                [(i, tts, subtitles[i]) for i, tts in enumerate(tts_list)],
+                ((i, tts, subtitles[i]) for i, tts in enumerate(tts_list)),
                 desc='Fitting Audio',
                 total=tqdm_total, unit='line',
                 dynamic_ncols=True, colour='white'):
-            one_fit = Audio.fit(
+            audio += Audio.fit(
                 tts,
-                line.ms.start - total_dubbed,
+                line.ms.start - audio.duration_ms,
                 line.ms.duration,
                 (default_right_border
                  if pos == end_element_pos else
                  (subtitles[
                       pos + 1].ms.start - line.ms.end)
-                 ), self.fit_align)
-            total_dubbed += one_fit.duration_ms
-            fits.append(one_fit)
-
-        audio = Audio.AudioSegment.empty()
-        for fit in tqdm(fits, desc='Bonding Audio', total=tqdm_total, unit='segment',
-                        dynamic_ncols=True, colour='white'):
-            audio += fit
+                 ), self.fit_align
+            )
 
         max_duration = subtitles[-1].ms.end
         audio_duration = audio.duration_ms
@@ -113,9 +109,8 @@ class Dubber:
         if not os.path.isdir(result_dir):
             os.mkdir(result_dir)
 
-        target_out_audio = os.path.join(result_dir, 'video.mp3')
-        result_out_audio = os.path.join(result_dir, 'result.mp3')
-        result_out_video = os.path.join(result_dir, 'result.mp4')
+        target_out_audio = os.path.join(result_dir, f'_{self.language}.mp3')
+        result_out_audio = os.path.join(result_dir, f'{self.language}.mp3')
 
         if target_mp4:
             with closing(VideoFileClip(target_mp4)) as video_clip:
@@ -128,7 +123,8 @@ class Dubber:
                     Audio.AudioSegment.from_file(target_out_audio).overlay(audio, self.gain_during_overlay
                                                                            ).export(result_out_audio)
 
-            FFMpegWrapper.replace_audio_in_video(target_mp4, result_out_audio, result_out_video)
+            FFMpegWrapper.replace_audio_in_video(target_mp4, result_out_audio,
+                                                 os.path.join(result_dir, f'{self.language}.mp4'))
             if clean_up > 0:
                 os.remove(target_out_audio)
                 if clean_up > 1:

@@ -1,16 +1,18 @@
 from __future__ import annotations
 
 import argparse
-import time
 from math import inf
+from time import perf_counter
 
 from FastDub import Dubber, Voicer
+from FastDub import Translator
 from FastDub import YT
 from FastDub.FFMpeg import FFMpegWrapper
+from FastDub.Translator.SubtitlesTranslate import SrtTranslate
 from FastDub.YT.Downloader import DownloadYTVideo
 
 
-def main():
+def parse_args() -> argparse.Namespace:
     arg_parser = argparse.ArgumentParser('FastDub',
                                          description='FastDub is a tool for dubbing videos by subtitle files.',
                                          formatter_class=argparse.RawTextHelpFormatter)
@@ -24,9 +26,15 @@ def main():
                                  '\t> 1 = remove dubbed audio if video exists\n'
                                  '\t> 2 = reomve dubbed cache files')
 
+    arg_parser.add_argument('-l', '--language', default='ru',
+                            help='Subtitles language (ru)')
+    if YT.SUPPORTED or Translator.SUPPORTED:
+        arg_parser.add_argument('-tc', '--threads-count', type=int,
+                                help='Process count to download (pass to cpu count, < 2 to disable)')
+
     input_group = arg_parser.add_argument_group('Input')
-    input_group.add_argument('-i', '--input', type=str, required=True,
-                             help='Input directory.')
+    input_group.add_argument('input', type=str,
+                             help=f"Input directory{('/YouTube Playlist/Video URL' if YT.SUPPORTED else '')}.")
     input_group.add_argument('-vf', '--video-format', default='.mp4',
                              help='Video format (default .mp4).')
     input_group.add_argument('-sf', '--subtitles-format', default='.srt',
@@ -49,8 +57,8 @@ def main():
                                help='Gain during overlay in dB')
 
     voicer_group = arg_parser.add_argument_group('Voicer')
-    voicer_group.add_argument('-v', '--voice', choices=Voicer.VOICES_NAMES.keys(),
-                              help='Voice')
+    voicer_group.add_argument('-v', '--voice', type=str.lower, choices=Voicer.VOICES_NAMES.keys(),
+                              help='SAPI voice for voice acting.')
     voicer_group.add_argument('-a', '--align', default=2., type=float,
                               help='Audio fit align\n'
                                    '\t1 = right\n'
@@ -64,14 +72,27 @@ def main():
 
     if YT.SUPPORTED:
         yt_group = arg_parser.add_argument_group('Youtube')
-        yt_group.add_argument('-yt', '--youtube', action=argparse.BooleanOptionalAction, default=True)
-        yt_group.add_argument('-l', '--language', default='ru',
-                              help='Subtitles language (ru)')
-        yt_group.add_argument('-ak', '--api-keys', nargs='+', default=(), help='Youtube API key/s')
-        yt_group.add_argument('-pc', '--process-count', type=int,
-                              help='Process count to download (pass to cpu count, < 2 to disable)')
+        yt_group.add_argument('-yt', '--youtube', action='store_true', default=False)
 
-    args = arg_parser.parse_args()
+        yt_group.add_argument('-ak', '--api-keys', nargs='+', default=(), help='Youtube API key/s')
+
+    if Translator.SUPPORTED:
+        translate_group = arg_parser.add_argument_group('Translate subtitles')
+        translate_group.add_argument('-tr', '--translate', action='store_true', default=False,
+                                     help='Translate input subtitles files')
+        translate_group.add_argument('--rewrite-srt', action=argparse.BooleanOptionalAction, default=False,
+                                     help='Rewrite input subtitles files.\n'
+                                          'If not, add "_" to the beginning of the original subtitle file.')
+        translate_group.add_argument('-ts', '--translate-service', type=str, default='google',
+                                     choices=[i[1:] for i in dir(Translator.translators.apis) if
+                                              i.startswith('_') and not i.startswith('__')],
+                                     help='Subtitle translation service. (default google)')
+
+    return arg_parser.parse_args()
+
+
+def main():
+    args = parse_args()
 
     FFMpegWrapper.DEFAULT_FFMPEG_LOG_LEVEL = args.loglevel
     if args.remove_cache:
@@ -80,19 +101,30 @@ def main():
     total_time = 0.
     if args.confirm:
         FFMpegWrapper.DEFAULT_ARGS += '-y',
-        total_time = time.perf_counter()
+        total_time = perf_counter()
 
     if YT.SUPPORTED and args.youtube:
         downloader = DownloadYTVideo(args.input, args.language, args.api_keys)
-        downloader.multiprocessing_download(args.process_count)
+        downloader.multiprocessing_download(args.threads_count)
         args.input = downloader.save_dir
 
-    dubber = Dubber.Dubber(args.voice, args.sidechain, args.min_silence_len, args.silence_thresh,
-                           args.gain_during_overlay, args.video_format, args.subtitles_format)
-    dubber.dub_dir(args.input, args.exclude_underscore, args.exclude)
+    video_format = video_format if (video_format := args.video_format).startswith('.') else f'.{video_format}'
+    subtitles_format = (
+        subtitles_format if (subtitles_format := args.subtitles_format).startswith('.') else f'.{subtitles_format}')
+
+    videos = Dubber.Dubber.collect_videos(args.input, args.exclude_underscore, args.exclude)
+
+    if Translator.SUPPORTED and args.translate:
+        SrtTranslate(args.language, args.translate_service, args.rewrite_srt, args.threads_count
+                     ).translate_dir(videos, subtitles_format)
+
+    dubber = Dubber.Dubber(args.voice, args.language, args.sidechain, args.min_silence_len, args.silence_thresh,
+                           args.gain_during_overlay)
+
+    dubber.dub_dir(videos, video_format, subtitles_format)
 
     if total_time:
-        print(f'Total time: {time.perf_counter() - total_time}s')
+        print(f'Total time: {perf_counter() - total_time}s')
 
 
 if __name__ == '__main__':
