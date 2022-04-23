@@ -41,22 +41,16 @@ class DownloadYTVideo:
 
     def download(self, yt_dl: YtdlPafy):
         save_to = os.path.join(self.save_dir, yt_dl.videoid)
-        mp4_file = f'{save_to}.mp4'
-        if not os.path.isfile(mp4_file):
-            def progress_callback(total: int, downloaded: float, ratio: float, rate: float, eta: float):
-                print(
-                    end=f'\r[{round(ratio * 100., 2)}%] {round(downloaded):,}/{total:,}b. {round(rate, 1):,} kb/s: ETA'
-                        f' {eta} '
-                        f'sec.'.ljust(shutil.get_terminal_size().columns))
-
-            try:
-                self.with_api_key(lambda: yt_dl.getbest('mp4').download(mp4_file, callback=progress_callback))
-                print('\r'.ljust(shutil.get_terminal_size().columns))
-            except OSError:
-                pass
         srt_file = f'{save_to}.srt'
         if not os.path.isfile(srt_file):
             Subtitles.download_srt(yt_dl.videoid, self.language, srt_file)
+        mp4_file = f'{save_to}.mp4'
+        if not os.path.isfile(mp4_file):
+            try:
+                self.with_api_key(self.mp4_downloader(yt_dl, mp4_file))
+                print(f'\r{mp4_file} downloaded.'.ljust(shutil.get_terminal_size().columns))
+            except OSError:
+                pass
 
     def with_api_key(self, func: Callable[[], _API_RET_TYPE]) -> Optional[_API_RET_TYPE]:
         for key in self.API_KEYS:
@@ -65,3 +59,16 @@ class DownloadYTVideo:
                 return func()
             except pafy.util.GdataError:
                 continue
+
+    def mp4_downloader(self, yt_dl: YtdlPafy, mp4_file: str):
+        return lambda: yt_dl.getbest('mp4').download(mp4_file,
+                                                     progress='MB',
+                                                     callback=self.progress_callback)
+
+    @staticmethod
+    def progress_callback(total: int, downloaded: float, ratio: float, rate: float, eta: float):
+        print(
+            end=f'\r[{round(ratio * 100., 2)}%] {round(downloaded):,}/{total:,}MB. {round(rate, 1):,} kb/s: ETA'
+                f' {eta} '
+                f'sec.'.ljust(shutil.get_terminal_size().columns),
+            flush=True)
