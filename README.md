@@ -25,7 +25,7 @@ Package for voice over subtitles:
 > python -m FastDub --help
 
 ```
-usage: FastDub [-h] [-rc] [-rf CLEANUP_LEVEL] [-l LANGUAGE] [-pc PROCESS_COUNT] [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT]
+usage: FastDub [-h] [-rc] [-rf CLEANUP_LEVEL] [-l LANGUAGE] [-tc THREADS_COUNT] [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT]
                [-En EXCLUDE [EXCLUDE ...]] [-Eu EXCLUDE_UNDERSCORE] [-sc | --sidechain | --no-sidechain] [-sc-msl MIN_SILENCE_LEN]
                [-sc-st SILENCE_THRESH] [-sc-gdo GAIN_DURING_OVERLAY]
                [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft david desktop - english (united sta
@@ -46,8 +46,9 @@ options:
                                 > 2 = reomve dubbed cache files
   -l LANGUAGE, --language LANGUAGE
                         Subtitles language (ru)
-  -pc PROCESS_COUNT, --process-count PROCESS_COUNT
+  -tc THREADS_COUNT, --threads-count THREADS_COUNT
                         Process count to download (pass to cpu count, < 2 to disable)
+                                *N = N * cpu count
 
 Input:
   input                 Input directory/YouTube Playlist/Video URL.
@@ -64,10 +65,12 @@ Audio Ducking:
   -sc-st SILENCE_THRESH, --silence-thresh SILENCE_THRESH
                         Silence threshold in dB
   -sc-gdo GAIN_DURING_OVERLAY, --gain-during-overlay GAIN_DURING_OVERLAY
-                        Gain during overlay in dB
+                        Gain during overlay in dB (-11)
 
 Voicer:
   -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksand
+  -yt, --youtube
+  -ak API_KEYS [API_KEYS ...], --api-keys API_KEYS [API_KEYS ...]
                         Youtube API key/s
 
 Translate subtitles:

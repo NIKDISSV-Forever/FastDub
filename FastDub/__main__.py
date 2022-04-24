@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import argparse
+import multiprocessing
 from math import inf
+from pprint import pprint
 from time import perf_counter
 
 from FastDub import Dubber, Voicer
@@ -28,9 +30,13 @@ def parse_args() -> argparse.Namespace:
 
     arg_parser.add_argument('-l', '--language', default='ru',
                             help='Subtitles language (ru)')
+
     if YT.SUPPORTED or Translator.SUPPORTED:
-        arg_parser.add_argument('-tc', '--threads-count', type=int,
-                                help='Process count to download (pass to cpu count, < 2 to disable)')
+        arg_parser.add_argument('-tc', '--threads-count', default=multiprocessing.cpu_count(),
+                                type=lambda i: int(multiprocessing.cpu_count() * float(i.lstrip('*')))
+                                if i.startswith('*') else int(i),
+                                help='Process count to download (pass to cpu count, < 2 to disable)\n'
+                                     '\t*N = N * cpu count')
 
     input_group = arg_parser.add_argument_group('Input')
     input_group.add_argument('input', type=str,
@@ -53,8 +59,8 @@ def parse_args() -> argparse.Namespace:
                                help='Minimum silence length in ms (default 100)')
     ducking_group.add_argument('-sc-st', '--silence-thresh', default=-inf, type=float,
                                help='Silence threshold in dB')
-    ducking_group.add_argument('-sc-gdo', '--gain-during-overlay', default=-10, type=int,
-                               help='Gain during overlay in dB')
+    ducking_group.add_argument('-sc-gdo', '--gain-during-overlay', default=-11, type=int,
+                               help='Gain during overlay in dB (-11)')
 
     voicer_group = arg_parser.add_argument_group('Voicer')
     voicer_group.add_argument('-v', '--voice', type=str.lower, choices=Voicer.VOICES_NAMES.keys(),
@@ -119,7 +125,7 @@ def main():
                      ).translate_dir(videos, subtitles_format)
 
     dubber = Dubber.Dubber(args.voice, args.language, args.sidechain, args.min_silence_len, args.silence_thresh,
-                           args.gain_during_overlay)
+                           args.gain_during_overlay, args.align)
 
     dubber.dub_dir(videos, video_format, subtitles_format)
 
