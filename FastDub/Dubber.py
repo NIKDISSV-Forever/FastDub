@@ -36,10 +36,6 @@ class Dubber:
         self.silence_thresh = silence_thresh
         self.gain_during_overlay = gain_during_overlay
 
-    def dub_dir(self, videos: dict[str, dict[str, str]], video_format: str, subtitles_format: str):
-        for fn, exts in videos.items():
-            self.dub_one(fn, exts[video_format], exts[subtitles_format])
-
     @staticmethod
     def collect_videos(path_to_files: str, skip_starts_underscore: bool = True,
                        exclude_files: Container[str] = None):
@@ -58,7 +54,13 @@ class Dubber:
             videos[filename] = {ext: os.path.join(path_to_files, file)}
         return videos
 
+    def dub_dir(self, videos: dict[str, dict[str, str]], video_format: str, subtitles_format: str):
+        for fn, exts in videos.items():
+            self.dub_one(fn, exts.get(video_format), exts.get(subtitles_format))
+
     def dub_one(self, fn: str, target_mp4: str, target_srt: str, clean_up: int = 1):
+        if target_mp4 is target_srt is None:
+            return
         subtitles = Subtitles.parse(target_srt)
 
         default_right_border = 0

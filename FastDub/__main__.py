@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import argparse
 import multiprocessing
+import os
 from math import inf
-from pprint import pprint
 from time import perf_counter
 
 from FastDub import Dubber, Voicer
@@ -39,7 +39,7 @@ def parse_args() -> argparse.Namespace:
                                      '\t*N = N * cpu count')
 
     input_group = arg_parser.add_argument_group('Input')
-    input_group.add_argument('input', type=str,
+    input_group.add_argument('-i', '--input', type=str, default=os.getcwd(),
                              help=f"Input directory{('/YouTube Playlist/Video URL' if YT.SUPPORTED else '')}.")
     input_group.add_argument('-vf', '--video-format', default='.mp4',
                              help='Video format (default .mp4).')
@@ -100,9 +100,10 @@ def parse_args() -> argparse.Namespace:
 def main():
     args = parse_args()
 
-    FFMpegWrapper.DEFAULT_FFMPEG_LOG_LEVEL = args.loglevel
     if args.remove_cache:
         Voicer.Voicer().cleanup()
+
+    FFMpegWrapper.DEFAULT_FFMPEG_LOG_LEVEL = args.loglevel
 
     total_time = 0.
     if args.confirm:
