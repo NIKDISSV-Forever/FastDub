@@ -131,7 +131,7 @@ def main():
     dubber.dub_dir(videos, video_format, subtitles_format)
 
     if total_time:
-        print(f'Total time: {perf_counter() - total_time}s')
+        print(f'Total time: {perf_counter() - total_time:,.3f} s.')
 
 
 if __name__ == '__main__':

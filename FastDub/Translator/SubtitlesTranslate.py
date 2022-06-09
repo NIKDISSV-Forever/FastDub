@@ -1,6 +1,7 @@
-import multiprocessing
-import os
+import multiprocessing.pool
+import os.path
 from functools import cache
+from pathlib import Path
 
 import tqdm
 
@@ -29,7 +30,7 @@ class SrtTranslate:
                 pool.map(handler, parsed)
         else:
             for line in _pb:
-                line.text = self.translate_line(line.text)
+                line.text = self.translate_line(line.text.strip())
         with open(output_srt, 'w', encoding='UTF-8') as f:
             f.write(Subtitles.unparse(parsed))
 

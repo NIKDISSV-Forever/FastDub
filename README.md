@@ -6,7 +6,7 @@ Package for voice over subtitles:
   all
   subsequent ones)_
 
-> pip install -U [PyFastDub](https://pypi.org/project/PyFastDub/) _--force-reinstall_
+> pip install -U [PyFastDub](https://pypi.org/project/PyFastDub/)
 
 # Youtube support
 
@@ -113,3 +113,4 @@ _name and name2 will be announced, and the results will be saved to a folder wit
 
 > python -m FastDub DirToDub -tr -ts iciba -l ru
 
+### python -m pydoc -w FastDub
