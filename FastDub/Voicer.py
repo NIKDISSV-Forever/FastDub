@@ -1,5 +1,7 @@
-import hashlib
 import os.path
+from hashlib import md5
+from pathlib import Path
+from shutil import rmtree
 
 import pyttsx3
 
@@ -18,17 +20,16 @@ del _voices
 
 
 class Voicer:
-    __slots__ = ('engine', "cache_dir")
+    __slots__ = ('engine', 'cache_dir')
 
     def __init__(self, cache_dir: str = None):
         self.engine = pyttsx3.init()
-        self.cache_dir = cache_dir or os.path.join(os.path.dirname(__file__), '_cached_texts')
-        if not os.path.isdir(self.cache_dir):
-            os.makedirs(self.cache_dir)
+        self.cache_dir = Path(__file__).parent / '_cached_texts' if cache_dir is None else Path(cache_dir)
+        if not self.cache_dir.is_dir():
+            self.cache_dir.mkdir(parents=True)
 
     def cleanup(self):
-        for file in os.listdir(self.cache_dir):
-            os.remove(os.path.join(self.cache_dir, file))
+        rmtree(self.cache_dir)
 
     def set_voice(self, voice: str):
         voice_name = voice.casefold()
@@ -48,8 +49,8 @@ class Voicer:
             self.set_voice(lines[0][2:])
             text = '\n'.join(lines[1:])
 
-        cached = os.path.join(self.cache_dir, hashlib.md5(
-            f"{text}{self.engine.proxy.getProperty('voice')}".encode('UTF-8')).hexdigest() + '.wav')
+        cached = '{0}.wav'.format(
+            self.cache_dir / md5(f"{text}{self.engine.proxy.getProperty('voice')}".encode('UTF-8')).hexdigest())
         if not os.path.isfile(cached):
             self.engine.proxy.save_to_file(text, cached, None)
             self.engine.runAndWait()

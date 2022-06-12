@@ -25,20 +25,23 @@ Package for voice over subtitles:
 > python -m FastDub --help
 
 ```
-usage: FastDub [-h] [-rc] [-rf CLEANUP_LEVEL] [-l LANGUAGE] [-tc THREADS_COUNT] [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT]
-               [-En EXCLUDE [EXCLUDE ...]] [-Eu EXCLUDE_UNDERSCORE] [-sc | --sidechain | --no-sidechain] [-sc-msl MIN_SILENCE_LEN]
-               [-sc-st SILENCE_THRESH] [-sc-gdo GAIN_DURING_OVERLAY]
-               [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft david desktop - english (united sta
-tes,aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}]
-               [-a ALIGN] [-ll LOGLEVEL] [-y | --confirm | --no-confirm] [-yt] [-ak API_KEYS [API_KEYS ...]] [-tr]
-               [--rewrite-srt | --no-rewrite-srt] [-ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,sogou,tencent,yandex,youdao}]   
-               input
+usage: FastDub [-h] [-rc {0,1,2}] [-rf CLEANUP_LEVEL] [-l LANGUAGE] [-tc THREADS_COUNT] [-i INPUT] [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT]
+               [-En EXCLUDE [EXCLUDE ...]] [-Eu EXCLUDE_UNDERSCORE] [-sc | --sidechain | --no-sidechain] [-sc-msl MIN_SILENCE_LEN] [-sc-st SILENCE_THRESH]
+               [-sc-gdo GAIN_DURING_OVERLAY]
+               [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft david desktop - english (united states,aleksandr-hq,
+arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}]
+               [-a ALIGN] [-ll LOGLEVEL] [-y | --confirm | --no-confirm] [-yt] [-ak API_KEYS [API_KEYS ...]] [-tr] [--rewrite-srt | --no-rewrite-srt]
+               [-ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}]
 
 FastDub is a tool for dubbing videos by subtitle files.
 
 options:
   -h, --help            show this help message and exit
-  -rc, --remove-cache   Remove all cache files
+  -rc {0,1,2}, --remove-cache {0,1,2}
+                        Remove all cache (_cached_texts directory) files
+                                0 - No remove cache (default)
+                                1 - Delete cache before voice acting
+                                2 - Delete cache after voice acting
   -rf CLEANUP_LEVEL, --cleanup-level CLEANUP_LEVEL
                         Cleanup level   0 = No removing any files
                                 > 0 remove audio from video (default)
@@ -51,7 +54,8 @@ options:
                                 *N = N * cpu count
 
 Input:
-  input                 Input directory/YouTube Playlist/Video URL.
+  -i INPUT, --input INPUT
+                        Input directory/YouTube Playlist/Video URL.
   -vf VIDEO_FORMAT, --video-format VIDEO_FORMAT
                         Video format (default .mp4).
   -sf SUBTITLES_FORMAT, --subtitles-format SUBTITLES_FORMAT
@@ -68,7 +72,23 @@ Audio Ducking:
                         Gain during overlay in dB (-11)
 
 Voicer:
-  -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksand
+  -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,artemi
+y,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}, --voice {microsoft irina desktop - russian,microsoft zira desktop
+ - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatian
+a,victoria,vitaliy,volodymyr,yuriy}
+                        SAPI voice for voice acting.
+  -a ALIGN, --align ALIGN
+                        Audio fit align
+                                1 = right
+                                2 = center (default)
+
+FFMpeg Output:
+  -ll LOGLEVEL, --loglevel LOGLEVEL
+                        FFMpegWrapper loglevel
+  -y, --confirm, --no-confirm
+                        Don't ask for confirmation (default: True)
+
+Youtube:
   -yt, --youtube
   -ak API_KEYS [API_KEYS ...], --api-keys API_KEYS [API_KEYS ...]
                         Youtube API key/s
@@ -78,8 +98,8 @@ Translate subtitles:
   --rewrite-srt, --no-rewrite-srt
                         Rewrite input subtitles files.
                         If not, add "_" to the beginning of the original subtitle file. (default: False)
-  -ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,sogou,tencent,yandex,youdao}, --translate-service {alibaba,argos,baidu,bing,caiyu
-n,deepl,google,iciba,iflytek,sogou,tencent,yandex,youdao}
+  -ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}, --translate-service {a
+libaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}
                         Subtitle translation service. (default google)
 ```
 

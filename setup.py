@@ -16,7 +16,7 @@ setuptools.setup(
                 "and dynamic voice changer for a single track.",
     long_description=readme,
     long_description_content_type="text/markdown",
-    version="2.4.3",
+    version="2.4.7",
     author="Nikita (NIKDISSV)",
     install_requires=requires,
     extras_require={'YT': yt_requires, 'TR': tr_requires},
@@ -39,7 +39,7 @@ setuptools.setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python :: 3.10',
-        'Programming Language :: Python :: Implementation :: CPython'
+        'Programming Language :: Python :: Implementation :: CPython',
 
         'Topic :: Multimedia',
         'Topic :: Multimedia :: Sound/Audio',

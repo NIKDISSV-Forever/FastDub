@@ -32,7 +32,7 @@ class AudioSegment(pydub.AudioSegment):
         return self.append(other)
 
 
-def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = True, log_level: str = 'panic'
+def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = True, log_level: str = 'trace'
                  ) -> AudioSegment:
     if speed_changes == 1.:
         return audio if allow_copy else copy(audio)
@@ -61,7 +61,7 @@ def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = T
         audio.export(inp)
         FFMpegWrapper.convert('-i', inp,
                               '-af', ','.join([f'atempo={i}' for i in atempo]),
-                              out, '-y', loglevel=log_level)
+                              out, loglevel=log_level)
         return AudioSegment.from_file(out)
 
 

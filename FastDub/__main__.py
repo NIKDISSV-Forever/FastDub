@@ -19,8 +19,11 @@ def parse_args() -> argparse.Namespace:
                                          description='FastDub is a tool for dubbing videos by subtitle files.',
                                          formatter_class=argparse.RawTextHelpFormatter)
 
-    arg_parser.add_argument('-rc', '--remove-cache', action='store_true',
-                            help='Remove all cache files')
+    arg_parser.add_argument('-rc', '--remove-cache', default=0, type=int, choices=(0, 1, 2),
+                            help='Remove all cache (_cached_texts directory) files\n'
+                                 '\t0 - No remove cache (default)\n'
+                                 '\t1 - Delete cache before voice acting\n'
+                                 '\t2 - Delete cache after voice acting')
     arg_parser.add_argument('-rf', '--cleanup-level', default=1,
                             help='Cleanup level'
                                  '\t0 = No removing any files\n'
@@ -99,8 +102,8 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
-
-    if args.remove_cache:
+    remove_cache = args.remove_cache
+    if remove_cache == 1:
         Voicer.Voicer().cleanup()
 
     FFMpegWrapper.DEFAULT_FFMPEG_LOG_LEVEL = args.loglevel
@@ -129,6 +132,9 @@ def main():
                            args.gain_during_overlay, args.align)
 
     dubber.dub_dir(videos, video_format, subtitles_format)
+
+    if remove_cache == 2:
+        Voicer.Voicer().cleanup()
 
     if total_time:
         print(f'Total time: {perf_counter() - total_time:,.3f} s.')
