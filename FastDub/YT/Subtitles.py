@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import os.path
 import time
@@ -17,12 +19,10 @@ def _float_to_srt_time_format(d: float) -> str:
 
 
 def _from_json(translation: Iterable[dict[str, str]]) -> str:
-    srt_s = ''
-    for i, el in enumerate(translation, 1):
-        srt_s += (f"\n\n{i}\n{_float_to_srt_time_format((start := int(el['start'])) / 1000.)}"
-                  " --> "
-                  f"{_float_to_srt_time_format((start + int(el['dur'])) / 1000.)}\n{el['text']}")
-    return srt_s.lstrip('\n')
+    return ''.join(f"\n\n{i}\n{_float_to_srt_time_format((start := int(el['start'])) / 1000.)}"
+                   " --> "
+                   f"{_float_to_srt_time_format((start + int(el['dur'])) / 1000.)}\n{el['text']}"
+                   for i, el in enumerate(translation, 1)).lstrip('\n')
 
 
 def download_srt(video_id: str, lang: str, fp: str | Path):

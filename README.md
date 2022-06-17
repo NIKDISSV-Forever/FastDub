@@ -25,12 +25,14 @@ Package for voice over subtitles:
 > python -m FastDub --help
 
 ```
-usage: FastDub [-h] [-rc {0,1,2}] [-rf CLEANUP_LEVEL] [-l LANGUAGE] [-tc THREADS_COUNT] [-i INPUT] [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT]
-               [-En EXCLUDE [EXCLUDE ...]] [-Eu EXCLUDE_UNDERSCORE] [-sc | --sidechain | --no-sidechain] [-sc-msl MIN_SILENCE_LEN] [-sc-st SILENCE_THRESH]
+usage: FastDub [-h] [-rc {0,1,2}] [-rf CLEANUP_LEVEL] [-l LANGUAGE] [-tc THREADS_COUNT] [-i INPUT] [-vf VIDEO_FORMAT]
+               [-sf SUBTITLES_FORMAT] [-En EXCLUDE [EXCLUDE ...]] [-Eu EXCLUDE_UNDERSCORE]
+               [-sc | --sidechain | --no-sidechain] [-sc-msl MIN_SILENCE_LEN] [-sc-st SILENCE_THRESH]
                [-sc-gdo GAIN_DURING_OVERLAY]
-               [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft david desktop - english (united states,aleksandr-hq,
-arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}]
-               [-a ALIGN] [-ll LOGLEVEL] [-y | --confirm | --no-confirm] [-yt] [-ak API_KEYS [API_KEYS ...]] [-tr] [--rewrite-srt | --no-rewrite-srt]
+               [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft david desktop - english (united states,aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}]
+               [-a ALIGN] [-ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}]
+               [-y | --confirm | --no-confirm] [-yt] [-ak API_KEYS [API_KEYS ...]] [-tr]
+               [--rewrite-srt | --no-rewrite-srt]
                [-ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}]
 
 FastDub is a tool for dubbing videos by subtitle files.
@@ -39,9 +41,9 @@ options:
   -h, --help            show this help message and exit
   -rc {0,1,2}, --remove-cache {0,1,2}
                         Remove all cache (_cached_texts directory) files
-                                0 - No remove cache (default)
+                                0 - No remove cache
                                 1 - Delete cache before voice acting
-                                2 - Delete cache after voice acting
+                                2 - Delete cache after voice acting (default)
   -rf CLEANUP_LEVEL, --cleanup-level CLEANUP_LEVEL
                         Cleanup level   0 = No removing any files
                                 > 0 remove audio from video (default)
@@ -72,10 +74,7 @@ Audio Ducking:
                         Gain during overlay in dB (-11)
 
 Voicer:
-  -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,artemi
-y,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}, --voice {microsoft irina desktop - russian,microsoft zira desktop
- - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatian
-a,victoria,vitaliy,volodymyr,yuriy}
+  -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}, --voice {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}
                         SAPI voice for voice acting.
   -a ALIGN, --align ALIGN
                         Audio fit align
@@ -83,7 +82,7 @@ a,victoria,vitaliy,volodymyr,yuriy}
                                 2 = center (default)
 
 FFMpeg Output:
-  -ll LOGLEVEL, --loglevel LOGLEVEL
+  -ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}, --loglevel {trace,debug,verbose,info,warning,error,fatal,panic,quiet}
                         FFMpegWrapper loglevel
   -y, --confirm, --no-confirm
                         Don't ask for confirmation (default: True)
@@ -98,9 +97,8 @@ Translate subtitles:
   --rewrite-srt, --no-rewrite-srt
                         Rewrite input subtitles files.
                         If not, add "_" to the beginning of the original subtitle file. (default: False)
-  -ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}, --translate-service {a
-libaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}
-                        Subtitle translation service. (default google)
+  -ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}, --translate-service {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}
+                        Subtitle translation service. (default google)```
 ```
 
 **If the voice set after !: is not selected during voiceover, clear the cache with the -rc argument**

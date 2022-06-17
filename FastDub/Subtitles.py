@@ -14,9 +14,9 @@ LINE_REGEX = re.compile(r'\n\n^\d+$\n', re.M)
 
 
 def _ms_to_srt_time(ms: int) -> str:
-    s, ms = divmod(ms, 1000)
-    m, s = divmod(s, 60)
-    h, m = divmod(m, 60)
+    s, ms = ms // 1000, ms % 1000
+    m, s = s // 60, s % 60
+    h, m = m // 60, m % 60
     return f'{h:0>2}:{m:0>2}:{s:0>2},{ms}'
 
 
@@ -40,12 +40,11 @@ class Line:
     def __init__(self, time_labels: tuple[datetime.time], text: str):
         self.ms: Line.TimeLabel = self.TimeLabel(*
                                                  [int(
-                                                     (label.hour * 3600000)
-                                                     + (label.minute * 60000)
-                                                     + (label.second * 1000)
-                                                     + (label.microsecond / 1000)
-                                                 ) for label in (time_labels[0], time_labels[-1])][:2]
-                                                 )
+                                                     label.hour * 3600000
+                                                     + label.minute * 60000
+                                                     + label.second * 1000
+                                                     + label.microsecond / 1000
+                                                 ) for label in (time_labels[0], time_labels[-1])][:2])
         self.text: str = text
         self._as_repr = f'Line({self.ms}, {self.text!r})'
 
@@ -70,10 +69,10 @@ def parse(text_or_file: str, skip_empty: bool = False) -> tuple[Line] | tuple:
         text = times_text[1].strip()
         if not text:
             continue
-        subtitles += Line(tuple(datetime.time(k.hour, k.minute, k.second, k.microsecond) for k in
-                                [datetime.datetime.strptime(j, '%H:%M:%S,%f') for j in
-                                 times_text[0].split(' --> ', 1)]), text),
-    return tuple(line for line in subtitles if line.text.strip()) if skip_empty else subtitles
+        subtitles += Line((*(datetime.time(k.hour, k.minute, k.second, k.microsecond) for k in
+                             [datetime.datetime.strptime(j, '%H:%M:%S,%f') for j in
+                              times_text[0].split(' --> ', 1)]),), text),
+    return (*(line for line in subtitles if line.text.strip()),) if skip_empty else subtitles
 
 
 def unparse(subtitles: tuple[Line]) -> str:

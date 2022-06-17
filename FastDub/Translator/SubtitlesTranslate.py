@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import multiprocessing.pool
 import os.path
 from functools import cache
-from pathlib import Path
 
-import tqdm
+from tqdm import tqdm
 
 from FastDub import Subtitles
 from FastDub.Translator import *
@@ -18,9 +19,15 @@ class SrtTranslate:
         self.rewrite = rewrite
         self.threads_count = threads_count or multiprocessing.cpu_count()
 
+    @cache
+    def translate_line(self, text: str) -> str:
+        return self.service(text, to_language=self.language)
+
     def translate_all(self, input_srt: str, output_srt: str):
         parsed = Subtitles.parse(input_srt)
-        _pb = tqdm.tqdm(parsed, 'Translating', len(parsed), unit='line', dynamic_ncols=True)
+        for line in parsed:
+            line.text = line.text.strip()
+        _pb = tqdm(parsed, 'Translating', len(parsed), unit='line', dynamic_ncols=True)
         if self.threads_count > 1:
             def handler(line: Subtitles.Line):
                 line.text = self.translate_line(line.text)
@@ -30,13 +37,9 @@ class SrtTranslate:
                 pool.map(handler, parsed)
         else:
             for line in _pb:
-                line.text = self.translate_line(line.text.strip())
+                line.text = self.translate_line(line.text)
         with open(output_srt, 'w', encoding='UTF-8') as f:
             f.write(Subtitles.unparse(parsed))
-
-    @cache
-    def translate_line(self, text: str):
-        return self.service(text, to_language=self.language)
 
     def translate_dir(self, files: dict[str, dict[str, str]], subtitles_format: str):
         for fn, exts in files.items():

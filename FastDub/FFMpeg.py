@@ -17,7 +17,7 @@ class FFMpegWrapper:
     def convert(cls, *args, loglevel=None):
         if not loglevel:
             loglevel = cls.DEFAULT_FFMPEG_LOG_LEVEL
-        check_call([cls.FFMPEG_EXE, '-v', loglevel, *cls.DEFAULT_ARGS, *args])
+        check_call((cls.FFMPEG_EXE, '-v', loglevel, *cls.DEFAULT_ARGS, *args))
 
     @staticmethod
     def replace_audio_in_video(video_path: str, audio_path: str, output_path: str):

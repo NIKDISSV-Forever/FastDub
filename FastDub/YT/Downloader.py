@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import multiprocessing.pool
 from pathlib import Path
 from shutil import get_terminal_size
-from typing import Callable, TypeVar, Optional, Iterable
+from typing import Callable, Iterable, Optional, TypeVar
 from urllib.parse import urlparse
 
 from FastDub.YT import *
@@ -69,7 +71,6 @@ class DownloadYTVideo:
     @staticmethod
     def progress_callback(total: int, downloaded: float, ratio: float, rate: float, eta: float):
         print(
-            end=f'\r[{ratio:.2%}] {downloaded:,.2f}/{total/1048576:,.2f}MB. {rate:,.2f} kb/s: '
-                f'ETA {eta} sec.'
-                ''.ljust(get_terminal_size().columns),
+            end=f'\r[{ratio:.2%}] {downloaded:,.2f}/{total / 1048576:,.2f}MB. {rate:,.2f} kb/s: '
+                f'ETA {eta} sec.'.ljust(get_terminal_size().columns),
             flush=True)

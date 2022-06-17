@@ -6,6 +6,7 @@ try:
     from FastDub.YT.pafy.backend_youtube_dl import YtdlPafy
 except ImportError as e:
     from typing import Any as YtdlPafy
+
     SUPPORTED = False
 else:
     SUPPORTED = True

@@ -2,9 +2,9 @@ import setuptools
 
 with open('requires.txt', encoding='UTF-8') as f:
     requires = f.read().strip().splitlines()
-with open('yt_requires.txt', encoding='UTF-8') as f:
+with open('requires_yt.txt', encoding='UTF-8') as f:
     yt_requires = f.read().strip().splitlines()
-with open('tr_requires.txt', encoding='UTF-8') as f:
+with open('requires_tr.txt', encoding='UTF-8') as f:
     tr_requires = f.read().strip().splitlines()
 
 with open('README.md', encoding='UTF-8') as f:
@@ -16,14 +16,15 @@ setuptools.setup(
                 "and dynamic voice changer for a single track.",
     long_description=readme,
     long_description_content_type="text/markdown",
-    version="2.4.7",
+    version="2.4.8",
     author="Nikita (NIKDISSV)",
     install_requires=requires,
     extras_require={'YT': yt_requires, 'TR': tr_requires},
     author_email='nikdissv@proton.me',
     project_urls={
-        'Download Voices': 'https://rhvoice.su/voices/',
-        'GitHub': 'https://github.com/NIKDISSV-Forever/FastDub'
+        'Download Voices': 'https://rhvoice.su/voices',
+        'GitHub': 'https://github.com/NIKDISSV-Forever/FastDub',
+        'YouTube': 'https://www.youtube.com/channel/UC8JV3zPSVm9EKSWD1XdkQvw',
     },
     packages=setuptools.find_packages(),
     license='MIT',
@@ -51,6 +52,5 @@ setuptools.setup(
         'Topic :: Utilities',
 
         'Typing :: Typed',
-
     ]
 )

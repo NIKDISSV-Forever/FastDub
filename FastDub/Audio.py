@@ -25,6 +25,7 @@ class AudioSegment(pydub.AudioSegment):
     def append(self, seg, _=None):
         """pydub.AudioSegment. Without crossfade."""
         seg1, seg2 = AudioSegment._sync(self, seg)
+        # noinspection PyProtectedMember
         return seg1._spawn(seg1._data + seg2._data)
 
     def __add__(self, other):
@@ -32,12 +33,13 @@ class AudioSegment(pydub.AudioSegment):
         return self.append(other)
 
 
-def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = True, log_level: str = 'trace'
+def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = True, log_level: str = 'error'
                  ) -> AudioSegment:
     if speed_changes == 1.:
         return audio if allow_copy else copy(audio)
     if speed_changes <= 0.:
-        raise ValueError(f"Speed cannot be negative ({speed_changes}).")
+        raise ValueError(f"Speed cannot be negative ({speed_changes}).\n"
+                         "This is usually due to errors in subtitle timecodes.")
 
     atempo = array('d')
     if speed_changes < .5:
@@ -57,8 +59,8 @@ def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = T
 
     with TemporaryDirectory() as tmp:
         inp = os.path.join(tmp, 'inp.mp3')
-        out = os.path.join(tmp, 'out.mp3')
         audio.export(inp)
+        out = os.path.join(tmp, 'out.mp3')
         FFMpegWrapper.convert('-i', inp,
                               '-af', ','.join([f'atempo={i}' for i in atempo]),
                               out, loglevel=log_level)
@@ -82,7 +84,6 @@ def side_chain(sound1: AudioSegment, sound2: AudioSegment,
                ) -> AudioSegment:
     for start, end in tqdm(
             pydub.silence.detect_nonsilent(sound2, min_silence_len=min_silence_len, silence_thresh=silence_thresh),
-            desc="Ducking", colour='white'
-    ):
+            desc="Ducking", colour='white'):
         sound1 = sound1.overlay(sound2[start:end], position=start, gain_during_overlay=gain_during_overlay)
     return sound1

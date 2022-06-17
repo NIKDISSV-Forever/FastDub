@@ -19,11 +19,11 @@ def parse_args() -> argparse.Namespace:
                                          description='FastDub is a tool for dubbing videos by subtitle files.',
                                          formatter_class=argparse.RawTextHelpFormatter)
 
-    arg_parser.add_argument('-rc', '--remove-cache', default=0, type=int, choices=(0, 1, 2),
+    arg_parser.add_argument('-rc', '--remove-cache', default=2, type=int, choices=(0, 1, 2),
                             help='Remove all cache (_cached_texts directory) files\n'
-                                 '\t0 - No remove cache (default)\n'
+                                 '\t0 - No remove cache\n'
                                  '\t1 - Delete cache before voice acting\n'
-                                 '\t2 - Delete cache after voice acting')
+                                 '\t2 - Delete cache after voice acting (default)')
     arg_parser.add_argument('-rf', '--cleanup-level', default=1,
                             help='Cleanup level'
                                  '\t0 = No removing any files\n'
@@ -75,6 +75,8 @@ def parse_args() -> argparse.Namespace:
 
     ffmpeg_group = arg_parser.add_argument_group('FFMpeg Output')
     ffmpeg_group.add_argument('-ll', '--loglevel', default='panic',
+                              choices=(
+                                  'trace', 'debug', 'verbose', 'info', 'warning', 'error', 'fatal', 'panic', 'quiet'),
                               help='FFMpegWrapper loglevel')
     ffmpeg_group.add_argument('-y', '--confirm', action=argparse.BooleanOptionalAction, default=True,
                               help="Don't ask for confirmation")
@@ -82,7 +84,6 @@ def parse_args() -> argparse.Namespace:
     if YT.SUPPORTED:
         yt_group = arg_parser.add_argument_group('Youtube')
         yt_group.add_argument('-yt', '--youtube', action='store_true', default=False)
-
         yt_group.add_argument('-ak', '--api-keys', nargs='+', default=(), help='Youtube API key/s')
 
     if Translator.SUPPORTED:

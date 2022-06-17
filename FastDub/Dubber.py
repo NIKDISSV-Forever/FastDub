@@ -25,7 +25,6 @@ class Dubber:
     def __init__(self, voice: str, language: str, ducking: bool,
                  min_silence_len: int, silence_thresh: float, gain_during_overlay: int,
                  fit_align: float = 2.):
-
         self.language = language
         self.fit_align = fit_align
         if voice:
