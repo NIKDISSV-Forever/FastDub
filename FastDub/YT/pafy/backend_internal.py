@@ -1,21 +1,23 @@
-import os
 import hashlib
-import tempfile
 import json
+import logging
+import os
 import re
 import sys
+import tempfile
 import time
-import logging
 from xml.etree import ElementTree
 
 if sys.version_info[:2] >= (3, 0):
     # pylint: disable=E0611,F0401,I0011
     from urllib.parse import parse_qs, unquote_plus
+
     uni, pyver = str, 3
 
 else:
     from urllib import unquote_plus
     from urlparse import parse_qs
+
     uni, pyver = unicode, 2
 
 early_py_version = sys.version_info[:2] < (2, 7)
@@ -24,7 +26,6 @@ from . import g
 from .pafy import fetch_decode, dbg, get_categoryname
 from .backend_shared import BasePafy, BaseStream
 from .jsinterp import JSInterpreter
-
 
 funcmap = {}
 
@@ -40,7 +41,6 @@ class InternPafy(BasePafy):
         self._formats = None
         self.ciphertag = None  # used by Stream class in url property def
         super(InternPafy, self).__init__(*args, **kwargs)
-
 
     def _fetch_basic(self):
         """ Fetch basic data and streams. """
@@ -114,7 +114,6 @@ class InternPafy(BasePafy):
         self._process_streams()
         self.expiry = time.time() + g.lifespan
 
-
     def _fetch_gdata(self):
         """ Extract gdata values, fetch gdata if necessary. """
         if self._have_gdata:
@@ -131,7 +130,6 @@ class InternPafy(BasePafy):
         self._likes = int(statistics["likeCount"])
         self._dislikes = int(statistics["dislikeCount"])
         self._have_gdata = 1
-
 
     def _process_streams(self):
         """ Create Stream object lists from internal stream maps. """
@@ -234,7 +232,7 @@ class InternStream(BaseStream):
 
             elif self.encrypted:
                 self._sig = _decodesig(self._sig, self._parent.js_url,
-                        self._parent.callback)
+                                       self._parent.callback)
 
             self._url = _make_url(self._rawurl, self._sig)
 

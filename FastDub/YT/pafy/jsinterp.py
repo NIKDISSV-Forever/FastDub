@@ -281,4 +281,5 @@ class JSInterpreter(object):
                 if abort:
                     break
             return res
+
         return resf

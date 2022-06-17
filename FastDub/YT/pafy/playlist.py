@@ -1,18 +1,19 @@
-import sys
-import re
-import json
 import itertools
+import json
+import re
+import sys
 
 from . import g
-from .pafy import new, get_categoryname, call_gdata, fetch_decode
-
+from .pafy import call_gdata, fetch_decode, get_categoryname, new
 
 if sys.version_info[:2] >= (3, 0):
     # pylint: disable=E0611,F0401,I0011
     from urllib.parse import parse_qs, urlparse
+
     pyver = 3
 else:
     from urlparse import parse_qs, urlparse
+
     pyver = 2
 
 
@@ -129,7 +130,7 @@ def parseISO8591(duration):
             _, hours, _, minutes, _, seconds = duration[0]
             duration = [seconds, minutes, hours]
             duration = [int(v) if len(v) > 0 else 0 for v in duration]
-            duration = sum([60**p*v for p, v in enumerate(duration)])
+            duration = sum([60**p * v for p, v in enumerate(duration)])
         else:
             duration = 30
     else:
@@ -161,7 +162,7 @@ class Playlist(object):
 
     @classmethod
     def from_dict(cls, pl, basic, gdata, size, callback):
-        t = cls(pl['id'],  basic, gdata, size, callback)
+        t = cls(pl['id'], basic, gdata, size, callback)
         t._title = pl['title']
         t._author = pl['author']
         t._description = pl['description']
@@ -172,7 +173,7 @@ class Playlist(object):
 
     @classmethod
     def from_url(cls, url, basic, gdata, size, callback):
-        t = cls(url,  basic, gdata, size, callback)
+        t = cls(url, basic, gdata, size, callback)
         t._fetch_basic()
         return t
 
@@ -326,10 +327,10 @@ def dict_for_playlist(v):
         title=v['snippet']['title'],
         author=v['snippet']['channelTitle'],
         thumbnail=v['snippet'].get('thumbnails', {})
-                              .get('default', {}).get('url'),
+        .get('default', {}).get('url'),
         description=v['snippet']['description'],
         length_seconds=parseISO8591(
-                       v['contentDetails']['duration']),
+            v['contentDetails']['duration']),
         category=get_categoryname(v['snippet']['categoryId']),
         views=stats.get('viewCount', 0),
         likes=stats.get('likeCount', 0),

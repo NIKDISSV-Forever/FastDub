@@ -1,20 +1,22 @@
+import logging
 import os
 import re
+import subprocess
 import sys
 import time
-import logging
-import subprocess
 
 if sys.version_info[:2] >= (3, 0):
     # pylint: disable=E0611,F0401,I0011
     from urllib.request import urlopen, build_opener
     from urllib.error import HTTPError, URLError
     from urllib.parse import parse_qs, urlparse
+
     uni, pyver = str, 3
 
 else:
     from urllib2 import urlopen, build_opener, HTTPError, URLError
     from urlparse import parse_qs, urlparse
+
     uni, pyver = unicode, 2
 
 early_py_version = sys.version_info[:2] < (2, 7)
@@ -33,7 +35,7 @@ def extract_video_id(url):
     url = str(url).strip()
 
     if idregx.match(url):
-        return url # ID of video
+        return url  # ID of video
 
     if '://' not in url:
         url = '//' + url
@@ -52,7 +54,6 @@ def extract_video_id(url):
 
 
 class BasePafy(object):
-
     """ Class to represent a YouTube video. """
 
     def __init__(self, video_url, basic=True, gdata=False,
@@ -104,16 +105,13 @@ class BasePafy(object):
                 # pylint: disable=W0104
                 s.get_filesize()
 
-
     def _fetch_basic(self):
         """ Fetch basic data and streams. """
         raise NotImplementedError
 
-
     def _fetch_gdata(self):
         """ Extract gdata values, fetch gdata if necessary. """
         raise NotImplementedError
-
 
     def _get_video_gdata(self, video_id):
         """ Return json string containing video metadata from gdata api. """
@@ -128,11 +126,9 @@ class BasePafy(object):
             self.callback("Fetched video gdata")
         return gdata
 
-
     def _process_streams(self):
         """ Create Stream object lists from internal stream maps. """
         raise NotImplementedError
-
 
     def __repr__(self):
         """ Print video metadata. Return utf8 string. """
@@ -355,9 +351,9 @@ class BasePafy(object):
             return None
 
         if quality == "max":
-        	r = max(streams, key=lambda x:self._sortvideokey(x, preftype=preftype, ftypestrict=ftypestrict))
+            r = max(streams, key=lambda x: self._sortvideokey(x, preftype=preftype, ftypestrict=ftypestrict))
         elif quality == "min":
-        	r = min(streams, key=lambda x:self._sortvideokey(x, preftype=preftype, ftypestrict=ftypestrict))
+            r = min(streams, key=lambda x: self._sortvideokey(x, preftype=preftype, ftypestrict=ftypestrict))
         else:
             return None
 
@@ -377,8 +373,8 @@ class BasePafy(object):
         return self._getvideo(preftype, ftypestrict, vidonly=True, quality="max")
 
     def getworstvideo(self, preftype="any", ftypestrict=True):
-    	""" Return the worst resolution video-only stream. """
-    	return self._getvideo(preftype, ftypestrict, vidonly=True, quality="min")
+        """ Return the worst resolution video-only stream. """
+        return self._getvideo(preftype, ftypestrict, vidonly=True, quality="min")
 
     def getbest(self, preftype="any", ftypestrict=True):
         """
@@ -390,8 +386,8 @@ class BasePafy(object):
         return self._getvideo(preftype, ftypestrict, vidonly=False, quality="max")
 
     def getworst(self, preftype="any", ftypestrict=True):
-    	""" Return the lowest resolution video+audio stream. """
-    	return self._getvideo(preftype, ftypestrict, vidonly=False, quality="min")
+        """ Return the lowest resolution video+audio stream. """
+        return self._getvideo(preftype, ftypestrict, vidonly=False, quality="min")
 
     def _sortaudiokey(self, x, keybitrate=0, keyftype=0, preftype="any", ftypestrict=True):
         """ Sort function. """
@@ -405,7 +401,7 @@ class BasePafy(object):
         if not self.audiostreams:
             return None
 
-        r = max(self.audiostreams, key=lambda x:self._sortaudiokey(x, preftype=preftype, ftypestrict=ftypestrict))
+        r = max(self.audiostreams, key=lambda x: self._sortaudiokey(x, preftype=preftype, ftypestrict=ftypestrict))
 
         if ftypestrict and preftype != "any" and r.extension != preftype:
             return None
@@ -418,7 +414,7 @@ class BasePafy(object):
         if not self.audiostreams:
             return None
 
-        r = min(self.audiostreams, key=lambda x:self._sortaudiokey(x, preftype=preftype, ftypestrict=ftypestrict))
+        r = min(self.audiostreams, key=lambda x: self._sortaudiokey(x, preftype=preftype, ftypestrict=ftypestrict))
 
         if ftypestrict and preftype != "any" and r.extension != preftype:
             return None
@@ -464,7 +460,6 @@ class BasePafy(object):
 
 
 class BaseStream(object):
-
     """ YouTube video stream class. """
 
     def __init__(self, parent):
@@ -503,7 +498,7 @@ class BaseStream(object):
         if max_length:
             max_length = max_length + 1 + len(self.extension)
             if len(filename) > max_length:
-                filename = filename[:max_length-3] + '...'
+                filename = filename[:max_length - 3] + '...'
 
         filename += "." + self.extension
         return xenc(filename)
@@ -616,7 +611,7 @@ class BaseStream(object):
             return True
 
     def download(self, filepath="", quiet=False, progress="Bytes",
-                           callback=None, meta=False, remux_audio=False):
+                 callback=None, meta=False, remux_audio=False):
         """ Download.  Use quiet=True to supress output. Return filename.
 
         Use meta=True to append video id and itag to generated filename
@@ -628,13 +623,13 @@ class BaseStream(object):
         savedir = filename = ""
 
         if filepath and os.path.isdir(filepath):
-            savedir, filename = filepath, self.generate_filename(max_length=256-len('.temp'))
+            savedir, filename = filepath, self.generate_filename(max_length=256 - len('.temp'))
 
         elif filepath:
             savedir, filename = os.path.split(filepath)
 
         else:
-            filename = self.generate_filename(meta=meta, max_length=256-len('.temp'))
+            filename = self.generate_filename(meta=meta, max_length=256 - len('.temp'))
 
         filepath = os.path.join(savedir, filename)
         temp_filepath = filepath + ".temp"
@@ -653,7 +648,6 @@ class BaseStream(object):
 
         if os.path.exists(temp_filepath):
             if os.stat(temp_filepath).st_size < total:
-
                 offset = os.stat(temp_filepath).st_size
                 fmode = "ab"
 
@@ -741,15 +735,15 @@ def remux(infile, outfile, quiet=False, muxer="ffmpeg"):
 
 def get_size_done(bytesdone, progress):
     _progress_dict = {'KB': 1024.0, 'MB': 1048576.0, 'GB': 1073741824.0}
-    return round(bytesdone/_progress_dict.get(progress, 1.0), 2)
+    return round(bytesdone / _progress_dict.get(progress, 1.0), 2)
 
 
 def get_status_string(progress):
     status_string = ('  {:,} ' + progress + ' [{:.2%}] received. Rate: [{:4.0f} '
-                     'KB/s].  ETA: [{:.0f} secs]')
+                                            'KB/s].  ETA: [{:.0f} secs]')
 
     if early_py_version:
         status_string = ('  {0:} ' + progress + ' [{1:.2%}] received. Rate:'
-                         ' [{2:4.0f} KB/s].  ETA: [{3:.0f} secs]')
+                                                ' [{2:4.0f} KB/s].  ETA: [{3:.0f} secs]')
 
     return status_string

@@ -1,7 +1,8 @@
 import re
+
+from .backend_shared import pyver
 from .pafy import call_gdata
 from .playlist import Playlist
-from .backend_shared import pyver
 
 
 def get_channel(channel_url, basic=False, gdata=False,

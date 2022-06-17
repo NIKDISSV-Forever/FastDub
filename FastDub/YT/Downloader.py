@@ -16,7 +16,7 @@ class DownloadYTVideo:
     __slots__ = ('save_dir', 'language', 'playlist', 'API_KEYS')
 
     def __init__(self, url: str, language: str, api_keys: Iterable[str] = ()):
-        self.API_KEYS = {g.api_key, 'AIzaSyCHxJ84-ryessLJfWZVWldiuVCnxtf0Nm4', *api_keys}
+        self.API_KEYS = {pafy_g.api_key, 'AIzaSyCHxJ84-ryessLJfWZVWldiuVCnxtf0Nm4', *api_keys}
 
         if urlparse(url).path == '/playlist':
             playlist = self.with_api_key(lambda: pafy.get_playlist2(url))

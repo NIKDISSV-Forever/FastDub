@@ -1,7 +1,7 @@
-import sys
-import time
 import logging
 import os
+import sys
+import time
 
 if sys.version_info[:2] >= (3, 0):
     # pylint: disable=E0611,F0401,I0011
@@ -15,7 +15,6 @@ from . import g
 from .backend_shared import BasePafy, BaseStream, remux, get_status_string, get_size_done
 
 dbg = logging.debug
-
 
 early_py_version = sys.version_info[:2] < (2, 7)
 
@@ -97,7 +96,7 @@ class YtdlStream(BaseStream):
                 info.get('vcodec') == 'none'):
             self._mediatype = 'audio'
         elif (info.get('acodec') == 'none' and
-                info.get('vcodec') != 'none'):
+              info.get('vcodec') != 'none'):
             self._mediatype = 'video'
         else:
             self._mediatype = 'normal'
@@ -134,7 +133,7 @@ class YtdlStream(BaseStream):
                  callback=None, meta=False, remux_audio=False):
 
         downloader = youtube_dl.downloader.http.HttpFD(ydl(),
-            {'http_chunk_size': 10485760})
+                                                       {'http_chunk_size': 10485760})
 
         progress_available = ["KB", "MB", "GB"]
         if progress not in progress_available:
@@ -156,7 +155,7 @@ class YtdlStream(BaseStream):
                     eta = s['eta']
 
                 progress_stats = (get_size_done(bytesdone, progress),
-                                  bytesdone*1.0/total, rate, eta)
+                                  bytesdone * 1.0 / total, rate, eta)
                 if not quiet:
                     status = status_string.format(*progress_stats)
                     sys.stdout.write("\r" + status + ' ' * 4 + "\r")

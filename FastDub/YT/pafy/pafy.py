@@ -23,11 +23,11 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 
-import sys
-import os
 import logging
-import time
+import os
 import re
+import sys
+import time
 
 if sys.version_info[:2] >= (3, 0):
     # pylint: disable=E0611,F0401,I0011
@@ -46,17 +46,17 @@ backend = "internal"
 if os.environ.get("PAFY_BACKEND") != "internal":
     try:
         import youtube_dl
+
         backend = "youtube-dl"
     except ImportError:
         raise ImportError(
-               "pafy: youtube-dl not found; you can use the internal backend by "
-               "setting the environmental variable PAFY_BACKEND to \"internal\". "
-               "It is not enabled by default because it is not as well maintained "
-               "as the youtube-dl backend.")
+            "pafy: youtube-dl not found; you can use the internal backend by "
+            "setting the environmental variable PAFY_BACKEND to \"internal\". "
+            "It is not enabled by default because it is not as well maintained "
+            "as the youtube-dl backend.")
 
 if os.environ.get("pafydebug") == "1":
     logging.basicConfig(level=logging.DEBUG)
-
 
 dbg = logging.debug
 
@@ -117,9 +117,9 @@ def new(url, basic=True, gdata=False, size=False,
     global Pafy
     if Pafy is None:
         if backend == "internal":
-           from .backend_internal import InternPafy as Pafy
+            from .backend_internal import InternPafy as Pafy
         else:
-           from .backend_youtube_dl import YtdlPafy as Pafy
+            from .backend_youtube_dl import YtdlPafy as Pafy
 
     return Pafy(url, basic, gdata, size, callback, ydl_opts=ydl_opts)
 
@@ -148,9 +148,9 @@ def get_categoryname(cat_id):
     try:
         for item in catinfo.get('items', []):
             title = item.get('snippet', {}).get('title', 'unknown')
-            cat_cache[cat_id] = {'title':title, 'updated':timestamp}
+            cat_cache[cat_id] = {'title': title, 'updated': timestamp}
             return title
-        cat_cache[cat_id] = {'updated':timestamp}
+        cat_cache[cat_id] = {'updated': timestamp}
         return 'unknown'
     except Exception:
         raise IOError("Error fetching category name for ID %s" % cat_id)
@@ -173,7 +173,7 @@ def set_categories(categories):
             for item in catinfo.get('items', []):
                 cid = item['id']
                 title = item.get('snippet', {}).get('title', 'unknown')
-                categories[cid] = {'title':title, 'updated':timestamp}
+                categories[cid] = {'title': title, 'updated': timestamp}
         except Exception:
             raise IOError("Error fetching category name for IDs %s" % idlist)
     cache('categories').update(categories)
