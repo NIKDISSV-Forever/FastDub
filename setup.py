@@ -13,6 +13,9 @@ for require in iglob('extra_requires/*_*.txt'):
     with open(require, encoding='UTF-8') as f:
         extras_require[
             Path(require).name.split('.')[0].split('_')[-1].upper()] = f.read().strip().splitlines()
+extras_require['ALL'] = requires
+for req in extras_require.values():
+    extras_require['ALL'] += req
 
 setuptools.setup(
     name="PyFastDub",
@@ -20,7 +23,7 @@ setuptools.setup(
                 "and dynamic voice changer for a single track.",
     long_description=readme,
     long_description_content_type="text/markdown",
-    version="2.5.1",
+    version="2.5.2",
     author="Nikita (NIKDISSV)",
     install_requires=requires,
     extras_require=extras_require,
