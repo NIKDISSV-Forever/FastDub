@@ -14,6 +14,18 @@ Package for voice over subtitles:
 
 > pip install PyFastDub[YT]
 
+**To translate all videos on a channel, pass "c/CHANNEL_ID" to --input**
+
+_To get the channel id if it only has a username, run the JS code in the browser console:_
+
+```javascript
+document.querySelector("body>link").href
+```
+
+For example:
+
+> python -m FastDub -i "c/[UCi-5OZ2tYuwMLIcEyOsbdRA](https://www.youtube.com/channel/UCi-5OZ2tYuwMLIcEyOsbdRA)" -yt
+
 # Subtitles translate
 
 ### Translate subtitles argument group

@@ -18,8 +18,12 @@ class DownloadYTVideo:
     def __init__(self, url: str, language: str, api_keys: Iterable[str] = ()):
         self.API_KEYS = {pafy_g.api_key, 'AIzaSyCHxJ84-ryessLJfWZVWldiuVCnxtf0Nm4', *api_keys}
 
-        if urlparse(url).path == '/playlist':
+        url_path = urlparse(url).path
+        if url_path == '/playlist':
             playlist = self.with_api_key(lambda: pafy.get_playlist2(url))
+            save_dir = playlist.plid
+        elif (path_split := url_path.strip('/').split('/')) and path_split[0] in ('c', 'channel'):
+            playlist = self.with_api_key(lambda: pafy.get_channel((path_split[1:] or (url,))[0]).uploads)
             save_dir = playlist.plid
         else:
             playlist = self.with_api_key(lambda: (pafy.new(url),))
