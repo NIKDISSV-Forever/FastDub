@@ -67,6 +67,7 @@ FastDub is a tool for dubbing videos by subtitle files.
 
 options:
   -h, --help            show this help message and exit
+  -rc {0,1,2}, --remove-cache {0,1,2}
                         Remove all cache (_cached_texts directory) files
                                 0 - No remove cache
                                 1 - Delete cache before voice acting
@@ -114,6 +115,12 @@ a,victoria,vitaliy,volodymyr,yuriy}
 FFMpeg Output:
   -ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}, --loglevel {trace,debug,verbose,info,warning,error,fatal,panic,quiet}
                         FFMpegWrapper loglevel
+  -y, --confirm, --no-confirm
+                        Don't ask for confirmation (default: True)
+
+YouTube:
+  -yt, --youtube
+  -ak API_KEYS [API_KEYS ...], --api-keys API_KEYS [API_KEYS ...]
                         Youtube API key/s
 
 YouTube Search:

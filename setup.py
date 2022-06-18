@@ -23,7 +23,7 @@ setuptools.setup(
                 "and dynamic voice changer for a single track.",
     long_description=readme,
     long_description_content_type="text/markdown",
-    version="2.5.2",
+    version="2.5.3",
     author="Nikita (NIKDISSV)",
     install_requires=requires,
     extras_require=extras_require,
