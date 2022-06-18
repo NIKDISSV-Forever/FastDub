@@ -1,14 +1,18 @@
+from glob import iglob
+from pathlib import Path
+
 import setuptools
 
-with open('requires.txt', encoding='UTF-8') as f:
+with open('requirements.txt', encoding='UTF-8') as f:
     requires = f.read().strip().splitlines()
-with open('requires_yt.txt', encoding='UTF-8') as f:
-    yt_requires = f.read().strip().splitlines()
-with open('requires_tr.txt', encoding='UTF-8') as f:
-    tr_requires = f.read().strip().splitlines()
-
 with open('README.md', encoding='UTF-8') as f:
     readme = f.read()
+
+extras_require = {}
+for require in iglob('extra_requires/*_*.txt'):
+    with open(require, encoding='UTF-8') as f:
+        extras_require[
+            Path(require).name.split('.')[0].split('_')[-1].upper()] = f.read().strip().splitlines()
 
 setuptools.setup(
     name="PyFastDub",
@@ -19,7 +23,7 @@ setuptools.setup(
     version="2.5.1",
     author="Nikita (NIKDISSV)",
     install_requires=requires,
-    extras_require={'YT': yt_requires, 'TR': tr_requires},
+    extras_require=extras_require,
     author_email='nikdissv@proton.me',
     project_urls={
         'Download Voices': 'https://rhvoice.su/voices',

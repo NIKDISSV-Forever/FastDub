@@ -82,9 +82,18 @@ def parse_args() -> argparse.Namespace:
                               help="Don't ask for confirmation")
 
     if YT.SUPPORTED:
-        yt_group = arg_parser.add_argument_group('Youtube')
+        yt_group = arg_parser.add_argument_group('YouTube')
         yt_group.add_argument('-yt', '--youtube', action='store_true', default=False)
         yt_group.add_argument('-ak', '--api-keys', nargs='+', default=(), help='Youtube API key/s')
+
+        yt_search_group = arg_parser.add_argument_group('YouTube Search')
+        yt_search_group.add_argument('-yts', '--youtube-search', action='store_true', default=False,
+                                     help='The input data is a query for searching on YouTube.'
+                                          ' (Adds "?" at the start of input)')
+        yt_search_group.add_argument('-yts-l', '--youtube-search-limit', type=int, default=20,
+                                     help='Sets limit to the number of results. Defaults to 20.')
+        yt_search_group.add_argument('-yts-rg', '--youtube-search-region', type=str, default='US',
+                                     help='Sets the result region. Defaults to "US".')
 
     if Translator.SUPPORTED:
         translate_group = arg_parser.add_argument_group('Translate subtitles')
@@ -115,7 +124,13 @@ def main():
         total_time = perf_counter()
 
     if YT.SUPPORTED and args.youtube:
-        downloader = DownloadYTVideo(args.input, args.language, args.api_keys)
+        query: str = args.input
+        if args.youtube_search and not query.startswith('?'):
+            query = f'?{query.strip()}'
+        downloader = DownloadYTVideo(query,
+                                     args.language, args.api_keys,
+                                     args.youtube_search_limit, args.youtube_search_limit,
+                                     )
         downloader.multiprocessing_download(args.threads_count)
         args.input = downloader.save_dir
 

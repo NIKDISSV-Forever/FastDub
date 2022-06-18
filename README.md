@@ -10,11 +10,11 @@ Package for voice over subtitles:
 
 # Youtube support
 
-### Youtube argument group
+## Youtube argument group
 
 > pip install PyFastDub[YT]
 
-**To translate all videos on a channel, pass "c/CHANNEL_ID" to --input**
+### Process all videos from a channel
 
 _To get the channel id if it only has a username, run the JS code in the browser console:_
 
@@ -22,9 +22,22 @@ _To get the channel id if it only has a username, run the JS code in the browser
 document.querySelector("body>link").href
 ```
 
-For example:
+**Then, in the input parameter,
+you can pass a link to the channel (with an id, not with a username) or a string of the format "c/CHANNEL_ID"**
+
+_For example:_
 
 > python -m FastDub -i "c/[UCi-5OZ2tYuwMLIcEyOsbdRA](https://www.youtube.com/channel/UCi-5OZ2tYuwMLIcEyOsbdRA)" -yt
+
+## YouTube Search argument group
+
+> pip install PyFastDub[YTS]
+
+That the input data was a request to YouTube, they must begin with "?".
+
+_For Example:_
+
+> python -m FastDub -i "?#python" -yt -yts-l 5
 
 # Subtitles translate
 
