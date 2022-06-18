@@ -29,9 +29,9 @@ setuptools.setup(
     extras_require=extras_require,
     author_email='nikdissv@proton.me',
     project_urls={
-        'Download Voices': 'https://rhvoice.su/voices',
-        'GitHub': 'https://github.com/NIKDISSV-Forever/FastDub',
-        'YouTube': 'https://www.youtube.com/channel/UC8JV3zPSVm9EKSWD1XdkQvw',
+        'Download Voices': 'https://rhvoice.su/voices/',
+        'GitHub': 'https://github.com/NIKDISSV-Forever/FastDub/',
+        'YouTube': 'https://www.youtube.com/channel/UC8JV3zPSVm9EKSWD1XdkQvw/',
     },
     packages=setuptools.find_packages(),
     license='MIT',

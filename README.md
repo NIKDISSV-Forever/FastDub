@@ -9,6 +9,7 @@ Package for voice over subtitles:
 > pip install -U [PyFastDub](https://pypi.org/project/PyFastDub/)
 
 # Install all dependencies
+
 > pip install PyFastDub[ALL]
 
 # Youtube support
@@ -164,3 +165,5 @@ _name and name2 will be announced, and the results will be saved to a folder wit
 > python -m FastDub DirToDub -tr -ts iciba -l ru
 
 ### python -m pydoc -w FastDub
+
+### You can write your issues on [GitHub](https://github.com/NIKDISSV-Forever/FastDub/) in English or in Russian.
