@@ -19,11 +19,14 @@ for req in extras_require.values():
 
 setuptools.setup(
     name="PyFastDub",
-    description="A Python package (+CLI) for voice over subtitles, with the ability to embed in video, audio ducking, "
-                "and dynamic voice changer for a single track.",
+    version="2.5.4b2",
+    description="A Python CLI package "
+                "for voice over subtitles, with the ability to embed in video, audio ducking, "
+                "and dynamic voice changer for a single track; "
+                "auto translating; "
+                "download and upload to YouTube supports",
     long_description=readme,
     long_description_content_type="text/markdown",
-    version="2.5.4b1",
     author="Nikita (NIKDISSV)",
     install_requires=requires,
     extras_require=extras_require,

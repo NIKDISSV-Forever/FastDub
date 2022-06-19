@@ -56,11 +56,11 @@ _client_secrets.json_
 * Specifying the -ytu-ps argument as non-private may result in processing errors, but this was not observed during
   testing.
 
-* Please note that video uploads require a large amount of quota (default has 10,000 per day)
+* Please note that video uploads require a large amount of [quota](https://console.cloud.google.com/iam-admin/quotas) (default has 10,000 per day)
 
 # Subtitles translate
 
-### Translate subtitles argument group
+### Translate argument group
 
 > pip install PyFastDub[TR]
 
@@ -75,7 +75,8 @@ usage: FastDub [-h] [-rc {0,1,2}] [-rf CLEANUP_LEVEL] [-l LANGUAGE] [-tc THREADS
                [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft david desktop - english (united states,aleksandr-hq,
 arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}]
                [-a ALIGN] [-ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}] [-y | --confirm | --no-confirm] [-yt] [-ak API_KEYS [API_KEYS ...]]      
-               [-yts] [-yts-l YOUTUBE_SEARCH_LIMIT] [-yts-rg YOUTUBE_SEARCH_REGION] [-tr] [--rewrite-srt | --no-rewrite-srt]
+               [-yts] [-yts-l YOUTUBE_SEARCH_LIMIT] [-yts-rg YOUTUBE_SEARCH_REGION] [-ytu] [-ytu-ps {private,public,unlisted}] [-ytu-t] [-tr]
+               [--rewrite-srt | --no-rewrite-srt]
                [-ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}]
 
 FastDub is a tool for dubbing videos by subtitle files.
@@ -146,7 +147,15 @@ YouTube Search:
   -yts-rg YOUTUBE_SEARCH_REGION, --youtube-search-region YOUTUBE_SEARCH_REGION
                         Sets the result region. Defaults to "US".
 
-Translate subtitles:
+YouTube Upload:
+  -ytu, --youtube-upload
+                        Upload video to YouTube channel after voice acting.
+  -ytu-ps {private,public,unlisted}, --privacy-status {private,public,unlisted}
+                        Video privacy status (If not private, errors are possible)
+  -ytu-t, --youtube-upload-translate
+                        Translate title and description on upload. (+ Arguments from translate argument group)
+
+Translate:
   -tr, --translate      Translate input subtitles files
   --rewrite-srt, --no-rewrite-srt
                         Rewrite input subtitles files.

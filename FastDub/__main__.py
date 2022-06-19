@@ -103,9 +103,13 @@ def parse_args() -> argparse.Namespace:
         ytu_group.add_argument('-ytu-ps', '--privacy-status', default=YTUpload.VALID_PRIVACY_STATUSES[0],
                                choices=YTUpload.VALID_PRIVACY_STATUSES,
                                help='Video privacy status (If not private, errors are possible)')
+        if Translator.SUPPORTED:
+            ytu_group.add_argument('-ytu-t', '--youtube-upload-translate', action='store_true', default=False,
+                                   help='Translate title and description on upload. '
+                                        '(+ Arguments from translate argument group)')
 
     if Translator.SUPPORTED:
-        translate_group = arg_parser.add_argument_group('Translate subtitles')
+        translate_group = arg_parser.add_argument_group('Translate')
         translate_group.add_argument('-tr', '--translate', action='store_true', default=False,
                                      help='Translate input subtitles files')
         translate_group.add_argument('--rewrite-srt', action=argparse.BooleanOptionalAction, default=False,
@@ -165,7 +169,7 @@ def main():
         translate = False
         translate_serv = None
         if Translator.SUPPORTED:
-            translate = args.translate
+            translate = args.youtube_upload_translate
             translate_serv = args.translate_service
         YTUpload.Uploader.Uploader(args.privacy_status, translate, translate_serv).upload(args.input)
 
