@@ -43,6 +43,21 @@ _For Example:_
 
 > python -m FastDub -i "?#python" -yt -yts-l 5
 
+## YouTube Upload argument group
+
+> pip install PyFastDub[YTU]
+
+To download, you need to go to [credentials](https://console.cloud.google.com/apis/credentials) (Create a new project if
+needed) > <kbd>+ Create credentials</kbd> > <kbd>OAuth Client ID</kbd> > <kbd>Desktop App</kbd>
+
+After filling in the required fields, <kbd>DOWNLOAD JSON</kbd> format and save to a working folder under the name
+_client_secrets.json_
+
+* Specifying the -ytu-ps argument as non-private may result in processing errors, but this was not observed during
+  testing.
+
+* Please note that video uploads require a large amount of quota (default has 10,000 per day)
+
 # Subtitles translate
 
 ### Translate subtitles argument group

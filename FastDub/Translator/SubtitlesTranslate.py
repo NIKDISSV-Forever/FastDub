@@ -3,19 +3,19 @@ from __future__ import annotations
 import multiprocessing.pool
 import os.path
 from functools import cache
+from typing import Callable
 
 from tqdm import tqdm
 
 from FastDub import Subtitles
-from FastDub.Translator import *
 
 
 class SrtTranslate:
     __slots__ = ('language', 'rewrite', 'threads_count', 'service', '_pb')
 
-    def __init__(self, language: str, service: str, rewrite: bool = False, threads_count: int = None):
+    def __init__(self, language: str, service: Callable, rewrite: bool = False, threads_count: int = None):
         self.language = language
-        self.service = getattr(translators, service)
+        self.service = service
         self.rewrite = rewrite
         self.threads_count = threads_count or multiprocessing.cpu_count()
 

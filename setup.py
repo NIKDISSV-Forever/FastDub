@@ -3,7 +3,7 @@ from pathlib import Path
 
 import setuptools
 
-with open('requirements.txt', encoding='UTF-8') as f:
+with open('requires.txt', encoding='UTF-8') as f:
     requires = f.read().strip().splitlines()
 with open('README.md', encoding='UTF-8') as f:
     readme = f.read()
@@ -23,7 +23,7 @@ setuptools.setup(
                 "and dynamic voice changer for a single track.",
     long_description=readme,
     long_description_content_type="text/markdown",
-    version="2.5.3",
+    version="2.5.4b0",
     author="Nikita (NIKDISSV)",
     install_requires=requires,
     extras_require=extras_require,

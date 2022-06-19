@@ -12,6 +12,7 @@ from FastDub import YT
 from FastDub.FFMpeg import FFMpegWrapper
 from FastDub.Translator.SubtitlesTranslate import SrtTranslate
 from FastDub.YT.Downloader import DownloadYTVideo
+from FastDub.YT import Upload as YTUpload
 
 
 def parse_args() -> argparse.Namespace:
@@ -95,6 +96,14 @@ def parse_args() -> argparse.Namespace:
         yt_search_group.add_argument('-yts-rg', '--youtube-search-region', type=str, default='US',
                                      help='Sets the result region. Defaults to "US".')
 
+    if YTUpload.SUPPORTED:
+        ytu_group = arg_parser.add_argument_group('YouTube Upload')
+        ytu_group.add_argument('-ytu', '--youtube-upload', action='store_true', default=False,
+                               help='Upload video to YouTube channel after voice acting.')
+        ytu_group.add_argument('-ytu-ps', '--privacy-status', default=YTUpload.VALID_PRIVACY_STATUSES[0],
+                               choices=YTUpload.VALID_PRIVACY_STATUSES,
+                               help='Video privacy status (If not private, errors are possible)')
+
     if Translator.SUPPORTED:
         translate_group = arg_parser.add_argument_group('Translate subtitles')
         translate_group.add_argument('-tr', '--translate', action='store_true', default=False,
@@ -102,9 +111,9 @@ def parse_args() -> argparse.Namespace:
         translate_group.add_argument('--rewrite-srt', action=argparse.BooleanOptionalAction, default=False,
                                      help='Rewrite input subtitles files.\n'
                                           'If not, add "_" to the beginning of the original subtitle file.')
-        translate_group.add_argument('-ts', '--translate-service', type=str, default='google',
-                                     choices=[i[1:] for i in dir(Translator.translators.apis) if
-                                              i.startswith('_') and not i.startswith('__')],
+        translate_group.add_argument('-ts', '--translate-service', type=Translator.get_service_by_name,
+                                     default='google',
+                                     choices=Translator.SERVICES,
                                      help='Subtitle translation service. (default google)')
 
     return arg_parser.parse_args()
@@ -151,6 +160,14 @@ def main():
 
     if remove_cache == 2:
         Voicer.Voicer().cleanup()
+
+    if args.youtube_upload:
+        translate = False
+        translate_serv = None
+        if Translator.SUPPORTED:
+            translate = args.translate
+            translate_serv = args.translate_service
+        YTUpload.Uploader.Uploader(args.privacy_status, translate, translate_serv).upload(args.input)
 
     if total_time:
         print(f'Total time: {perf_counter() - total_time:,.3f} s.')
