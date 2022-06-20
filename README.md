@@ -73,8 +73,9 @@ _client_secrets.json_
 usage: FastDub [-h] [-rc {0,1,2}] [-rf CLEANUP_LEVEL] [-l LANGUAGE] [-tc THREADS_COUNT] [-i INPUT] [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT]
                [-En EXCLUDE [EXCLUDE ...]] [-Eu EXCLUDE_UNDERSCORE] [-sc | --sidechain | --no-sidechain] [-sc-msl MIN_SILENCE_LEN] [-sc-st SILENCE_THRESH]
                [-sc-gdo GAIN_DURING_OVERLAY]
-               [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft david desktop - english (united states,aleksandr-hq,
-arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}]
+               [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft haruka desktop - japanese,microsoft david desktop - 
+english (united states),microsoft huihui desktop - chinese (simplified,aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,vict
+oria,vitaliy,volodymyr,yuriy}]
                [-a ALIGN] [-ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}] [-y | --confirm | --no-confirm] [-yt] [-ak API_KEYS [API_KEYS ...]]      
                [-yts] [-yts-l YOUTUBE_SEARCH_LIMIT] [-yts-rg YOUTUBE_SEARCH_REGION] [-ytu] [-ytu-ps {private,public,unlisted}] [-ytu-t] [-tr]
                [--rewrite-srt | --no-rewrite-srt]
@@ -119,10 +120,11 @@ Audio Ducking:
                         Gain during overlay in dB (-11)
 
 Voicer:
-  -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,artemi
-y,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}, --voice {microsoft irina desktop - russian,microsoft zira desktop
- - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatian
-a,victoria,vitaliy,volodymyr,yuriy}
+  -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft haruka desktop - japanese,microsoft david desktop - english (unit
+ed states),microsoft huihui desktop - chinese (simplified),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy
+,volodymyr,yuriy}, --voice {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft haruka desktop - japanese,microsoft david d
+esktop - english (united states),microsoft huihui desktop - chinese (simplified),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,ta
+tiana,victoria,vitaliy,volodymyr,yuriy}
                         SAPI voice for voice acting.
   -a ALIGN, --align ALIGN
                         Audio fit align

@@ -121,7 +121,8 @@ class Dubber:
                                      self.silence_thresh, self.gain_during_overlay
                                      ).export(result_out_audio)
                 else:
-                    Audio.AudioSegment.from_file(target_out_audio).overlay(audio, self.gain_during_overlay
+                    Audio.AudioSegment.from_file(target_out_audio).overlay(audio,
+                                                                           gain_during_overlay=self.gain_during_overlay
                                                                            ).export(result_out_audio)
 
             FFMpegWrapper.replace_audio_in_video(target_mp4, result_out_audio,
