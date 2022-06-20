@@ -4,7 +4,7 @@ import multiprocessing.pool
 import re
 from pathlib import Path
 from shutil import get_terminal_size
-from typing import Callable, Iterable, Optional, TypeVar
+from typing import Callable, Optional, TypeVar
 from urllib.parse import urlparse
 
 from tqdm import tqdm
@@ -23,30 +23,29 @@ def _path_save(name: str) -> str:
 
 class DownloadYTVideo:
     __slots__ = ('save_dir', 'language', 'playlist', 'api_keys')
-    API_KEYS_DEFAULT = {pafy_g.api_key, 'AIzaSyCHxJ84-ryessLJfWZVWldiuVCnxtf0Nm4'}
+    API_KEYS = {pafy_g.api_key, 'AIzaSyCHxJ84-ryessLJfWZVWldiuVCnxtf0Nm4'}
 
     def __init__(self, query: str,
-                 language: str, api_keys: Iterable[str] = (),
-                 search_limit: int = 20, region: str = 'US'
-                 ):
-        self.api_keys = self.API_KEYS_DEFAULT | {*api_keys}
+                 language: str,
+                 search_limit: int = 20,
+                 region: str = 'US'):
         url_path = urlparse(query).path
         if query.startswith('?'):
             query = query.removeprefix('?')
             videos = tqdm(VideosSearch(query, search_limit, language, region).result().get('result', ()),
                           'Video search processing', unit='video', dynamic_ncols=True, colour='white')
             playlist = (
-                *(with_api_key(lambda: pafy.new(data['id']), self.api_keys)
+                *(with_api_key(lambda: pafy.new(data['id']))
                   for data in videos if data.get('type', '') == 'video'),)
             save_dir = _path_save(query)
         elif url_path == '/playlist':
-            playlist = with_api_key(lambda: pafy.get_playlist2(query), self.api_keys)
+            playlist = with_api_key(lambda: pafy.get_playlist2(query))
             save_dir = playlist.plid
         elif (path_split := url_path.strip('/').split('/')) and path_split[0] in ('c', 'channel'):
-            playlist = with_api_key(lambda: pafy.get_channel((path_split[1:] or (query,))[0]).uploads, self.api_keys)
+            playlist = with_api_key(lambda: pafy.get_channel((path_split[1:] or (query,))[0]).uploads)
             save_dir = playlist.plid
         else:
-            playlist = with_api_key(lambda: (pafy.new(query),), self.api_keys)
+            playlist = with_api_key(lambda: (pafy.new(query),))
             save_dir = playlist[0].videoid
         save_dir = Path(save_dir)
         if not save_dir.is_dir():
@@ -74,7 +73,7 @@ class DownloadYTVideo:
         mp4_file = Path(f'{save_to}.mp4')
         if not mp4_file.is_file():
             try:
-                with_api_key(self.mp4_downloader(yt_dl, mp4_file), self.api_keys)
+                with_api_key(self.mp4_downloader(yt_dl, mp4_file))
                 print(f'\r{mp4_file} downloaded.'.ljust(get_terminal_size().columns))
             except OSError:
                 pass
@@ -92,8 +91,8 @@ class DownloadYTVideo:
             flush=True)
 
 
-def with_api_key(func: Callable[[], _API_RET_TYPE], api_keys: Iterable[str] = None) -> Optional[_API_RET_TYPE]:
-    for key in (api_keys or DownloadYTVideo.API_KEYS_DEFAULT):
+def with_api_key(func: Callable[[], _API_RET_TYPE]) -> Optional[_API_RET_TYPE]:
+    for key in DownloadYTVideo.API_KEYS:
         pafy.set_api_key(key)
         try:
             return func()

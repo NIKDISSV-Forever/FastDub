@@ -11,8 +11,8 @@ from FastDub import Translator
 from FastDub import YT
 from FastDub.FFMpeg import FFMpegWrapper
 from FastDub.Translator.SubtitlesTranslate import SrtTranslate
-from FastDub.YT.Downloader import DownloadYTVideo
 from FastDub.YT import Upload as YTUpload
+from FastDub.YT.Downloader import DownloadYTVideo
 
 
 def parse_args() -> argparse.Namespace:
@@ -140,10 +140,10 @@ def main():
         query: str = args.input
         if args.youtube_search and not query.startswith('?'):
             query = f'?{query.strip()}'
+        DownloadYTVideo.API_KEYS |= {*args.api_keys}
         downloader = DownloadYTVideo(query,
-                                     args.language, args.api_keys,
-                                     args.youtube_search_limit, args.youtube_search_limit,
-                                     )
+                                     args.language,
+                                     args.youtube_search_limit, args.youtube_search_limit, )
         downloader.multiprocessing_download(args.threads_count)
         args.input = downloader.save_dir
 
@@ -174,7 +174,7 @@ def main():
         YTUpload.Uploader.Uploader(args.privacy_status, translate, translate_serv).upload(args.input)
 
     if total_time:
-        print(f'Total time: {perf_counter() - total_time:,.3f} s.')
+        print(f'Total time: {perf_counter() - total_time:,g} s.')
 
 
 if __name__ == '__main__':
