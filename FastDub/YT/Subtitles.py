@@ -19,10 +19,11 @@ def _float_to_srt_time_format(d: float) -> str:
 
 
 def _from_json(translation: Iterable[dict[str, str]]) -> str:
-    return ''.join(f"\n\n{i}\n{_float_to_srt_time_format((start := int(el['start'])) / 1000.)}"
-                   " --> "
-                   f"{_float_to_srt_time_format((start + int(el['dur'])) / 1000.)}\n{el['text']}"
-                   for i, el in enumerate(translation, 1)).lstrip('\n')
+    return '\n\n'.join(
+        f"{i}\n{_float_to_srt_time_format((start := int(el['start'])) / 1000.)}"
+        " --> "
+        f"{_float_to_srt_time_format((start + int(el['dur'])) / 1000.)}\n{el['text']}"
+        for i, el in enumerate(translation, 1))
 
 
 def download_srt(video_id: str, lang: str, fp: str | Path):

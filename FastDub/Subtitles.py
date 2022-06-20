@@ -8,16 +8,17 @@ from FastDub.FFMpeg import FFMpegWrapper
 
 __all__ = ('LINE_REGEX',
            'Line',
-           'parse', 'unparse')
+           'parse', 'unparse',
+           'ms_to_srt_time')
 
 LINE_REGEX = re.compile(r'\n\n^\d+$\n', re.M)
 
 
-def _ms_to_srt_time(ms: int) -> str:
+def ms_to_srt_time(ms: int) -> str:
     s, ms = ms // 1000, ms % 1000
     m, s = s // 60, s % 60
     h, m = m // 60, m % 60
-    return f'{h:0>2}:{m:0>2}:{s:0>2},{ms}'
+    return f'{h:0>2.0f}:{m:0>2.0f}:{s:0>2.0f},{ms:.0f}'
 
 
 class Line:
@@ -33,9 +34,9 @@ class Line:
             self.time_str = f'{start} --> {end}'
 
         def __str__(self):
-            return (f"{_ms_to_srt_time(self.start)}"
+            return (f"{ms_to_srt_time(self.start)}"
                     " --> "
-                    f"{_ms_to_srt_time(self.end)}")
+                    f"{ms_to_srt_time(self.end)}")
 
     def __init__(self, time_labels: tuple[datetime.time], text: str):
         self.ms: Line.TimeLabel = self.TimeLabel(*

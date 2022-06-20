@@ -56,7 +56,8 @@ _client_secrets.json_
 * Specifying the -ytu-ps argument as non-private may result in processing errors, but this was not observed during
   testing.
 
-* Please note that video uploads require a large amount of [quota](https://console.cloud.google.com/iam-admin/quotas) (default has 10,000 per day)
+* Please note that video uploads require a large amount of [quota](https://console.cloud.google.com/iam-admin/quotas) (
+  default has 10,000 per day)
 
 # Subtitles translate
 
@@ -194,6 +195,10 @@ _name and name2 will be announced, and the results will be saved to a folder wit
 ## Translate Example
 
 > python -m FastDub DirToDub -tr -ts iciba -l ru
+
+## Other
+
+### The `FastDub.utils` module stores helper functions.
 
 ### python -m pydoc -w FastDub
 
