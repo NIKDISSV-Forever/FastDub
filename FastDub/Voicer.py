@@ -12,7 +12,6 @@ from FastDub.Audio import AudioSegment
 
 class UnknownVoice(Exception):
     __slots__ = ()
-    pass
 
 
 _voices = pyttsx3.init().proxy.getProperty('voices')
@@ -51,8 +50,8 @@ class Voicer:
             self.set_voice(lines[0][2:])
             text = '\n'.join(lines[1:])
 
-        cached = '{0}.wav'.format(
-            self.cache_dir / md5(f"{text}{self.engine.proxy.getProperty('voice')}".encode('UTF-8')).hexdigest())
+        cached = f'''{self.cache_dir / md5(f"{text}{self.engine.proxy.getProperty('voice')}".encode())
+        .hexdigest()}.wav'''
         if not os.path.isfile(cached):
             self.engine.proxy.save_to_file(text, cached, None)
             self.engine.runAndWait()
