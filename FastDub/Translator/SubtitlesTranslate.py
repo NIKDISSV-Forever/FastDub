@@ -2,8 +2,16 @@ from __future__ import annotations
 
 import multiprocessing.pool
 import os.path
-from functools import cache
 from typing import Callable
+
+try:
+    from functools import cache
+except ImportError:
+    from functools import lru_cache
+
+
+    def cache(func, /):
+        return lru_cache(maxsize=None)(func)
 
 from tqdm import tqdm
 
