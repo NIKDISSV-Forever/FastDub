@@ -19,7 +19,7 @@ for req in extras_require.values():
 
 setuptools.setup(
     name="PyFastDub",
-    version="2.5.5",
+    version="2.5.6",
     description="A Python CLI package "
                 "for voice over subtitles, with the ability to embed in video, audio ducking, "
                 "and dynamic voice changer for a single track; "
@@ -62,5 +62,9 @@ setuptools.setup(
         'Topic :: Utilities',
 
         'Typing :: Typed',
-    ]
+    ],
+    keywords=['dubbing', 'voicing',
+              'FastDub', 'JustDub', 'SpeedDub',
+              'offline', 'free', 'easiest',
+              'subtitles', 'videos'],
 )
