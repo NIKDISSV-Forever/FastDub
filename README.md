@@ -8,9 +8,19 @@ Package for voice over subtitles:
 
 > pip install -U [PyFastDub](https://pypi.org/project/PyFastDub/)
 
+# Install for Ubuntu
+
+> sudo apt update -y && sudo apt upgrade -y
+>
+> sudo apt install python3 python3-pip ffmpeg [espeak](http://espeak.sourceforge.net/data/)
+>
+> sudo python3 -m pip install -U pip setuptools wheel
+> 
+> sudo python3 -m pip install -U [PyFastDub](https://pypi.org/project/PyFastDub/)
+
 # Install all dependencies
 
-> pip install PyFastDub[ALL]
+> pip install PyFastDub[ALL]  # default
 
 # Youtube support
 
@@ -172,31 +182,32 @@ libaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,papago,reve
 
 ## Example
 
-> python -m FastDub DirToDub -v "[Yuriy](https://rhvoice.su/downloads/?voice=yuriy&type=sapi)" --no-ducking -vf mkv
+> python -m FastDub -i DirToDub -v "[Yuriy](https://rhvoice.su/downloads/?voice=yuriy&type=sapi)" --no-ducking -sf vtt -vf mkv
 
-name is any name.
+All files in the folder will be voices (*.mkv, *.vtt)
 
-DirToDub:
-
-- name.srt
-- name.mkv
-- name2.srt
-- name2.mkv
-- andit.srt
-- andit.mkv
+Default is mp4 video and srt subtitles.
 
 Then:
 _name and name2 will be announced, and the results will be saved to a folder with the appropriate name._
 
 ## YT Example
 
-> python -m FastDub https://youtu.be/DD5UKQggXTc **-yt**
+> python -m FastDub -i https://youtu.be/DD5UKQggXTc **-yt**
 > -v "[Yuriy](https://rhvoice.su/downloads/?voice=yuriy&type=sapi)"
 > -l ru
 
+
+### YouTube Search Example
+
+> python -m FastDub -i "#annoyingorange" -yt **-yts** -l ru
+
 ## Translate Example
 
-> python -m FastDub DirToDub -tr -ts iciba -l ru
+> python -m FastDub -i DirToDub -tr **-ts iciba** _-l ru_
+
+Default service is Google.
+
 
 ## Other
 
@@ -204,4 +215,4 @@ _name and name2 will be announced, and the results will be saved to a folder wit
 
 ### python -m pydoc -w FastDub
 
-### You can write your issues on [GitHub](https://github.com/NIKDISSV-Forever/FastDub/) in English or in Russian.
+### You can write your issues on [GitHub](https://github.com/NIKDISSV-Forever/FastDub/issues) in English or in Russian.
