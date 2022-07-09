@@ -1,4 +1,4 @@
-"""Convert JSON file with auto-generated subtitles from https://www.veed.io/ to .srt file"""
+"""Convert JSON file with auto-generated subtitles from https://www.veed.io to .srt file"""
 import argparse
 import json
 from pathlib import Path
