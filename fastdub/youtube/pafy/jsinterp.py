@@ -109,7 +109,7 @@ class JSInterpreter(object):
 
         for op, opfunc in _ASSIGN_OPERATORS:
             m = re.match(r'''(?x)
-                (?P<out>%s)(?:\[(?P<index>[^\]]+?)\])?
+                (?P<out>%s)(?:\[(?P<index>[^]]+?)])?
                 \s*%s
                 (?P<expr>.*)$''' % (_NAME_RE, re.escape(op)), expr)
             if not m:
@@ -200,7 +200,7 @@ class JSInterpreter(object):
             return obj[member](argvals)
 
         m = re.match(
-            r'(?P<in>%s)\[(?P<idx>.+)\]$' % _NAME_RE, expr)
+            r'(?P<in>%s)\[(?P<idx>.+)]$' % _NAME_RE, expr)
         if m:
             val = local_vars[m.group('in')]
             idx = self.interpret_expression(
@@ -240,8 +240,8 @@ class JSInterpreter(object):
         obj = {}
         obj_m = re.search(
             (r'(?:var\s+)?%s\s*=\s*\{' % re.escape(objname)) +
-            r'\s*(?P<fields>([a-zA-Z$0-9]+\s*:\s*function\(.*?\)\s*\{.*?\}(?:,\s*)?)*)' +
-            r'\}\s*;',
+            r'\s*(?P<fields>([a-zA-Z$0-9]+\s*:\s*function\(.*?\)\s*\{.*?}(?:,\s*)?)*)' +
+            r'}\s*;',
             self.code)
         fields = obj_m.group('fields')
         # Currently, it only supports function definitions
@@ -260,7 +260,7 @@ class JSInterpreter(object):
             r'''(?x)
                 (?:function\s+%s|[{;,]\s*%s\s*=\s*function|var\s+%s\s*=\s*function)\s*
                 \((?P<args>[^)]*)\)\s*
-                \{(?P<code>[^}]+)\}''' % (
+                \{(?P<code>[^}]+)}''' % (
                 re.escape(funcname), re.escape(funcname), re.escape(funcname)),
             self.code)
         if func_m is None:

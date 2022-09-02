@@ -3,19 +3,13 @@ import os
 import sys
 import time
 
-if sys.version_info[:2] >= (3, 0):
-    # pylint: disable=E0611,F0401,I0011
-    uni = str
-else:
-    uni = unicode
-
 import youtube_dl
 
 from . import g
-from .backend_shared import BasePafy, BaseStream, remux, get_status_string, get_size_done
+from .backend_shared import BasePafy, BaseStream, get_size_done, get_status_string, remux
 
+uni = str
 dbg = logging.debug
-
 early_py_version = sys.version_info[:2] < (2, 7)
 
 
@@ -189,7 +183,8 @@ class YtdlStream(BaseStream):
 
 
 class ydl:
-    def urlopen(self, url):
+    @staticmethod
+    def urlopen(url):
         return g.opener.open(url)
 
     def to_screen(self, *args, **kwargs):

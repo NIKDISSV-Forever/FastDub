@@ -7,7 +7,7 @@ from shutil import rmtree
 
 import pyttsx3
 
-from FastDub.Audio import AudioSegment
+from fastdub.audio import AudioSegment
 
 
 class UnknownVoice(Exception):

@@ -1,20 +1,12 @@
 import itertools
 import json
 import re
-import sys
+from urllib.parse import parse_qs, urlparse
 
 from . import g
 from .pafy import call_gdata, fetch_decode, get_categoryname, new
 
-if sys.version_info[:2] >= (3, 0):
-    # pylint: disable=E0611,F0401,I0011
-    from urllib.parse import parse_qs, urlparse
-
-    pyver = 3
-else:
-    from urlparse import parse_qs, urlparse
-
-    pyver = 2
+pyver = 3
 
 
 def extract_playlist_id(playlist_url):

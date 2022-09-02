@@ -6,27 +6,16 @@ import re
 import sys
 import tempfile
 import time
+from urllib.parse import parse_qs, unquote_plus
 from xml.etree import ElementTree
 
-if sys.version_info[:2] >= (3, 0):
-    # pylint: disable=E0611,F0401,I0011
-    from urllib.parse import parse_qs, unquote_plus
-
-    uni, pyver = str, 3
-
-else:
-    from urllib import unquote_plus
-    from urlparse import parse_qs
-
-    uni, pyver = unicode, 2
-
-early_py_version = sys.version_info[:2] < (2, 7)
-
 from . import g
-from .pafy import fetch_decode, dbg, get_categoryname
 from .backend_shared import BasePafy, BaseStream
 from .jsinterp import JSInterpreter
+from .pafy import dbg, fetch_decode, get_categoryname
 
+uni, pyver = str, 3
+early_py_version = sys.version_info[:2] < (2, 7)
 funcmap = {}
 
 
@@ -96,16 +85,16 @@ class InternPafy(BasePafy):
                 funcmap[js_url] = mainfunc
                 self.sm, self.asm = smaps
                 self.js_url = js_url
-                dashsig = re.search(r"/s/([\w\.]+)", self._dashurl).group(1)
+                dashsig = re.search(r"/s/([\w.]+)", self._dashurl).group(1)
                 dbg("decrypting dash sig")
                 goodsig = _decodesig(dashsig, js_url, self.callback)
-                self._dashurl = re.sub(r"/s/[\w\.]+",
+                self._dashurl = re.sub(r"/s/[\w.]+",
                                        "/signature/%s" % goodsig, self._dashurl)
 
             else:
-                s = re.search(r"/s/([\w\.]+)", self._dashurl).group(1)
+                s = re.search(r"/s/([\w.]+)", self._dashurl).group(1)
                 s = s[2:63] + s[82] + s[64:82] + s[63]
-                self._dashurl = re.sub(r"/s/[\w\.]+",
+                self._dashurl = re.sub(r"/s/[\w.]+",
                                        "/signature/%s" % s, self._dashurl)
 
         if self._dashurl != 'unknown':
@@ -381,7 +370,7 @@ def fetch_cached(url, callback, encoding=None, dbg_ref="", file_prefix=""):
 
 
 def prune_files(path, prefix="", age_max=3600 * 24 * 14, count_max=4):
-    """ Remove oldest files from path that start with prefix.
+    """ Remove the oldest files from path that start with prefix.
 
     remove files older than age_max, leave maximum of count_max files.
     """

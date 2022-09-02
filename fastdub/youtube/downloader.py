@@ -10,15 +10,19 @@ from urllib.parse import urlparse
 from tqdm import tqdm
 from youtubesearchpython import VideosSearch
 
-from FastDub.YT import *
+from fastdub.youtube import *
+from fastdub.youtube import pafy
+from fastdub.youtube.pafy import g as pafy_g
+from fastdub.youtube.subtitles import download_srt
 
 __all__ = 'DownloadYTVideo', 'with_api_key'
+
 _API_RET_TYPE = TypeVar('_API_RET_TYPE')
-_PATH_UNSUPPORTED = re.compile(r'[^\w\d-]')
+_PATH_SUPPORTED = re.compile(r'[\\/:?"<>|]+')
 
 
 def _path_save(name: str) -> str:
-    return _PATH_UNSUPPORTED.sub('_', name)
+    return _PATH_SUPPORTED.sub('_', name)
 
 
 class DownloadYTVideo:
@@ -37,19 +41,19 @@ class DownloadYTVideo:
             playlist = (
                 *(with_api_key(lambda: pafy.new(data['id']))
                   for data in videos if data.get('type', '') == 'video'),)
-            save_dir = _path_save(query)
+            save_dir = query
         elif url_path == '/playlist':
             playlist = with_api_key(lambda: pafy.get_playlist2(query))
-            save_dir = playlist.plid
+            save_dir = f'{playlist.title} [{playlist.plid}]'
         elif (path_split := url_path.strip('/').split('/')) and path_split[0] in ('c', 'channel'):
             playlist = with_api_key(lambda: pafy.get_channel((path_split[1:] or (query,))[0]).uploads)
-            save_dir = playlist.plid
+            save_dir = f'{playlist.title} [{playlist.plid}]'
         else:
             playlist = with_api_key(lambda: (pafy.new(query),))
-            save_dir = playlist[0].videoid
-        save_dir = Path(save_dir)
-        if not save_dir.is_dir():
-            save_dir.mkdir()
+            playlist_0 = playlist[0]
+            save_dir = f'{playlist_0.title} [{playlist_0.videoid}]'
+        save_dir = Path(_path_save(' '.join(save_dir.split(' ')[:-1]) if len(save_dir) > 100 else save_dir))
+        save_dir.mkdir(parents=True, exist_ok=True)
 
         self.save_dir = save_dir
         self.language = language
@@ -66,10 +70,13 @@ class DownloadYTVideo:
             pool.map(self.download, self.playlist)
 
     def download(self, yt_dl: YtdlPafy):
-        save_to = self.save_dir / yt_dl.videoid
+        title = yt_dl.title
+        if len(yt_dl.title) <= (97 - len(yt_dl.videoid)):
+            title += f' [{yt_dl.videoid}]'
+        save_to = self.save_dir / title
         srt_file = Path(f'{save_to}.srt')
         if not srt_file.is_file():
-            Subtitles.download_srt(yt_dl.videoid, self.language, srt_file)
+            download_srt(yt_dl.videoid, self.language, srt_file)
         mp4_file = Path(f'{save_to}.mp4')
         if not mp4_file.is_file():
             try:

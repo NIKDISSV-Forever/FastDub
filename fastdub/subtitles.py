@@ -4,7 +4,7 @@ import datetime
 import os.path
 import re
 
-from FastDub.FFMpeg import FFMpegWrapper
+from fastdub.ffmpeg_wrapper import FFMpegWrapper
 
 __all__ = ('LINE_REGEX',
            'Line',

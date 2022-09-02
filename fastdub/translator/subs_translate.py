@@ -15,7 +15,7 @@ except ImportError:
 
 from tqdm import tqdm
 
-from FastDub import Subtitles
+from fastdub import subtitles
 
 
 class SrtTranslate:
@@ -32,12 +32,12 @@ class SrtTranslate:
         return self.service(text, to_language=self.language)
 
     def translate_all(self, input_srt: str, output_srt: str):
-        parsed = Subtitles.parse(input_srt)
+        parsed = subtitles.parse(input_srt)
         for line in parsed:
             line.text = line.text.strip()
         _pb = tqdm(parsed, 'Translating', len(parsed), unit='line', dynamic_ncols=True)
         if self.threads_count > 1:
-            def handler(line: Subtitles.Line):
+            def handler(line: subtitles.Line):
                 line.text = self.translate_line(line.text)
                 _pb.update()
 
@@ -47,7 +47,7 @@ class SrtTranslate:
             for line in _pb:
                 line.text = self.translate_line(line.text)
         with open(output_srt, 'w', encoding='UTF-8') as f:
-            f.write(Subtitles.unparse(parsed))
+            f.write(subtitles.unparse(parsed))
 
     def translate_dir(self, files: dict[str, dict[str, str]], subtitles_format: str):
         for fn, exts in files.items():

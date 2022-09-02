@@ -6,11 +6,10 @@ from copy import copy
 from math import inf
 from tempfile import TemporaryDirectory
 
-import pydub
 import pydub.silence
 from tqdm import tqdm
 
-from FastDub.FFMpeg import FFMpegWrapper
+from fastdub.ffmpeg_wrapper import FFMpegWrapper
 
 __all__ = ('AudioSegment', 'speed_change', 'fit', 'side_chain')
 
@@ -23,7 +22,7 @@ class AudioSegment(pydub.AudioSegment):
         self.duration_ms = self.duration_seconds * 1000.
 
     def append(self, seg, _=None):
-        """pydub.AudioSegment. Without crossfade."""
+        """pydub.AudioSegment. Without cross-fade."""
         seg1, seg2 = AudioSegment._sync(self, seg)
         # noinspection PyProtectedMember
         return seg1._spawn(seg1._data + seg2._data)

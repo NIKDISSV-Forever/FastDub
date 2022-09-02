@@ -199,8 +199,8 @@ class Channel(object):
 
     def _fetch_basic(self):
         query = None
-        chanR = re.compile('.+channel\/([^\/]+)$')
-        userR = re.compile('.+user\/([^\/]+)$')
+        chanR = re.compile('.+channel/([^/]+)$')
+        userR = re.compile('.+user/([^/]+)$')
         channel_id = None
         channel_url = self._channel_url
         if chanR.match(channel_url):

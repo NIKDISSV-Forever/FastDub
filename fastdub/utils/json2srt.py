@@ -3,7 +3,7 @@ import argparse
 import json
 from pathlib import Path
 
-from FastDub.Subtitles import ms_to_srt_time
+from fastdub.subtitles import ms_to_srt_time
 
 
 def from_veed_json(json_file: Path):

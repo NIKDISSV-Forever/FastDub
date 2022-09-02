@@ -12,10 +12,12 @@ Package for voice over subtitles:
 
 > sudo apt update -y && sudo apt upgrade -y
 >
-> sudo apt install python3 python3-pip ffmpeg [espeak](http://espeak.sourceforge.net/data/)
+> sudo apt install python3 python3-pip ffmpeg [espeak](http://espeak.sourceforge.net/data/) libxml2-dev libxslt1-dev
+>
+> ; libxml for translator functions
 >
 > sudo python3 -m pip install -U pip setuptools wheel
-> 
+>
 > sudo python3 -m pip install -U [PyFastDub](https://pypi.org/project/PyFastDub/)
 
 # Install all dependencies
@@ -41,17 +43,15 @@ you can pass a link to the channel (with an id, not with a username) or a string
 
 _For example:_
 
-> python -m FastDub -i "c/[UCi-5OZ2tYuwMLIcEyOsbdRA](https://www.youtube.com/channel/UCi-5OZ2tYuwMLIcEyOsbdRA)" -yt
+> python -m fastdub -i "c/[UCi-5OZ2tYuwMLIcEyOsbdRA](https://www.youtube.com/channel/UCi-5OZ2tYuwMLIcEyOsbdRA)" -yt
 
 ## YouTube Search argument group
-
-> pip install PyFastDub[YTS]
 
 That the input data was a request to YouTube, they must begin with "?".
 
 _For Example:_
 
-> python -m FastDub -i "?#python" -yt -yts-l 5
+> python -m fastdub -i "?#python" -yt -yts-l 5
 
 ## YouTube Upload argument group
 
@@ -77,21 +77,19 @@ _client_secrets.json_
 
 # Usage
 
-> python -m FastDub --help
+> python -m fastdub --help
 
 ```
-usage: FastDub [-h] [-rc {0,1,2}] [-rf CLEANUP_LEVEL] [-l LANGUAGE] [-tc THREADS_COUNT] [-i INPUT] [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT]
+usage: fastdub [-h] [-rc {0,1,2}] [-rf CLEANUP_LEVEL] [-l LANGUAGE] [-tc THREADS_COUNT] -i INPUT [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT]
                [-En EXCLUDE [EXCLUDE ...]] [-Eu EXCLUDE_UNDERSCORE] [-sc | --sidechain | --no-sidechain] [-sc-msl MIN_SILENCE_LEN] [-sc-st SILENCE_THRESH]
                [-sc-gdo GAIN_DURING_OVERLAY]
                [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft haruka desktop - japanese,microsoft david desktop - 
 english (united states),microsoft huihui desktop - chinese (simplified,aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,vict
 oria,vitaliy,volodymyr,yuriy}]
                [-a ALIGN] [-ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}] [-y | --confirm | --no-confirm] [-yt] [-ak API_KEYS [API_KEYS ...]]      
-               [-yts] [-yts-l YOUTUBE_SEARCH_LIMIT] [-yts-rg YOUTUBE_SEARCH_REGION] [-ytu] [-ytu-ps {private,public,unlisted}] [-ytu-t] [-tr]
-               [--rewrite-srt | --no-rewrite-srt]
-               [-ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}]
+               [-yts] [-yts-l YOUTUBE_SEARCH_LIMIT] [-yts-rg YOUTUBE_SEARCH_REGION]
 
-FastDub is a tool for dubbing videos by subtitle files.
+fastdub is a tool for dubbing videos by subtitle files.
 
 options:
   -h, --help            show this help message and exit
@@ -104,7 +102,7 @@ options:
                         Cleanup level   0 = No removing any files
                                 > 0 remove audio from video (default)
                                 > 1 = remove dubbed audio if video exists
-                                > 2 = reomve dubbed cache files
+                                > 2 = remove dubbed cache files
   -l LANGUAGE, --language LANGUAGE
                         Subtitles language (ru)
   -tc THREADS_COUNT, --threads-count THREADS_COUNT
@@ -121,7 +119,7 @@ Input:
 
 Audio Ducking:
   -sc, --sidechain, --no-sidechain
-                        Enable audio side chain compress (ducking) (default: True)
+                        Enable audio side chain compress (ducking)
   -sc-msl MIN_SILENCE_LEN, --min-silence-len MIN_SILENCE_LEN, --attack MIN_SILENCE_LEN
                         Minimum silence length in ms (default 100)
   -sc-st SILENCE_THRESH, --silence-thresh SILENCE_THRESH
@@ -145,7 +143,7 @@ FFMpeg Output:
   -ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}, --loglevel {trace,debug,verbose,info,warning,error,fatal,panic,quiet}
                         FFMpegWrapper loglevel
   -y, --confirm, --no-confirm
-                        Don't ask for confirmation (default: True)
+                        Don't ask for confirmation
 
 YouTube:
   -yt, --youtube
@@ -159,30 +157,14 @@ YouTube Search:
                         Sets limit to the number of results. Defaults to 20.
   -yts-rg YOUTUBE_SEARCH_REGION, --youtube-search-region YOUTUBE_SEARCH_REGION
                         Sets the result region. Defaults to "US".
-
-YouTube Upload:
-  -ytu, --youtube-upload
-                        Upload video to YouTube channel after voice acting.
-  -ytu-ps {private,public,unlisted}, --privacy-status {private,public,unlisted}
-                        Video privacy status (If not private, errors are possible)
-  -ytu-t, --youtube-upload-translate
-                        Translate title and description on upload. (+ Arguments from translate argument group)
-
-Translate:
-  -tr, --translate      Translate input subtitles files
-  --rewrite-srt, --no-rewrite-srt
-                        Rewrite input subtitles files.
-                        If not, add "_" to the beginning of the original subtitle file. (default: False)
-  -ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}, --translate-service {a
-libaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}
-                        Subtitle translation service. (default google)
 ```
 
 **If the voice set after !: is not selected during voiceover, clear the cache with the -rc argument**
 
 ## Example
 
-> python -m FastDub -i DirToDub -v "[Yuriy](https://rhvoice.su/downloads/?voice=yuriy&type=sapi)" --no-ducking -sf vtt -vf mkv
+> python -m fastdub -i DirToDub -v "[Yuriy](https://rhvoice.su/downloads/?voice=yuriy&type=sapi)" --no-sidechain -sf vtt
+> -vf mkv
 
 All files in the folder will be voices (*.mkv, *.vtt)
 
@@ -193,26 +175,24 @@ _name and name2 will be announced, and the results will be saved to a folder wit
 
 ## YT Example
 
-> python -m FastDub -i https://youtu.be/DD5UKQggXTc **-yt**
+> python -m fastdub **-yt** -i https://youtu.be/DD5UKQggXTc
 > -v "[Yuriy](https://rhvoice.su/downloads/?voice=yuriy&type=sapi)"
 > -l ru
 
-
 ### YouTube Search Example
 
-> python -m FastDub -i "#annoyingorange" -yt **-yts** -l ru
+> python -m fastdub -yt **-yts** -i "#annoyingorange" -l ru
 
 ## Translate Example
 
-> python -m FastDub -i DirToDub -tr **-ts iciba** _-l ru_
+> python -m fastdub -i DirToDub -tr **-ts iciba** _-l [ru](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)_
 
 Default service is Google.
 
-
 ## Other
 
-### The `FastDub.utils` module stores helper functions.
+### The `fastdub.utils` module stores helper functions.
 
-### python -m pydoc -w FastDub
+### python -m pydoc -w fastdub
 
-### You can write your issues on [GitHub](https://github.com/NIKDISSV-Forever/FastDub/issues) in English or in Russian.
+### You can write your issues on [GitHub](https://github.com/NIKDISSV-Forever/fastdub/issues) in English or in Russian.

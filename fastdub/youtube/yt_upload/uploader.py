@@ -1,9 +1,9 @@
 from pathlib import Path
 from pprint import pp
 from typing import Callable
-from FastDub.YT.Upload.UploadVideo import upload
-from FastDub.YT import pafy
-from FastDub.YT.Downloader import with_api_key
+from fastdub.youtube.yt_upload.upload_video import upload
+from fastdub.youtube import pafy
+from fastdub.youtube.downloader import with_api_key
 
 
 class Uploader:

@@ -4,33 +4,22 @@ import re
 import subprocess
 import sys
 import time
-
-if sys.version_info[:2] >= (3, 0):
-    # pylint: disable=E0611,F0401,I0011
-    from urllib.request import urlopen, build_opener
-    from urllib.error import HTTPError, URLError
-    from urllib.parse import parse_qs, urlparse
-
-    uni, pyver = str, 3
-
-else:
-    from urllib2 import urlopen, build_opener, HTTPError, URLError
-    from urlparse import parse_qs, urlparse
-
-    uni, pyver = unicode, 2
-
-early_py_version = sys.version_info[:2] < (2, 7)
+from urllib.error import HTTPError, URLError
+from urllib.parse import parse_qs, urlparse
+from urllib.request import build_opener, urlopen
 
 from . import __version__, g
 from .pafy import call_gdata
 from .playlist import get_playlist2
 from .util import xenc
 
+uni, pyver = str, 3
+early_py_version = sys.version_info[:2] < (2, 7)
 dbg = logging.debug
 
 
 def extract_video_id(url):
-    """ Extract the video id from a url, return video id as str. """
+    """ Extract the video id from an url, return video id as str. """
     idregx = re.compile(r'[\w-]{11}$')
     url = str(url).strip()
 
@@ -331,7 +320,8 @@ class BasePafy(object):
                 return None
         return self._mix_pl
 
-    def _sortvideokey(self, x, key3d=0, keyres=0, keyftype=0, preftype="any", ftypestrict=True):
+    @staticmethod
+    def _sortvideokey(x, key3d=0, keyres=0, keyftype=0, preftype="any", ftypestrict=True):
         """ Sort function. """
         key3d = "3D" not in x.resolution
         keyres = int(x.resolution.split("x")[0])
@@ -367,7 +357,7 @@ class BasePafy(object):
         """
         Return the best resolution video-only stream.
 
-        set ftypestrict to False to return a non-preferred format if that
+        set ftypestrict to False - to return a non-preferred format if that
         has a higher resolution
         """
         return self._getvideo(preftype, ftypestrict, vidonly=True, quality="max")
@@ -380,7 +370,7 @@ class BasePafy(object):
         """
         Return the highest resolution video+audio stream.
 
-        set ftypestrict to False to return a non-preferred format if that
+        set ftypestrict to False - to return a non-preferred format if that
         has a higher resolution
         """
         return self._getvideo(preftype, ftypestrict, vidonly=False, quality="max")
@@ -389,7 +379,8 @@ class BasePafy(object):
         """ Return the lowest resolution video+audio stream. """
         return self._getvideo(preftype, ftypestrict, vidonly=False, quality="min")
 
-    def _sortaudiokey(self, x, keybitrate=0, keyftype=0, preftype="any", ftypestrict=True):
+    @staticmethod
+    def _sortaudiokey(x, keybitrate=0, keyftype=0, preftype="any", ftypestrict=True):
         """ Sort function. """
         keybitrate = int(x.rawbitrate)
         keyftype = preftype == x.extension
@@ -709,7 +700,7 @@ def remux(infile, outfile, quiet=False, muxer="ffmpeg"):
     """ Remux audio. """
     muxer = muxer if isinstance(muxer, str) else "ffmpeg"
 
-    for tool in set([muxer, "ffmpeg", "avconv"]):
+    for tool in {muxer, "ffmpeg", "avconv"}:
         cmd = [tool, "-y", "-i", infile, "-acodec", "copy", "-vn", outfile]
 
         try:

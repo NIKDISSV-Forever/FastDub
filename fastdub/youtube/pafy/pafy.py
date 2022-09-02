@@ -26,15 +26,8 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 import logging
 import os
 import re
-import sys
 import time
-
-if sys.version_info[:2] >= (3, 0):
-    # pylint: disable=E0611,F0401,I0011
-    from urllib.error import HTTPError
-
-else:
-    from urllib2 import HTTPError
+from urllib.error import HTTPError
 
 from . import g
 from .util import call_gdata
@@ -89,7 +82,7 @@ def fetch_decode(url, encoding=None):
 
 def new(url, basic=True, gdata=False, size=False,
         callback=None, ydl_opts=None):
-    """ Return a new pafy instance given a url or video id.
+    """ Return a new pafy instance given an url or video id.
 
     NOTE: The signature argument has been deprecated and now has no effect,
         it will be removed in a future version.
@@ -190,5 +183,5 @@ def dump_cache():
 
 
 def set_api_key(key):
-    """Sets the api key to be used with youtube."""
+    """Sets the api key to be used with YouTube."""
     g.api_key = key
