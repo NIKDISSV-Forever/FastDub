@@ -83,6 +83,6 @@ def side_chain(sound1: AudioSegment, sound2: AudioSegment,
                ) -> AudioSegment:
     for start, end in tqdm(
             pydub.silence.detect_nonsilent(sound2, min_silence_len=min_silence_len, silence_thresh=silence_thresh),
-            desc="Ducking", colour='white'):
+            desc="Ducking"):
         sound1 = sound1.overlay(sound2[start:end], position=start, gain_during_overlay=gain_during_overlay)
     return sound1
