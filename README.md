@@ -80,14 +80,25 @@ _client_secrets.json_
 > python -m fastdub --help
 
 ```
-usage: fastdub [-h] [-rc {0,1,2}] [-rf CLEANUP_LEVEL] [-l LANGUAGE] [-tc THREADS_COUNT] -i INPUT [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT]
-               [-En EXCLUDE [EXCLUDE ...]] [-Eu EXCLUDE_UNDERSCORE] [-sc | --sidechain | --no-sidechain] [-sc-msl MIN_SILENCE_LEN] [-sc-st SILENCE_THRESH]
+usage: fastdub [-h] [-rc {0,1,2}] [-rf CLEANUP_LEVEL]
+               [-l LANGUAGE] [-tc THREADS_COUNT] -i INPUT
+               [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT]
+               [-En EXCLUDE [EXCLUDE ...]]
+               [-Eu EXCLUDE_UNDERSCORE]
+               [-sc | --sidechain | --no-sidechain]
+               [-sc-msl MIN_SILENCE_LEN] [-sc-st SILENCE_THRESH]
                [-sc-gdo GAIN_DURING_OVERLAY]
-               [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft haruka desktop - japanese,microsoft david desktop - 
-english (united states),microsoft huihui desktop - chinese (simplified,aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,vict
-oria,vitaliy,volodymyr,yuriy}]
-               [-a ALIGN] [-ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}] [-y | --confirm | --no-confirm] [-yt] [-ak API_KEYS [API_KEYS ...]]      
-               [-yts] [-yts-l YOUTUBE_SEARCH_LIMIT] [-yts-rg YOUTUBE_SEARCH_REGION]
+               [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft haruka desktop - japanese,microsoft david desktop - english (united states),microsoft huihui desktop - chinese (simplified,aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}]
+               [-a ALIGN]
+               [-ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}]
+               [-y | --confirm | --no-confirm]
+               [--traceback | --no-traceback] [-yt]
+               [-ak API_KEYS [API_KEYS ...]] [-yts]
+               [-yts-l YOUTUBE_SEARCH_LIMIT]
+               [-yts-rg YOUTUBE_SEARCH_REGION] [-ytu]
+               [-ytu-ps {private,public,unlisted}] [-ytu-t] [-tr]
+               [--rewrite-srt | --no-rewrite-srt]
+               [-ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,mglip,niutrans,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}]
 
 fastdub is a tool for dubbing videos by subtitle files.
 
@@ -96,13 +107,13 @@ options:
   -rc {0,1,2}, --remove-cache {0,1,2}
                         Remove all cache (_cached_texts directory) files
                                 0 - No remove cache
-                                1 - Delete cache before voice acting
-                                2 - Delete cache after voice acting (default)
+                                1 - Delete cache before voice acting                                2 - Delete cache after voice acting (default)
   -rf CLEANUP_LEVEL, --cleanup-level CLEANUP_LEVEL
-                        Cleanup level   0 = No removing any files
-                                > 0 remove audio from video (default)
-                                > 1 = remove dubbed audio if video exists
-                                > 2 = remove dubbed cache files
+                        Cleanup level
+                                = 0 -> No removing any files
+                                > 0 -> remove extracted audio from video (default)
+                                > 1 -> remove dubbed audio if video exists
+                                > 2 -> remove dubbed cache files
   -l LANGUAGE, --language LANGUAGE
                         Subtitles language (ru)
   -tc THREADS_COUNT, --threads-count THREADS_COUNT
@@ -119,7 +130,7 @@ Input:
 
 Audio Ducking:
   -sc, --sidechain, --no-sidechain
-                        Enable audio side chain compress (ducking)
+                        Enable audio side chain compress (ducking) (default: True)
   -sc-msl MIN_SILENCE_LEN, --min-silence-len MIN_SILENCE_LEN, --attack MIN_SILENCE_LEN
                         Minimum silence length in ms (default 100)
   -sc-st SILENCE_THRESH, --silence-thresh SILENCE_THRESH
@@ -128,11 +139,7 @@ Audio Ducking:
                         Gain during overlay in dB (-11)
 
 Voicer:
-  -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft haruka desktop - japanese,microsoft david desktop - english (unit
-ed states),microsoft huihui desktop - chinese (simplified),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy
-,volodymyr,yuriy}, --voice {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft haruka desktop - japanese,microsoft david d
-esktop - english (united states),microsoft huihui desktop - chinese (simplified),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,ta
-tiana,victoria,vitaliy,volodymyr,yuriy}
+  -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft haruka desktop - japanese,microsoft david desktop - english (united states),microsoft huihui desktop - chinese (simplified),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}, --voice {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft haruka desktop - japanese,microsoft david desktop - english (united states),microsoft huihui desktop - chinese (simplified),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}
                         SAPI voice for voice acting.
   -a ALIGN, --align ALIGN
                         Audio fit align
@@ -143,7 +150,11 @@ FFMpeg Output:
   -ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}, --loglevel {trace,debug,verbose,info,warning,error,fatal,panic,quiet}
                         FFMpegWrapper loglevel
   -y, --confirm, --no-confirm
-                        Don't ask for confirmation
+                        Don't ask for confirmation (default: True)
+
+Terminal Output:
+  --traceback, --no-traceback
+                        Show custom traceback (Default True) (default: True)
 
 YouTube:
   -yt, --youtube
@@ -157,7 +168,22 @@ YouTube Search:
                         Sets limit to the number of results. Defaults to 20.
   -yts-rg YOUTUBE_SEARCH_REGION, --youtube-search-region YOUTUBE_SEARCH_REGION
                         Sets the result region. Defaults to "US".
-```
+
+YouTube yt_upload:
+  -ytu, --youtube-upload
+                        yt_upload video to YouTube channel after voice acting.
+  -ytu-ps {private,public,unlisted}, --privacy-status {private,public,unlisted}
+                        Video privacy status (If not private, errors are possible)
+  -ytu-t, --youtube-upload-translate
+                        Translate title and description on upload. (+ Arguments from translate argument group)
+
+Translate:
+  -tr, --translate      Translate input subtitles files
+  --rewrite-srt, --no-rewrite-srt
+                        Rewrite input subtitles files.
+                        If not, add "_" to the beginning of the original subtitle file. (default: False)
+  -ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,mglip,niutrans,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}, --translate-service {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,mglip,niutrans,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}
+                        Subtitle translation service. (default google)```
 
 **If the voice set after !: is not selected during voiceover, clear the cache with the -rc argument**
 
