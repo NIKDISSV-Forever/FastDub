@@ -26,3 +26,23 @@ if not hasattr(argparse, 'BooleanOptionalAction'):
 
 
     argparse.BooleanOptionalAction = BooleanOptionalAction
+
+
+class PrettyViewPrefix:
+    __slots__ = ()
+
+    @staticmethod
+    def pretty_units_of_any(size: float, div: float, iter_prefix, base: str) -> str:
+        for prefix in iter_prefix[:-1]:
+            if size < div:
+                return f'{size:,g}{prefix}{base}'
+            size /= div
+        return f'{size:,g}{iter_prefix[-1]}{base}'
+
+    @classmethod
+    def pretty_units_of_inf(cls, size: float):
+        return cls.pretty_units_of_any(size, 1000., ('', *'kMGTPEZY'), 'B')
+
+    @classmethod
+    def pretty_units_of_time(cls, size: float):
+        return cls.pretty_units_of_any(size, 60., 'smh', '')
