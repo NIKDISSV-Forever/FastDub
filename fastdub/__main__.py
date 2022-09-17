@@ -4,11 +4,14 @@ import argparse
 import glob
 import multiprocessing
 import os
+import sys
 from math import inf
 from time import perf_counter
 
+import rich.traceback
+
 import fastdub.youtube
-from fastdub import dubber, voicer
+from fastdub import PrettyViewPrefix, dubber, voicer
 from fastdub import translator
 from fastdub import youtube
 from fastdub.ffmpeg_wrapper import FFMpegWrapper
@@ -26,12 +29,12 @@ def parse_args() -> argparse.Namespace:
                                  '\t0 - No remove cache\n'
                                  '\t1 - Delete cache before voice acting\n'
                                  '\t2 - Delete cache after voice acting (default)')
-    arg_parser.add_argument('-rf', '--cleanup-level', default=1,
-                            help='Cleanup level'
-                                 '\t0 = No removing any files\n'
-                                 '\t> 0 remove audio from video (default)\n'
-                                 '\t> 1 = remove dubbed audio if video exists\n'
-                                 '\t> 2 = remove dubbed cache files')
+    arg_parser.add_argument('-rf', '--cleanup-level', type=int, default=1,
+                            help='Cleanup level\n'
+                                 '\t= 0 -> No removing any files\n'
+                                 '\t> 0 -> remove extracted audio from video (default)\n'
+                                 '\t> 1 -> remove dubbed audio if video exists\n'
+                                 '\t> 2 -> remove dubbed cache files')
 
     arg_parser.add_argument('-l', '--language', default='ru',
                             help='Subtitles language (ru)')
@@ -82,6 +85,11 @@ def parse_args() -> argparse.Namespace:
                               help='FFMpegWrapper loglevel')
     ffmpeg_group.add_argument('-y', '--confirm', action=argparse.BooleanOptionalAction, default=True,
                               help="Don't ask for confirmation")
+
+    output_group = arg_parser.add_argument_group('Terminal Output')
+    output_group.add_argument('--traceback', action=argparse.BooleanOptionalAction, default=True,
+                              help='Show custom traceback (Default True)')
+
     if youtube.SUPPORTED:
         yt_group = arg_parser.add_argument_group('YouTube')
         yt_group.add_argument('-yt', '--youtube', action='store_true', default=False)
@@ -126,13 +134,20 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
+    if args.traceback:
+        def _custom_excepthook(exc_type, exc_value, traceback):
+            rich.print(rich.traceback.Traceback(
+                rich.traceback.Traceback.extract(exc_type, exc_value, traceback, exc_type is not KeyboardInterrupt, )))
+
+        sys.excepthook = _custom_excepthook
+
     remove_cache = args.remove_cache
     if remove_cache == 1:
         dubber.VOICER.cleanup()
 
     FFMpegWrapper.DEFAULT_FFMPEG_LOG_LEVEL = args.loglevel
 
-    total_time = 0.
+    total_time = 0
     if args.confirm:
         FFMpegWrapper.DEFAULT_ARGS += '-y',
         total_time = perf_counter()
@@ -159,7 +174,7 @@ def main():
                      ).translate_dir(videos, subtitles_format)
 
     dubs = dubber.Dubber(args.voice, args.language, args.sidechain, args.min_silence_len, args.silence_thresh,
-                         args.gain_during_overlay, args.align)
+                         args.gain_during_overlay, args.align, args.cleanup_level)
 
     dubs.dub_dir(videos, video_format, subtitles_format)
 
@@ -175,7 +190,7 @@ def main():
         fastdub.youtube.yt_upload.uploader.Uploader(args.privacy_status, translate, translate_serv).upload(args.input)
 
     if total_time:
-        print(f'Total time: {perf_counter() - total_time:,g} s.')
+        rich.print(f'Total time: {PrettyViewPrefix.pretty_units_of_time(perf_counter() - total_time)}')
 
 
 if __name__ == '__main__':
