@@ -3,13 +3,15 @@ from __future__ import annotations
 import multiprocessing.pool
 import re
 from pathlib import Path
-from shutil import get_terminal_size
 from typing import Callable, Optional, TypeVar
 from urllib.parse import urlparse
 
+import rich.live
+import rich.table
 from tqdm import tqdm
 from youtubesearchpython import VideosSearch
 
+from fastdub import PrettyViewPrefix
 from fastdub.youtube import *
 from fastdub.youtube import pafy
 from fastdub.youtube.pafy import g as pafy_g
@@ -26,7 +28,8 @@ def _path_save(name: str) -> str:
 
 
 class DownloadYTVideo:
-    __slots__ = ('save_dir', 'language', 'playlist', 'api_keys')
+    __slots__ = ('save_dir', 'language', 'playlist', 'api_keys',
+                 '_table_data', '_live_progress')
     API_KEYS = {pafy_g.api_key, 'AIzaSyCHxJ84-ryessLJfWZVWldiuVCnxtf0Nm4'}
 
     def __init__(self, query: str,
@@ -59,43 +62,59 @@ class DownloadYTVideo:
         self.language = language
         self.playlist = playlist
 
-    def multiprocessing_download(self, pc: int = None):
-        if pc is None:
-            pc = multiprocessing.cpu_count()
-        if pc < 2:
-            for yt_dl in self.playlist:
-                self.download(yt_dl)
-            return
-        with multiprocessing.pool.ThreadPool(pc) as pool:
-            pool.map(self.download, self.playlist)
-
     def download(self, yt_dl: YtdlPafy):
-        title = yt_dl.title
-        if len(yt_dl.title) <= (97 - len(yt_dl.videoid)):
+        title: str = yt_dl.title.strip()
+        if len(title) <= (97 - len(yt_dl.videoid)):
             title += f' [{yt_dl.videoid}]'
         save_to = self.save_dir / title
-        srt_file = Path(f'{save_to}.srt')
+
+        _file = Path(save_to)
+        srt_file = _file.with_suffix('.srt')
         if not srt_file.is_file():
             download_srt(yt_dl.videoid, self.language, srt_file)
-        mp4_file = Path(f'{save_to}.mp4')
+        mp4_file = _file.with_suffix('.mp4')
         if not mp4_file.is_file():
             try:
                 with_api_key(self.mp4_downloader(yt_dl, mp4_file))
-                print(f'\r{mp4_file} downloaded.'.ljust(get_terminal_size().columns))
             except OSError:
                 pass
 
     def mp4_downloader(self, yt_dl: YtdlPafy, mp4_file: str | Path):
-        return lambda: yt_dl.getbest('mp4').download(f'{mp4_file}',
-                                                     progress='MB',
-                                                     callback=self.progress_callback)
+        mp4_file = str(mp4_file)
+        return lambda: yt_dl.getbest('mp4').download(mp4_file,
+                                                     quiet=True,
+                                                     callback=lambda *args: self.progress_callback(mp4_file, *args))
 
-    @staticmethod
-    def progress_callback(total: int, downloaded: float, ratio: float, rate: float, eta: float):
-        print(
-            end=f'\r[{ratio:.2%}] {downloaded:,.2f}/{total / 1048576:,.2f}MB. {rate:,.2f} kb/s: '
-                f'ETA {eta / 60:,.2f} min.'.ljust(get_terminal_size().columns),
-            flush=True)
+    def multiprocessing_download(self, pc: int = None):
+        self._table_data = {}
+        self._live_progress = rich.live.Live(self._generate_info_table())
+        with self._live_progress:
+            if pc is None:
+                pc = multiprocessing.cpu_count()
+            if pc < 2:
+                for yt_dl in self.playlist:
+                    self.download(yt_dl)
+                return
+            with multiprocessing.pool.ThreadPool(pc) as pool:
+                pool.map(self.download, self.playlist)
+
+    def progress_callback(self, fn: str, total: int, downloaded: float, ratio: float, rate: float, eta: float):
+        self._table_data[fn] = (
+            f'\r{ratio:.2%}',
+            f'{PrettyViewPrefix.pretty_units_of_inf(downloaded)}/{PrettyViewPrefix.pretty_units_of_inf(total)}',
+            f'{PrettyViewPrefix.pretty_units_of_inf(rate)}/s', f'{PrettyViewPrefix.pretty_units_of_time(eta)}')
+
+        self._live_progress.update(self._generate_info_table())
+
+    def _generate_info_table(self):
+        _download_table = rich.table.Table(title='Download from [b][black on white]You[/][white on red]Tube[/][/]',
+                                           show_lines=True,
+                                           highlight=True)
+        for header in ('file name', '%', 'downloaded/total', 'rate', 'ETA'):
+            _download_table.add_column(header, justify='center')
+        for fn, v in self._table_data.items():
+            _download_table.add_row(fn, *v)
+        return _download_table
 
 
 def with_api_key(func: Callable[[], _API_RET_TYPE]) -> Optional[_API_RET_TYPE]:
