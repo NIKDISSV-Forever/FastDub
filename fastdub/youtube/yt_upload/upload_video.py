@@ -2,6 +2,7 @@
 import argparse
 import http.client
 import json
+import logging
 import random
 import sys
 import time
@@ -99,7 +100,7 @@ def resumable_upload(insert_request):
     retry = 0
     while response is None:
         try:
-            print('Uploading file...')
+            logging.log('Uploading file...')
             status, response = insert_request.next_chunk()
             if response is not None:
                 if 'id' in response:
@@ -108,7 +109,7 @@ def resumable_upload(insert_request):
                         webbrowser.open_new_tab(f'https://youtu.be/{id_}')
                     except webbrowser.Error:
                         pass
-                    print(f'Video id {id_!r} was successfully uploaded.')
+                    logging.log(f'Video id {id_!r} was successfully uploaded.')
                 else:
                     exit(f'The upload failed with an unexpected response: {response}')
         except HttpError as e:
@@ -120,14 +121,14 @@ def resumable_upload(insert_request):
             error = f'A retriable error occurred: {e}'
 
         if error is not None:
-            print(error, file=sys.stderr)
+            logging.error(error)
             retry += 1
             if retry > MAX_RETRIES:
                 exit('No longer attempting to retry.')
 
             max_sleep = 2**retry
             sleep_seconds = random.random() * max_sleep
-            print(f'Sleeping {sleep_seconds:g} seconds and then retrying...')
+            logging.log(f'Sleeping {sleep_seconds:g} seconds and then retrying...')
             time.sleep(sleep_seconds)
 
 
@@ -167,4 +168,4 @@ def upload(args=None):
     try:
         initialize_upload(youtube, args)
     except HttpError as e:
-        print(f'An HTTP error {e.resp.status} occurred:\n{_json_content(e.content)}', file=sys.stderr)
+        logging.error(f'An HTTP error {e.resp.status} occurred:\n{_json_content(e.content)}')
