@@ -1,9 +1,9 @@
 from pathlib import Path
-from pprint import pp
 from typing import Callable
-from fastdub.youtube.yt_upload.upload_video import upload
+
 from fastdub.youtube import pafy
 from fastdub.youtube.downloader import with_api_key
+from fastdub.youtube.yt_upload.upload_video import upload
 
 
 class Uploader:
@@ -41,5 +41,4 @@ class Uploader:
                 command += ('--category', category)
             if keywords:
                 command += ('--keywords', ','.join(translate(kw) for kw in keywords))
-            pp(command)
             upload(command)
