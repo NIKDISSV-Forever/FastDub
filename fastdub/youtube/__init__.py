@@ -1,5 +1,6 @@
 from fastdub.youtube import yt_upload
 
+__all__ = ('SUPPORTED',)
 try:
     from fastdub.youtube import downloader
     from fastdub.youtube import subtitles
@@ -10,3 +11,4 @@ except ImportError as e:
     SUPPORTED = False
 else:
     SUPPORTED = True
+    __all__ += ('downloader', 'subtitles', 'YtdlPafy')

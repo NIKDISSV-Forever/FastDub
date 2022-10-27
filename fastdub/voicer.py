@@ -1,13 +1,15 @@
 from __future__ import annotations
 
-import os.path
 from hashlib import md5
+from os.path import isfile
 from pathlib import Path
 from shutil import rmtree
 
 import pyttsx3
 
 from fastdub.audio import AudioSegment
+
+__all__ = ('UnknownVoice', 'VOICES_NAMES', 'VOICES_ID', 'Voicer')
 
 
 class UnknownVoice(Exception):
@@ -52,7 +54,7 @@ class Voicer:
 
         cached = f'''{self.cache_dir / md5(f"{text}{self.engine.proxy.getProperty('voice')}".encode())
         .hexdigest()}.wav'''
-        if not os.path.isfile(cached):
+        if not isfile(cached):
             self.engine.proxy.save_to_file(text, cached, None)
             self.engine.runAndWait()
         return AudioSegment.from_file(cached, format='wav')

@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import argparse
 
+__all__ = ('PrettyViewPrefix',)
+
 if not hasattr(argparse, 'BooleanOptionalAction'):
     class BooleanOptionalAction(argparse.Action):
         def __init__(self, option_strings, dest, default=None, type=None,

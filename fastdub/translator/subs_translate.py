@@ -4,6 +4,10 @@ import multiprocessing.pool
 import os.path
 from typing import Callable
 
+from tqdm import tqdm
+
+from fastdub import subtitles
+
 try:
     from functools import cache
 except ImportError:
@@ -13,9 +17,7 @@ except ImportError:
     def cache(func, /):
         return lru_cache(maxsize=None)(func)
 
-from tqdm import tqdm
-
-from fastdub import subtitles
+__all__ = ('SrtTranslate',)
 
 
 class SrtTranslate:

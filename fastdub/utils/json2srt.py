@@ -5,6 +5,8 @@ from pathlib import Path
 
 from fastdub.subtitles import ms_to_srt_time
 
+__all__ = ('from_veed_json', 'main')
+
 
 def from_veed_json(json_file: Path):
     with json_file.open('r', encoding='UTF-8') as f:

@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import argparse
-import glob
-import multiprocessing
-import os
-import sys
+from glob import iglob
 from math import inf
+from multiprocessing import cpu_count
+from os import getcwd
 from time import perf_counter
 
 import rich.traceback
@@ -16,6 +15,8 @@ from fastdub import translator
 from fastdub import youtube
 from fastdub.ffmpeg_wrapper import FFMpegWrapper
 from fastdub.translator.subs_translate import SrtTranslate
+
+__all__ = ('parse_args', 'main')
 
 
 # noinspection PyTypeChecker
@@ -40,22 +41,22 @@ def parse_args() -> argparse.Namespace:
                             help='Subtitles language (ru)')
 
     if youtube.SUPPORTED or translator.SUPPORTED:
-        arg_parser.add_argument('-tc', '--threads-count', default=multiprocessing.cpu_count(),
-                                type=lambda i: int(multiprocessing.cpu_count() * float(i.lstrip('*')))
+        arg_parser.add_argument('-tc', '--threads-count', default=cpu_count(),
+                                type=lambda i: int(cpu_count() * float(i.lstrip('*')))
                                 if i.startswith('*') else int(i),
                                 help='Process count to download (pass to cpu count, < 2 to disable)\n'
                                      '\t*N = N * cpu count')
 
     input_group = arg_parser.add_argument_group('Input')
-    input_group.add_argument('-i', '--input', type=str, default=os.getcwd(), required=True,
+    input_group.add_argument('-i', '--input', type=str, default=getcwd(), required=True,
                              help=f"Input directory{('/YouTube Playlist/Video URL' if youtube.SUPPORTED else '')}.")
     input_group.add_argument('-vf', '--video-format', default='.mp4',
-                             help='Video format (default .mp4).')
+                             help='Video format (default: .mp4).')
     input_group.add_argument('-sf', '--subtitles-format', default='.srt',
-                             help='Subtitles format (default .srt).')
+                             help='Subtitles format (default: .srt).')
 
     exclude_input_group = input_group.add_argument_group('Exclude Input')
-    exclude_input_group.add_argument('-En', '--exclude', type=glob.glob, nargs='+', default=(),
+    exclude_input_group.add_argument('-En', '--exclude', type=iglob, nargs='+', default=(),
                                      help='Exclude <name> (glob)')
     exclude_input_group.add_argument('-Eu', '--exclude-underscore', default=True,
                                      help='Exclude files starts with underscore')
@@ -64,19 +65,19 @@ def parse_args() -> argparse.Namespace:
     ducking_group.add_argument('-sc', '--sidechain', action=argparse.BooleanOptionalAction, default=True,
                                help='Enable audio side chain compress (ducking)')
     ducking_group.add_argument('-sc-msl', '--min-silence-len', '--attack', default=100, type=int,
-                               help='Minimum silence length in ms (default 100)')
+                               help='Minimum silence length in ms (default: 100)')
     ducking_group.add_argument('-sc-st', '--silence-thresh', default=-inf, type=float,
                                help='Silence threshold in dB')
     ducking_group.add_argument('-sc-gdo', '--gain-during-overlay', default=-11, type=int,
-                               help='Gain during overlay in dB (-11)')
+                               help='Gain during overlay in dB (default: -11)')
 
     voicer_group = arg_parser.add_argument_group('Voicer')
     voicer_group.add_argument('-v', '--voice', type=str.lower, choices=voicer.VOICES_NAMES.keys(),
                               help='SAPI voice for voice acting.')
     voicer_group.add_argument('-a', '--align', default=2., type=float,
-                              help='Audio fit align\n'
-                                   '\t1 = right\n'
-                                   '\t2 = center (default)')
+                              help='Audio fit align'
+                                   '\n\t1 = right'
+                                   '\n\t2 = center (default)')
 
     ffmpeg_group = arg_parser.add_argument_group('FFMpeg Output')
     ffmpeg_group.add_argument('-ll', '--loglevel', default='panic',
@@ -87,8 +88,8 @@ def parse_args() -> argparse.Namespace:
                               help="Don't ask for confirmation")
 
     output_group = arg_parser.add_argument_group('Terminal Output')
-    output_group.add_argument('--traceback', action=argparse.BooleanOptionalAction, default=True,
-                              help='Show custom traceback (Default True)')
+    output_group.add_argument('--traceback', action=argparse.BooleanOptionalAction, default=False,
+                              help='Show debug traceback')
 
     if youtube.SUPPORTED:
         yt_group = arg_parser.add_argument_group('YouTube')
@@ -105,7 +106,7 @@ def parse_args() -> argparse.Namespace:
                                      help='Sets the result region. Defaults to "US".')
 
     if fastdub.youtube.yt_upload.SUPPORTED:
-        ytu_group = arg_parser.add_argument_group('YouTube yt_upload')
+        ytu_group = arg_parser.add_argument_group('YouTube Upload')
         ytu_group.add_argument('-ytu', '--youtube-upload', action='store_true', default=False,
                                help='yt_upload video to YouTube channel after voice acting.')
         ytu_group.add_argument('-ytu-ps', '--privacy-status',
@@ -135,12 +136,9 @@ def parse_args() -> argparse.Namespace:
 def main():
     args = parse_args()
     if args.traceback:
-        def _custom_excepthook(exc_type, exc_value, traceback):
-            rich.print(rich.traceback.Traceback(
-                rich.traceback.Traceback.extract(exc_type, exc_value, traceback, exc_type is not KeyboardInterrupt, )))
-
-        sys.excepthook = _custom_excepthook
-
+        rich.traceback.install(show_locals=True)
+    else:
+        rich.traceback.install(extra_lines=0, word_wrap=True)
     remove_cache = args.remove_cache
     if remove_cache == 1:
         dubber.VOICER.cleanup()

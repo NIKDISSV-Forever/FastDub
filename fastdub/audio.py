@@ -27,9 +27,7 @@ class AudioSegment(pydub.AudioSegment):
         # noinspection PyProtectedMember
         return seg1._spawn(seg1._data + seg2._data)
 
-    def __add__(self, other):
-        """Add, only for AudioSegments"""
-        return self.append(other)
+    __add__ = append
 
 
 def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = True, log_level: str = 'error'
@@ -72,9 +70,11 @@ def fit(audio: AudioSegment, left_border: float, need_duration: float, right_bor
     if (audio_duration := audio.duration_ms) > (free := left_border + need_duration + right_border):
         audio = speed_change(audio, audio_duration / free)
         audio_duration = audio.duration_ms
-    return AudioSegment.silent(((free - audio_duration) / align)
-                               if (audio_duration > (need_duration + right_border))
-                               else left_border) + audio
+    return AudioSegment.silent(
+        ((free - audio_duration) / align)
+        if (audio_duration > (need_duration + right_border))
+        else left_border
+    ) + audio
 
 
 def side_chain(sound1: AudioSegment, sound2: AudioSegment,

@@ -5,7 +5,6 @@ from contextlib import closing
 from typing import Iterable
 
 import rich.align
-import rich.progress
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from tqdm import tqdm
 

@@ -17,7 +17,7 @@ from fastdub.youtube import pafy
 from fastdub.youtube.pafy import g as pafy_g
 from fastdub.youtube.subtitles import download_srt
 
-__all__ = 'DownloadYTVideo', 'with_api_key'
+__all__ = ('DownloadYTVideo', 'with_api_key')
 
 _API_RET_TYPE = TypeVar('_API_RET_TYPE')
 _PATH_SUPPORTED = re.compile(r'[\\/:?"<>|]+')
@@ -29,16 +29,21 @@ def _path_save(name: str) -> str:
 
 class DownloadYTVideo:
     __slots__ = ('save_dir', 'language', 'playlist', 'api_keys',
+                 'download_title',
                  '_table_data', '_live_progress')
     API_KEYS = {pafy_g.api_key, 'AIzaSyCHxJ84-ryessLJfWZVWldiuVCnxtf0Nm4'}
+    TABLE_TITLE_TEMPLATE = 'Downloading from [link=%(scheme)s://%(netloc)s]%(netloc)s[/]...'
 
     def __init__(self, query: str,
                  language: str,
                  search_limit: int = 20,
                  region: str = 'US'):
-        url_path = urlparse(query).path
+        url_parsed = urlparse(query)
+        url_path = url_parsed.path
+        is_youtube = False
         if query.startswith('?'):
             query = query.removeprefix('?')
+            is_youtube = True
             videos = tqdm(VideosSearch(query, search_limit, language, region).result().get('result', ()),
                           'Video search processing', unit='video', dynamic_ncols=True, colour='white')
             playlist = (
@@ -61,6 +66,10 @@ class DownloadYTVideo:
         self.save_dir = save_dir
         self.language = language
         self.playlist = playlist
+        self.download_title = self.TABLE_TITLE_TEMPLATE % (
+            {'scheme': 'https', 'netloc': 'www.youtube.com'} if is_youtube
+            else {'scheme': url_parsed.scheme, 'netloc': url_parsed.netloc}
+        )
 
     def download(self, yt_dl: YtdlPafy):
         title: str = yt_dl.title.strip()
@@ -107,7 +116,7 @@ class DownloadYTVideo:
         self._live_progress.update(self._generate_info_table())
 
     def _generate_info_table(self):
-        _download_table = rich.table.Table(title='Download from [b][black on white]You[/][white on red]Tube[/][/]',
+        _download_table = rich.table.Table(title=self.download_title,
                                            show_lines=True,
                                            highlight=True)
         for header in ('file name', '%', 'downloaded/total', 'rate', 'ETA'):
