@@ -6,6 +6,8 @@ __all__ = ('PrettyViewPrefix',)
 
 if not hasattr(argparse, 'BooleanOptionalAction'):
     class BooleanOptionalAction(argparse.Action):
+        __slots__ = ()
+
         def __init__(self, option_strings, dest, default=None, type=None,
                      choices=None, required=False, help=None, metavar=None):
             _option_strings = ()
@@ -31,20 +33,21 @@ if not hasattr(argparse, 'BooleanOptionalAction'):
 
 
 class PrettyViewPrefix:
+    """Class for representing a number as units"""
     __slots__ = ()
 
     @staticmethod
-    def pretty_units_of_any(size: float, div: float, iter_prefix, base: str) -> str:
-        for prefix in iter_prefix[:-1]:
+    def from_any(size: float, div: float, base: str, prefixes) -> str:
+        for prefix in prefixes[:-1]:
             if size < div:
                 return f'{size:,g}{prefix}{base}'
             size /= div
-        return f'{size:,g}{iter_prefix[-1]}{base}'
+        return f'{size:,g}{prefixes[-1]}{base}'
 
     @classmethod
-    def pretty_units_of_inf(cls, size: float):
-        return cls.pretty_units_of_any(size, 1000., ('', *'kMGTPEZY'), 'B')
+    def from_bytes(cls, size: float) -> str:
+        return cls.from_any(size, 1000., 'B', ('', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'))
 
     @classmethod
-    def pretty_units_of_time(cls, size: float):
-        return cls.pretty_units_of_any(size, 60., 'smh', '')
+    def from_seconds(cls, size: float) -> str:
+        return cls.from_any(size, 60., '', 'smh')
