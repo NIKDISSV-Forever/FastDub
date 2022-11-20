@@ -188,7 +188,7 @@ def main():
         fastdub.youtube.yt_upload.uploader.Uploader(args.privacy_status, translate, translate_serv).upload(args.input)
 
     if total_time:
-        rich.print(f'Total time: {PrettyViewPrefix.pretty_units_of_time(perf_counter() - total_time)}')
+        rich.print(f'Total time: {PrettyViewPrefix.from_seconds(perf_counter() - total_time)}')
 
 
 if __name__ == '__main__':
