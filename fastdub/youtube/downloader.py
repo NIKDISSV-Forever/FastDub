@@ -110,8 +110,8 @@ class DownloadYTVideo:
     def progress_callback(self, fn: str, total: int, downloaded: float, ratio: float, rate: float, eta: float):
         self._table_data[fn] = (
             f'\r{ratio:.2%}',
-            f'{PrettyViewPrefix.pretty_units_of_inf(downloaded)}/{PrettyViewPrefix.pretty_units_of_inf(total)}',
-            f'{PrettyViewPrefix.pretty_units_of_inf(rate)}/s', f'{PrettyViewPrefix.pretty_units_of_time(eta)}')
+            f'{PrettyViewPrefix.from_bytes(downloaded)}/{PrettyViewPrefix.from_bytes(total)}',
+            f'{PrettyViewPrefix.from_bytes(rate)}/s', PrettyViewPrefix.from_seconds(eta))
 
         self._live_progress.update(self._generate_info_table())
 
