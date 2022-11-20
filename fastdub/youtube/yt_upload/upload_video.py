@@ -100,7 +100,7 @@ def resumable_upload(insert_request):
     retry = 0
     while response is None:
         try:
-            logging.log('Uploading file...')
+            logging.info('Uploading file...')
             status, response = insert_request.next_chunk()
             if response is not None:
                 if 'id' in response:
@@ -109,7 +109,7 @@ def resumable_upload(insert_request):
                         webbrowser.open_new_tab(f'https://youtu.be/{id_}')
                     except webbrowser.Error:
                         pass
-                    logging.log(f'Video id {id_!r} was successfully uploaded.')
+                    logging.info(f'Video id {id_!r} was successfully uploaded.')
                 else:
                     exit(f'The upload failed with an unexpected response: {response}')
         except HttpError as e:
@@ -128,7 +128,7 @@ def resumable_upload(insert_request):
 
             max_sleep = 2**retry
             sleep_seconds = random.random() * max_sleep
-            logging.log(f'Sleeping {sleep_seconds:g} seconds and then retrying...')
+            logging.info(f'Sleeping {sleep_seconds:g} seconds and then retrying...')
             time.sleep(sleep_seconds)
 
 
