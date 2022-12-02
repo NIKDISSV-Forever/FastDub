@@ -20,7 +20,7 @@ class FFMpegWrapper:
         check_call((cls.FFMPEG_EXE, '-v', loglevel, *cls.DEFAULT_ARGS, *args))
 
     @staticmethod
-    def save_result_data(video_path: str, audio_path: str, subtitles_path: str, output_path: str):
+    def save_result_data(video_path, audio_path, subtitles_path, output_path):
         FFMpegWrapper.convert('-i', video_path, '-i', audio_path, '-i', subtitles_path,
                               '-map', '0:0', '-map', '1:0', '-map', '0:1', '-map', '2:0',
                               '-disposition:a:0', 'default', '-disposition:a:1', '0',

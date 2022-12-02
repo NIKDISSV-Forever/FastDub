@@ -276,6 +276,7 @@ class JSInterpreter(object):
     def build_function(self, argnames, code):
         def resf(args):
             local_vars = dict(zip(argnames, args))
+            res = None
             for stmt in code.split(';'):
                 res, abort = self.interpret_statement(stmt, local_vars)
                 if abort:

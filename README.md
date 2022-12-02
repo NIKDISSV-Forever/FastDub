@@ -2,11 +2,14 @@ Package for voice over subtitles:
 
 * with the ability to embed in video,
 * audio ducking,
-* dynamic voice changer for a single track. _Add **"!: voice name"** at the beginning of the subtitle line. (Applies to
+* dynamic voice changer for a single track. _Add **--voice-set-anchor** at the beginning of the subtitle line. (Applies
+  to
   all
   subsequent ones)_
 
-> pip install -U [PyFastDub](https://pypi.org/project/PyFastDub/)
+> pip install -U [FastDub](https://pypi.org/project/FastDub/)
+
+---
 
 # Install for Ubuntu
 
@@ -18,17 +21,17 @@ Package for voice over subtitles:
 >
 > sudo python3 -m pip install -U pip setuptools wheel
 >
-> sudo python3 -m pip install -U [PyFastDub](https://pypi.org/project/PyFastDub/)
+> sudo python3 -m pip install -U [FastDub](https://pypi.org/project/FastDub/)
 
 # Install all dependencies
 
-> pip install PyFastDub[ALL]  # default
+> pip install FastDub[ALL]  # default
 
 # Youtube support
 
 ## Youtube argument group
 
-> pip install PyFastDub[YT]
+> pip install FastDub[YT]
 
 ### Process all videos from a channel
 
@@ -55,7 +58,7 @@ _For Example:_
 
 ## YouTube Upload argument group
 
-> pip install PyFastDub[YTU]
+> pip install FastDub[YTU]
 
 To download, you need to go to [credentials](https://console.cloud.google.com/apis/credentials) (Create a new project if
 needed) > <kbd>+ Create credentials</kbd> > <kbd>OAuth Client ID</kbd> > <kbd>Desktop App</kbd>
@@ -73,24 +76,24 @@ _client_secrets.json_
 
 ### Translate argument group
 
-> pip install PyFastDub[TR]
+> pip install FastDub[TR]
 
 # Usage
 
 > python -m fastdub --help
 
 ```
-usage: fastdub [-h] [-rc {0,1,2}] [-rf CLEANUP_LEVEL] [-l LANGUAGE] [-tc THREADS_COUNT] -i INPUT [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT]
-               [-En EXCLUDE [EXCLUDE ...]] [-Eu EXCLUDE_UNDERSCORE] [-sc | --sidechain | --no-sidechain] [-sc-msl MIN_SILENCE_LEN] [-sc-st SILENCE_THRESH]
-               [-sc-gdo GAIN_DURING_OVERLAY]
-               [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft haruka desktop - japanese,microsoft david desktop - 
-english (united states),microsoft huihui desktop - chinese (simplified,aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,vict
-oria,vitaliy,volodymyr,yuriy}]
-               [-a ALIGN] [-ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}] [-y | --confirm | --no-confirm] [--traceback | --no-traceback] [-yt]     
-               [-ak API_KEYS [API_KEYS ...]] [-yts] [-yts-l YOUTUBE_SEARCH_LIMIT] [-yts-rg YOUTUBE_SEARCH_REGION] [-ytu] [-ytu-ps {private,public,unlisted}]        
-               [-ytu-t] [-tr] [--rewrite-srt | --no-rewrite-srt]
-               [-ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,mglip,niutrans,papago,reverso,sogou,tencent,translateCom,utibet
-,yandex,youdao}]
+usage: fastdub [-h] [-rc {0,1,2}] [-ra | --cleanup-audio | -n-ra | --no-cleanup-audio] [-l LANGUAGE]
+               [-tc THREADS_COUNT] -i INPUT [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT] [-En EXCLUDE [EXCLUDE ...]]
+               [-Eu EXCLUDE_UNDERSCORE] [-sc | --side-chain | -n-sc | --no-side-chain] [-sc-msl MIN_SILENCE_LEN]
+               [-sc-st SILENCE_THRESH] [-sc-gdo GAIN_DURING_OVERLAY]
+               [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft david desktop - english (united states,aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}]
+               [-a ALIGN] [-v-set-a VOICE_SET_ANCHOR] [-ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}]
+               [-y | --confirm | -n-y | --no-confirm] [-af AUDIO_FORMAT] [-tb | --traceback | -n-tb | --no-traceback]
+               [-yt] [-ak API_KEYS [API_KEYS ...]] [-yts] [-yts-l YOUTUBE_SEARCH_LIMIT]
+               [-yts-rg YOUTUBE_SEARCH_REGION] [-ytu] [-ytu-ps {private,public,unlisted}] [-ytu-t] [-tr]
+               [--rewrite-srt | --no-rewrite-srt]
+               [-ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,mglip,niutrans,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}]
 
 fastdub is a tool for dubbing videos by subtitle files.
 
@@ -101,12 +104,8 @@ options:
                                 0 - No remove cache
                                 1 - Delete cache before voice acting
                                 2 - Delete cache after voice acting (default)
-  -rf CLEANUP_LEVEL, --cleanup-level CLEANUP_LEVEL
-                        Cleanup level
-                                = 0 -> No removing any files
-                                > 0 -> remove extracted audio from video (default)
-                                > 1 -> remove dubbed audio if video exists
-                                > 2 -> remove dubbed cache files
+  -ra, --cleanup-audio, -n-ra, --no-cleanup-audio
+                        Remove result audio if video exists (default: False)
   -l LANGUAGE, --language LANGUAGE
                         Subtitles language (ru)
   -tc THREADS_COUNT, --threads-count THREADS_COUNT
@@ -122,7 +121,7 @@ Input:
                         Subtitles format (default: .srt).
 
 Audio Ducking:
-  -sc, --sidechain, --no-sidechain
+  -sc, --side-chain, -n-sc, --no-side-chain
                         Enable audio side chain compress (ducking) (default: True)
   -sc-msl MIN_SILENCE_LEN, --min-silence-len MIN_SILENCE_LEN, --attack MIN_SILENCE_LEN
                         Minimum silence length in ms (default: 100)
@@ -132,25 +131,25 @@ Audio Ducking:
                         Gain during overlay in dB (default: -11)
 
 Voicer:
-  -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft haruka desktop - japanese,microsoft david desktop - english (unit
-ed states),microsoft huihui desktop - chinese (simplified),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy
-,volodymyr,yuriy}, --voice {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft haruka desktop - japanese,microsoft david d
-esktop - english (united states),microsoft huihui desktop - chinese (simplified),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,ta
-tiana,victoria,vitaliy,volodymyr,yuriy}
+  -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}, --voice {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}
                         SAPI voice for voice acting.
   -a ALIGN, --align ALIGN
-                        Audio fit align
+                        Audio fit align (divisor)
                                 1 = right
                                 2 = center (default)
+  -v-set-a VOICE_SET_ANCHOR, --voice-set-anchor VOICE_SET_ANCHOR
+                        Anchor indicating voice actor change (default "!:")
 
 FFMpeg Output:
   -ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}, --loglevel {trace,debug,verbose,info,warning,error,fatal,panic,quiet}
                         FFMpegWrapper loglevel
-  -y, --confirm, --no-confirm
+  -y, --confirm, -n-y, --no-confirm
                         Don't ask for confirmation (default: True)
+  -af AUDIO_FORMAT, --audio-format AUDIO_FORMAT
+                        Out audio files format (default wav)
 
 Terminal Output:
-  --traceback, --no-traceback
+  -tb, --traceback, -n-tb, --no-traceback
                         Show debug traceback (default: False)
 
 YouTube:
@@ -179,9 +178,7 @@ Translate:
   --rewrite-srt, --no-rewrite-srt
                         Rewrite input subtitles files.
                         If not, add "_" to the beginning of the original subtitle file. (default: False)
-  -ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,mglip,niutrans,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao
-}, --translate-service {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,mglip,niutrans,papago,reverso,sogou,tencent,translateCom,uti
-bet,yandex,youdao}
+  -ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,mglip,niutrans,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}, --translate-service {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,mglip,niutrans,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}
                         Subtitle translation service. (default google)
 ```
 

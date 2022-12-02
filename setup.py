@@ -2,10 +2,13 @@ from pathlib import Path
 
 import setuptools
 
-with open('requires.txt', encoding='UTF-8') as f:
+with open('requires.txt', encoding='utf-8') as f:
     requires = f.read().strip().splitlines()
-with open('README.md', encoding='UTF-8') as f:
+with open('CHANGELOG.md', encoding='utf-8') as f:
+    changelog = f.read()
+with open('README.md', encoding='utf-8') as f:
     readme = f.read()
+readme += f'\n\n# CHANGELOG\n\n{changelog}'
 
 extras_require = {}
 for require in Path('extra_requires').glob('*_*.txt'):
@@ -14,8 +17,8 @@ for require in Path('extra_requires').glob('*_*.txt'):
 extras_require['all'] = sum(extras_require.values(), requires)
 
 setuptools.setup(
-    name="PyFastDub",
-    version="3.1.2",
+    name="FastDub",
+    version="3.2.0",
 
     description="A Python CLI package "
                 "for voice over subtitles, with the ability to embed in video, audio ducking, "
@@ -33,7 +36,6 @@ setuptools.setup(
 
     install_requires=requires,
     extras_require=extras_require,
-
 
     project_urls={
         'Download Voices': 'https://rhvoice.su/voices/',

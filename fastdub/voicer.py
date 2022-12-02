@@ -23,11 +23,21 @@ del _voices
 
 
 class Voicer:
-    __slots__ = ('engine', 'cache_dir')
+    __slots__ = ('engine', 'cache_dir', '_update_voice_anchor')
 
-    def __init__(self, cache_dir: str = None):
-        self.engine = pyttsx3.init()
+    def __init__(self, cache_dir: str = None, anchor: str = '!:'):
+        if anchor:
+            def _update_voice_anchor(line: str) -> bool:
+                if line.startswith(anchor):
+                    self.set_voice(line.removeprefix(anchor))
+                    return True
+                return False
+        else:
+            def _update_voice_anchor(_: str) -> bool:
+                return False
+        self._update_voice_anchor = _update_voice_anchor
         self.cache_dir = Path(__file__).parent / '_cached_texts' if cache_dir is None else Path(cache_dir)
+        self.engine = pyttsx3.init()
         if not self.cache_dir.is_dir():
             self.cache_dir.mkdir(parents=True)
 
@@ -43,13 +53,12 @@ class Voicer:
         if VOICES_ID.get(voice_property).name.casefold() != voice_name:
             self.engine.proxy.setProperty('voice', voice.id)
 
-    def voice(self, text: str, change_voice: bool = True) -> AudioSegment:
+    def voice(self, text: str) -> AudioSegment:
         text = text.strip()
         if not text:
             return AudioSegment.silent(0)
 
-        if change_voice and (lines := text.splitlines())[0].startswith('!:'):
-            self.set_voice(lines[0][2:])
+        if self._update_voice_anchor((lines := text.splitlines())[0]):
             text = '\n'.join(lines[1:])
 
         cached = f'''{self.cache_dir / md5(f"{text}{self.engine.proxy.getProperty('voice')}".encode())

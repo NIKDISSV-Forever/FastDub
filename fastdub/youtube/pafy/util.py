@@ -26,7 +26,7 @@ def call_gdata(api, qs):
         data = g.opener.open(url).read().decode('utf-8')
     except HTTPError as e:
         try:
-            errdata = e.file.read().decode()
+            errdata = e.read().decode()
             error = json.loads(errdata)['error']['message']
             errmsg = 'Youtube Error %d: %s' % (e.getcode(), error)
         except Exception:

@@ -106,13 +106,18 @@ class DownloadYTVideo:
                 return
             with multiprocessing.pool.ThreadPool(pc) as pool:
                 pool.map(self.download, self.playlist)
+            self._live_progress.update(f'{len(self.playlist)} downloaded.')
 
     def progress_callback(self, fn: str, total: int, downloaded: float, ratio: float, rate: float, eta: float):
+        if ratio == 1.:
+            if fn in self._table_data:
+                del self._table_data[fn]
+            return
         self._table_data[fn] = (
             f'\r{ratio:.2%}',
             f'{PrettyViewPrefix.from_bytes(downloaded)}/{PrettyViewPrefix.from_bytes(total)}',
-            f'{PrettyViewPrefix.from_bytes(rate)}/s', PrettyViewPrefix.from_seconds(eta))
-
+            f'{PrettyViewPrefix.from_bytes(rate)}/s', PrettyViewPrefix.from_seconds(eta)
+        )
         self._live_progress.update(self._generate_info_table())
 
     def _generate_info_table(self):

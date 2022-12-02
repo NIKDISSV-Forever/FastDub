@@ -15,7 +15,7 @@ __all__ = ('AudioSegment', 'speed_change', 'fit', 'side_chain')
 
 
 class AudioSegment(pydub.AudioSegment):
-    __slots__ = ('duration_ms',)
+    __slots__ = ()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -64,17 +64,17 @@ def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = T
         return AudioSegment.from_file(out)
 
 
-def fit(audio: AudioSegment, left_border: float, need_duration: float, right_border: float,
+def fit(audio: AudioSegment,
+        left_border: float, need_duration: float, right_border: float,
         align: float) -> AudioSegment:
     """Fits audio to the borders of the subtitles."""
-    if (audio_duration := audio.duration_ms) > (free := left_border + need_duration + right_border):
+    if (audio_duration := audio.duration_ms) > (free := (left_border + need_duration + right_border)):
         audio = speed_change(audio, audio_duration / free)
         audio_duration = audio.duration_ms
     return AudioSegment.silent(
-        ((free - audio_duration) / align)
-        if (audio_duration > (need_duration + right_border))
-        else left_border
-    ) + audio
+        (free - audio_duration) / align
+        if audio_duration > need_duration + right_border
+        else left_border) + audio
 
 
 def side_chain(sound1: AudioSegment, sound2: AudioSegment,

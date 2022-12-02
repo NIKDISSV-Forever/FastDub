@@ -10,13 +10,34 @@ from time import perf_counter
 import rich.traceback
 
 import fastdub.youtube
-from fastdub import PrettyViewPrefix, dubber, voicer
-from fastdub import translator
-from fastdub import youtube
+from fastdub import PrettyViewPrefix, dubber, translator, voicer, youtube
 from fastdub.ffmpeg_wrapper import FFMpegWrapper
 from fastdub.translator.subs_translate import SrtTranslate
 
 __all__ = ('parse_args', 'main')
+
+
+class BooleanOptionalAction(argparse.Action):
+    __slots__ = ()
+
+    def __init__(self, option_strings, dest, default=None, type=None,
+                 choices=None, required=False, help=None, metavar=None):
+        _option_strings = (*option_strings,
+                           *('--no-' + option_string[2:] if option_string.startswith('--') else
+                             '-n-' + option_string[1:] if option_string.startswith('-') else option_strings
+                             for option_string in option_strings))
+        if help is not None and default is not None and default is not argparse.SUPPRESS:
+            help += " (default: %(default)s)"
+        super().__init__(option_strings=_option_strings, dest=dest, nargs=0, default=default, type=type,
+                         choices=choices, required=required, help=help, metavar=metavar)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        if option_string in self.option_strings:
+            setattr(namespace, self.dest,
+                    not (option_string.startswith('--no-') or option_string.startswith('-n-')))
+
+    def format_usage(self):
+        return ' | '.join(self.option_strings)
 
 
 # noinspection PyTypeChecker
@@ -30,12 +51,8 @@ def parse_args() -> argparse.Namespace:
                                  '\t0 - No remove cache\n'
                                  '\t1 - Delete cache before voice acting\n'
                                  '\t2 - Delete cache after voice acting (default)')
-    arg_parser.add_argument('-rf', '--cleanup-level', type=int, default=1,
-                            help='Cleanup level\n'
-                                 '\t= 0 -> No removing any files\n'
-                                 '\t> 0 -> remove extracted audio from video (default)\n'
-                                 '\t> 1 -> remove dubbed audio if video exists\n'
-                                 '\t> 2 -> remove dubbed cache files')
+    arg_parser.add_argument('-ra', '--cleanup-audio', action=BooleanOptionalAction, default=False,
+                            help='Remove result audio if video exists', dest='cleanup_audio')
 
     arg_parser.add_argument('-l', '--language', default='ru',
                             help='Subtitles language (ru)')
@@ -48,7 +65,7 @@ def parse_args() -> argparse.Namespace:
                                      '\t*N = N * cpu count')
 
     input_group = arg_parser.add_argument_group('Input')
-    input_group.add_argument('-i', '--input', type=str, default=getcwd(), required=True,
+    input_group.add_argument('-i', '--input', default=getcwd(), required=True,
                              help=f"Input directory{('/YouTube Playlist/Video URL' if youtube.SUPPORTED else '')}.")
     input_group.add_argument('-vf', '--video-format', default='.mp4',
                              help='Video format (default: .mp4).')
@@ -62,7 +79,7 @@ def parse_args() -> argparse.Namespace:
                                      help='Exclude files starts with underscore')
 
     ducking_group = arg_parser.add_argument_group('Audio Ducking')
-    ducking_group.add_argument('-sc', '--sidechain', action=argparse.BooleanOptionalAction, default=True,
+    ducking_group.add_argument('-sc', '--side-chain', action=BooleanOptionalAction, default=True,
                                help='Enable audio side chain compress (ducking)')
     ducking_group.add_argument('-sc-msl', '--min-silence-len', '--attack', default=100, type=int,
                                help='Minimum silence length in ms (default: 100)')
@@ -75,20 +92,24 @@ def parse_args() -> argparse.Namespace:
     voicer_group.add_argument('-v', '--voice', type=str.lower, choices=voicer.VOICES_NAMES.keys(),
                               help='SAPI voice for voice acting.')
     voicer_group.add_argument('-a', '--align', default=2., type=float,
-                              help='Audio fit align'
+                              help='Audio fit align (divisor)'
                                    '\n\t1 = right'
                                    '\n\t2 = center (default)')
+    voicer_group.add_argument('-v-set-a', '--voice-set-anchor', default='!:',
+                              help='Anchor indicating voice actor change (default "!:")')
 
     ffmpeg_group = arg_parser.add_argument_group('FFMpeg Output')
     ffmpeg_group.add_argument('-ll', '--loglevel', default='panic',
                               choices=(
                                   'trace', 'debug', 'verbose', 'info', 'warning', 'error', 'fatal', 'panic', 'quiet'),
                               help='FFMpegWrapper loglevel')
-    ffmpeg_group.add_argument('-y', '--confirm', action=argparse.BooleanOptionalAction, default=True,
+    ffmpeg_group.add_argument('-y', '--confirm', action=BooleanOptionalAction, default=True,
                               help="Don't ask for confirmation")
+    ffmpeg_group.add_argument('-af', '--audio-format', default='wav',
+                              help='Out audio files format (default wav)')
 
     output_group = arg_parser.add_argument_group('Terminal Output')
-    output_group.add_argument('--traceback', action=argparse.BooleanOptionalAction, default=False,
+    output_group.add_argument('-tb', '--traceback', action=BooleanOptionalAction, default=False,
                               help='Show debug traceback')
 
     if youtube.SUPPORTED:
@@ -102,7 +123,7 @@ def parse_args() -> argparse.Namespace:
                                           ' (Adds "?" at the start of input)')
         yt_search_group.add_argument('-yts-l', '--youtube-search-limit', type=int, default=20,
                                      help='Sets limit to the number of results. Defaults to 20.')
-        yt_search_group.add_argument('-yts-rg', '--youtube-search-region', type=str, default='US',
+        yt_search_group.add_argument('-yts-rg', '--youtube-search-region', default='US',
                                      help='Sets the result region. Defaults to "US".')
 
     if fastdub.youtube.yt_upload.SUPPORTED:
@@ -122,7 +143,7 @@ def parse_args() -> argparse.Namespace:
         translate_group = arg_parser.add_argument_group('Translate')
         translate_group.add_argument('-tr', '--translate', action='store_true', default=False,
                                      help='Translate input subtitles files')
-        translate_group.add_argument('--rewrite-srt', action=argparse.BooleanOptionalAction, default=False,
+        translate_group.add_argument('--rewrite-srt', action=BooleanOptionalAction, default=False,
                                      help='Rewrite input subtitles files.\n'
                                           'If not, add "_" to the beginning of the original subtitle file.')
         translate_group.add_argument('-ts', '--translate-service', type=translator.get_service_by_name,
@@ -164,6 +185,7 @@ def main():
     video_format = video_format if (video_format := args.video_format).startswith('.') else f'.{video_format}'
     subtitles_format = (
         subtitles_format if (subtitles_format := args.subtitles_format).startswith('.') else f'.{subtitles_format}')
+    audio_format: str = args.audio_format.removeprefix('.')
 
     videos = dubber.Dubber.collect_videos(args.input, args.exclude_underscore, (*sum(args.exclude, []),))
 
@@ -171,8 +193,9 @@ def main():
         SrtTranslate(args.language, args.translate_service, args.rewrite_srt, args.threads_count
                      ).translate_dir(videos, subtitles_format)
 
-    dubs = dubber.Dubber(args.voice, args.language, args.sidechain, args.min_silence_len, args.silence_thresh,
-                         args.gain_during_overlay, args.align, args.cleanup_level)
+    dubs = dubber.Dubber(args.voice, args.language, audio_format,
+                         args.side_chain, args.min_silence_len, args.silence_thresh, args.gain_during_overlay,
+                         args.align, args.cleanup_audio)
 
     dubs.dub_dir(videos, video_format, subtitles_format)
 
