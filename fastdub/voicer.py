@@ -38,8 +38,7 @@ class Voicer:
         self._update_voice_anchor = _update_voice_anchor
         self.cache_dir = Path(__file__).parent / '_cached_texts' if cache_dir is None else Path(cache_dir)
         self.engine = pyttsx3.init()
-        if not self.cache_dir.is_dir():
-            self.cache_dir.mkdir(parents=True)
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
 
     def cleanup(self):
         rmtree(self.cache_dir)
@@ -61,9 +60,9 @@ class Voicer:
         if self._update_voice_anchor((lines := text.splitlines())[0]):
             text = '\n'.join(lines[1:])
 
-        cached = f'''{self.cache_dir / md5(f"{text}{self.engine.proxy.getProperty('voice')}".encode())
+        cached_file = f'''{self.cache_dir / md5(f"{text}{self.engine.proxy.getProperty('voice')}".encode())
         .hexdigest()}.wav'''
-        if not isfile(cached):
-            self.engine.proxy.save_to_file(text, cached, None)
+        if not isfile(cached_file):
+            self.engine.save_to_file(text, cached_file, 'fastdub')
             self.engine.runAndWait()
-        return AudioSegment.from_file(cached, format='wav')
+        return AudioSegment.from_file(cached_file, format='wav')

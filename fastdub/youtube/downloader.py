@@ -11,7 +11,7 @@ import rich.table
 from tqdm import tqdm
 from youtubesearchpython import VideosSearch
 
-from fastdub import PrettyViewPrefix
+from fastdub import GlobalSettings, PrettyViewPrefix
 from fastdub.youtube import *
 from fastdub.youtube import pafy
 from fastdub.youtube.pafy import g as pafy_g
@@ -97,9 +97,10 @@ class DownloadYTVideo:
     def multiprocessing_download(self, pc: int = None):
         self._table_data = {}
         self._live_progress = rich.live.Live(self._generate_info_table())
+
+        if pc is None:
+            pc = GlobalSettings.threads_count
         with self._live_progress:
-            if pc is None:
-                pc = multiprocessing.cpu_count()
             if pc < 2:
                 for yt_dl in self.playlist:
                     self.download(yt_dl)

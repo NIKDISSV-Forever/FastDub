@@ -6,7 +6,7 @@ from typing import Callable
 
 from tqdm import tqdm
 
-from fastdub import subtitles
+from fastdub import GlobalSettings, subtitles
 
 try:
     from functools import cache
@@ -27,7 +27,7 @@ class SrtTranslate:
         self.language = language
         self.service = service
         self.rewrite = rewrite
-        self.threads_count = threads_count or multiprocessing.cpu_count()
+        self.threads_count = threads_count or GlobalSettings.threads_count
 
     @cache
     def translate_line(self, text: str) -> str:

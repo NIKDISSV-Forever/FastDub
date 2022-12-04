@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+import math
 import os.path
-from array import array
 from copy import copy
 from math import inf
 from tempfile import TemporaryDirectory
@@ -11,7 +11,9 @@ from tqdm import tqdm
 
 from fastdub.ffmpeg_wrapper import FFMpegWrapper
 
-__all__ = ('AudioSegment', 'speed_change', 'fit', 'side_chain')
+__all__ = ('AudioSegment',
+           'speed_change', 'calc_speed_change_ffmpeg_arg',
+           'fit', 'side_chain')
 
 
 class AudioSegment(pydub.AudioSegment):
@@ -38,30 +40,23 @@ def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = T
         raise ValueError(f"Speed cannot be negative ({speed_changes}).\n"
                          "This is usually due to errors in subtitle timecodes.")
 
-    atempo = array('d')
-    if speed_changes < .5:
-        _n = speed_changes
-        while _n < .5:
-            atempo.append(.5)
-            _n *= 2.
-        atempo.append(_n)
-    elif speed_changes > 100.:
-        _n = speed_changes
-        while _n > 100.:
-            atempo.append(100.)
-            _n /= 2.
-        atempo.append(_n)
-    else:
-        atempo.append(speed_changes)
-
     with TemporaryDirectory() as tmp:
         inp = os.path.join(tmp, 'inp.mp3')
         audio.export(inp)
         out = os.path.join(tmp, 'out.mp3')
         FFMpegWrapper.convert('-i', inp,
-                              '-af', ','.join([f'atempo={i}' for i in atempo]),
+                              '-af', calc_speed_change_ffmpeg_arg(speed_changes),
                               out, loglevel=log_level)
         return AudioSegment.from_file(out)
+
+
+def calc_speed_change_ffmpeg_arg(speed_changes: float) -> str:
+    if .5 <= speed_changes <= 100.:
+        return f'atempo={speed_changes}'
+    if .25 <= speed_changes <= 10_000.:
+        return f'atempo=sqrt({speed_changes}),atempo=sqrt({speed_changes})'
+    power = math.ceil(math.log(speed_changes, .5 if speed_changes < .5 else 100.))
+    return (f'atempo={speed_changes}^(1/{power}),' * power)[:-1]
 
 
 def fit(audio: AudioSegment,
@@ -84,5 +79,5 @@ def side_chain(sound1: AudioSegment, sound2: AudioSegment,
     for start, end in tqdm(
             pydub.silence.detect_nonsilent(sound2, min_silence_len=min_silence_len, silence_thresh=silence_thresh),
             desc="Ducking"):
-        sound1 = sound1.overlay(sound2[start:end], position=start, gain_during_overlay=gain_during_overlay)
+        sound1 = sound1.overlay(sound2[start:end], start, times=1, gain_during_overlay=gain_during_overlay)
     return sound1

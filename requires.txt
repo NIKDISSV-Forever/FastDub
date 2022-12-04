@@ -1,4 +1,3 @@
-moviepy
 pyttsx3
 pydub
 imageio-ffmpeg

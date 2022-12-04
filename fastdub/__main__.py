@@ -10,7 +10,7 @@ from time import perf_counter
 import rich.traceback
 
 import fastdub.youtube
-from fastdub import PrettyViewPrefix, dubber, translator, voicer, youtube
+from fastdub import GlobalSettings, PrettyViewPrefix, dubber, translator, voicer, youtube
 from fastdub.ffmpeg_wrapper import FFMpegWrapper
 from fastdub.translator.subs_translate import SrtTranslate
 
@@ -40,6 +40,10 @@ class BooleanOptionalAction(argparse.Action):
         return ' | '.join(self.option_strings)
 
 
+def _thread_count_type(tc: str) -> int:
+    return int(cpu_count() * float(tc.removeprefix('*'))) if tc.startswith('*') else int(tc)
+
+
 # noinspection PyTypeChecker
 def parse_args() -> argparse.Namespace:
     arg_parser = argparse.ArgumentParser('fastdub',
@@ -59,8 +63,7 @@ def parse_args() -> argparse.Namespace:
 
     if youtube.SUPPORTED or translator.SUPPORTED:
         arg_parser.add_argument('-tc', '--threads-count', default=cpu_count(),
-                                type=lambda i: int(cpu_count() * float(i.lstrip('*')))
-                                if i.startswith('*') else int(i),
+                                type=_thread_count_type,
                                 help='Process count to download (pass to cpu count, < 2 to disable)\n'
                                      '\t*N = N * cpu count')
 
@@ -171,6 +174,7 @@ def main():
         FFMpegWrapper.DEFAULT_ARGS += '-y',
         total_time = perf_counter()
 
+    GlobalSettings.threads_count = args.threads_count
     if youtube.SUPPORTED and args.youtube:
         query: str = args.input
         if args.youtube_search and not query.startswith('?'):
@@ -179,7 +183,7 @@ def main():
         downloader = youtube.downloader.DownloadYTVideo(query,
                                                         args.language,
                                                         args.youtube_search_limit, args.youtube_search_limit, )
-        downloader.multiprocessing_download(args.threads_count)
+        downloader.multiprocessing_download()
         args.input = downloader.save_dir
 
     video_format = video_format if (video_format := args.video_format).startswith('.') else f'.{video_format}'
@@ -190,12 +194,10 @@ def main():
     videos = dubber.Dubber.collect_videos(args.input, args.exclude_underscore, (*sum(args.exclude, []),))
 
     if translator.SUPPORTED and args.translate:
-        SrtTranslate(args.language, args.translate_service, args.rewrite_srt, args.threads_count
-                     ).translate_dir(videos, subtitles_format)
+        SrtTranslate(args.language, args.translate_service, args.rewrite_srt).translate_dir(videos, subtitles_format)
 
-    dubs = dubber.Dubber(args.voice, args.language, audio_format,
-                         args.side_chain, args.min_silence_len, args.silence_thresh, args.gain_during_overlay,
-                         args.align, args.cleanup_audio)
+    dubs = dubber.Dubber(args.voice, args.language, audio_format, args.side_chain, args.min_silence_len,
+                         args.silence_thresh, args.gain_during_overlay, args.align, args.cleanup_audio)
 
     dubs.dub_dir(videos, video_format, subtitles_format)
 
