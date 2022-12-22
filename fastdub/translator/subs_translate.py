@@ -2,20 +2,12 @@ from __future__ import annotations
 
 import multiprocessing.pool
 import os.path
+from functools import lru_cache
 from typing import Callable
 
 from tqdm import tqdm
 
 from fastdub import GlobalSettings, subtitles
-
-try:
-    from functools import cache
-except ImportError:
-    from functools import lru_cache
-
-
-    def cache(func, /):
-        return lru_cache(maxsize=None)(func)
 
 __all__ = ('SrtTranslate',)
 
@@ -29,7 +21,7 @@ class SrtTranslate:
         self.rewrite = rewrite
         self.threads_count = threads_count or GlobalSettings.threads_count
 
-    @cache
+    @lru_cache
     def translate_line(self, text: str) -> str:
         return self.service(text, to_language=self.language)
 

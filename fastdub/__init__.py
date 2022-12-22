@@ -1,14 +1,15 @@
 from __future__ import annotations
 
-__all__ = ('PrettyViewPrefix', 'GlobalSettings')
-
 from multiprocessing import cpu_count
+
+__all__ = ('PrettyViewPrefix', 'GlobalSettings')
 
 
 class GlobalSettings:
     __slots__ = ()
     threads_count = cpu_count()
     language = 'ru'
+    watermark = ''
 
 
 class PrettyViewPrefix:

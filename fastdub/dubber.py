@@ -60,20 +60,13 @@ class Dubber:
 
     def dub_dir(self, videos: dict[str, dict[str, str]], video_format: str, subtitles_format: str):
         for fn, exts in videos.items():
-            target_vid = exts.get(video_format)
-            target_sub = exts.get(subtitles_format)
-
-            if not target_vid:
-                raise FileNotFoundError(fn + video_format)
-            if not target_sub:
-                raise FileNotFoundError(fn + subtitles_format)
-
-            self.dub_one(fn, target_vid, target_sub)
+            self.dub_one(fn, exts.get(video_format), exts.get(subtitles_format))
 
     def dub_one(self, fn: str, target_vid: str, target_sub: str, cleanup_audio: bool = None):
         if target_vid is None and target_sub is None:
             return
         rich.print(rich.align.Align(fn, 'center'))
+        cleanup_audio = cleanup_audio is None and self.cleanup_audio or cleanup_audio
 
         result_dir = Path(target_sub).parent / '_result'
         result_dir.mkdir(exist_ok=True)
@@ -161,7 +154,8 @@ class Dubber:
 
             FFMpegWrapper.save_result_data(target_vid, result_out_audio, target_sub,
                                            result_dir / f'{fn}_{self.language}.mp4')
-            if cleanup_audio is None and self.cleanup_audio or cleanup_audio:
+            if cleanup_audio:
                 os.remove(result_out_audio)
         else:
             cur_audio.export(result_out_audio)
+        os.remove(fitted_audio_file)

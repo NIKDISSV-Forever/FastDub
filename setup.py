@@ -18,7 +18,7 @@ extras_require['all'] = sum(extras_require.values(), requires)
 
 setuptools.setup(
     name="FastDub",
-    version="3.3.0",
+    version="3.4.1",
 
     description="A Python CLI package "
                 "for voice over subtitles, with the ability to embed in video, audio ducking, "
@@ -38,9 +38,9 @@ setuptools.setup(
     extras_require=extras_require,
 
     project_urls={
-        'Download Voices': 'https://rhvoice.su/voices/',
-        'GitHub': 'https://github.com/NIKDISSV-Forever/FastDub/',
-        'YouTube': 'https://www.youtube.com/channel/UC8JV3zPSVm9EKSWD1XdkQvw/',
+        'Download Voices': 'https://rhvoice.su/voices',
+        'GitHub': 'https://github.com/NIKDISSV-Forever/FastDub',
+        'YouTube': 'https://www.youtube.com/channel/UC8JV3zPSVm9EKSWD1XdkQvw',
     },
 
     license='MIT',
@@ -71,7 +71,6 @@ setuptools.setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
-        'Programming Language :: Python :: Implementation :: CPython',
 
         'Topic :: Multimedia',
         'Topic :: Multimedia :: Sound/Audio',

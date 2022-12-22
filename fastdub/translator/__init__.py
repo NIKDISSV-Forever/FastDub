@@ -1,13 +1,16 @@
 __all__ = 'SUPPORTED',
+
+from typing import Callable
+
 try:
-    import translators
+    from translators import server
     from fastdub.translator import subs_translate
 
-    SERVICES = [i[1:] for i in dir(translators.apis) if i.startswith('_') and not i.startswith('__')]
+    SERVICES = *server.tss.translators_dict.keys(),
 
 
-    def get_service_by_name(service: str):
-        return getattr(translators, service)
+    def get_service_by_name(service: str) -> Callable:
+        return server.tss.translators_dict[service]
 except ImportError:
     SUPPORTED = False
 else:

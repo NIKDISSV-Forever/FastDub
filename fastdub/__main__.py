@@ -11,7 +11,7 @@ import rich.traceback
 
 import fastdub.youtube
 from fastdub import GlobalSettings, PrettyViewPrefix, dubber, translator, voicer, youtube
-from fastdub.ffmpeg_wrapper import FFMpegWrapper
+from fastdub.ffmpeg_wrapper import DefaultFFMpegParams
 from fastdub.translator.subs_translate import SrtTranslate
 
 __all__ = ('parse_args', 'main')
@@ -55,8 +55,8 @@ def parse_args() -> argparse.Namespace:
                                  '\t0 - No remove cache\n'
                                  '\t1 - Delete cache before voice acting\n'
                                  '\t2 - Delete cache after voice acting (default)')
-    arg_parser.add_argument('-ra', '--cleanup-audio', action=BooleanOptionalAction, default=False,
-                            help='Remove result audio if video exists', dest='cleanup_audio')
+    arg_parser.add_argument('-ra', '--cleanup-audio', action=BooleanOptionalAction, default=True,
+                            help='Remove result audio if video exists (default True)')
 
     arg_parser.add_argument('-l', '--language', default='ru',
                             help='Subtitles language (ru)')
@@ -75,7 +75,7 @@ def parse_args() -> argparse.Namespace:
     input_group.add_argument('-sf', '--subtitles-format', default='.srt',
                              help='Subtitles format (default: .srt).')
 
-    exclude_input_group = input_group.add_argument_group('Exclude Input')
+    exclude_input_group = arg_parser.add_argument_group('Input Exclude')
     exclude_input_group.add_argument('-En', '--exclude', type=iglob, nargs='+', default=(),
                                      help='Exclude <name> (glob)')
     exclude_input_group.add_argument('-Eu', '--exclude-underscore', default=True,
@@ -110,6 +110,8 @@ def parse_args() -> argparse.Namespace:
                               help="Don't ask for confirmation")
     ffmpeg_group.add_argument('-af', '--audio-format', default='wav',
                               help='Out audio files format (default wav)')
+    ffmpeg_group.add_argument('-wm', '--watermark', default='',
+                              help='Add watermark to output video')
 
     output_group = arg_parser.add_argument_group('Terminal Output')
     output_group.add_argument('-tb', '--traceback', action=BooleanOptionalAction, default=False,
@@ -157,6 +159,11 @@ def parse_args() -> argparse.Namespace:
     return arg_parser.parse_args()
 
 
+def banner():
+    rich.print('[b][i]FastDub[/][/]. Visit project GitHub (star it or add issues):\n'
+               'https://github.com/NIKDISSV-Forever/FastDub')
+
+
 def main():
     args = parse_args()
     if args.traceback:
@@ -167,11 +174,11 @@ def main():
     if remove_cache == 1:
         dubber.VOICER.cleanup()
 
-    FFMpegWrapper.DEFAULT_FFMPEG_LOG_LEVEL = args.loglevel
-
+    GlobalSettings.watermark = args.watermark
+    DefaultFFMpegParams.ffmpeg_log_level = args.loglevel
     total_time = 0
     if args.confirm:
-        FFMpegWrapper.DEFAULT_ARGS += '-y',
+        DefaultFFMpegParams.args += '-y',
         total_time = perf_counter()
 
     GlobalSettings.threads_count = args.threads_count
@@ -217,4 +224,5 @@ def main():
 
 
 if __name__ == '__main__':
+    banner()
     main()

@@ -83,17 +83,17 @@ _client_secrets.json_
 > python -m fastdub --help
 
 ```
-usage: fastdub [-h] [-rc {0,1,2}] [-ra | --cleanup-audio | -n-ra | --no-cleanup-audio] [-l LANGUAGE]
-               [-tc THREADS_COUNT] -i INPUT [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT] [-En EXCLUDE [EXCLUDE ...]]
-               [-Eu EXCLUDE_UNDERSCORE] [-sc | --side-chain | -n-sc | --no-side-chain] [-sc-msl MIN_SILENCE_LEN]
-               [-sc-st SILENCE_THRESH] [-sc-gdo GAIN_DURING_OVERLAY]
-               [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft david desktop - english (united states,aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}]
-               [-a ALIGN] [-v-set-a VOICE_SET_ANCHOR] [-ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}]
-               [-y | --confirm | -n-y | --no-confirm] [-af AUDIO_FORMAT] [-tb | --traceback | -n-tb | --no-traceback]
-               [-yt] [-ak API_KEYS [API_KEYS ...]] [-yts] [-yts-l YOUTUBE_SEARCH_LIMIT]
-               [-yts-rg YOUTUBE_SEARCH_REGION] [-ytu] [-ytu-ps {private,public,unlisted}] [-ytu-t] [-tr]
+usage: fastdub [-h] [-rc {0,1,2}] [-ra | --cleanup-audio | -n-ra | --no-cleanup-audio] [-l LANGUAGE] [-tc THREADS_COUNT] -i INPUT [-vf VIDEO_FORMAT]
+               [-sf SUBTITLES_FORMAT] [-En EXCLUDE [EXCLUDE ...]] [-Eu EXCLUDE_UNDERSCORE] [-sc | --side-chain | -n-sc | --no-side-chain]
+               [-sc-msl MIN_SILENCE_LEN] [-sc-st SILENCE_THRESH] [-sc-gdo GAIN_DURING_OVERLAY]
+               [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft david desktop - english (united states,aleksandr-hq,
+arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}]
+               [-a ALIGN] [-v-set-a VOICE_SET_ANCHOR] [-ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}] [-y | --confirm | -n-y | --no-confirm]       
+               [-af AUDIO_FORMAT] [-wm WATERMARK] [-tb | --traceback | -n-tb | --no-traceback] [-yt] [-ak API_KEYS [API_KEYS ...]] [-yts]
+               [-yts-l YOUTUBE_SEARCH_LIMIT] [-yts-rg YOUTUBE_SEARCH_REGION] [-ytu] [-ytu-ps {private,public,unlisted}] [-ytu-t] [-tr]
                [--rewrite-srt | --no-rewrite-srt]
-               [-ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,mglip,niutrans,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}]
+               [-ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,niutrans,mglip,papago,reverso,sogou,tencent,translateCom,utibet
+,yandex,youdao}]
 
 fastdub is a tool for dubbing videos by subtitle files.
 
@@ -105,7 +105,7 @@ options:
                                 1 - Delete cache before voice acting
                                 2 - Delete cache after voice acting (default)
   -ra, --cleanup-audio, -n-ra, --no-cleanup-audio
-                        Remove result audio if video exists (default: False)
+                        Remove result audio if video exists (default True) (default: True)
   -l LANGUAGE, --language LANGUAGE
                         Subtitles language (ru)
   -tc THREADS_COUNT, --threads-count THREADS_COUNT
@@ -120,6 +120,12 @@ Input:
   -sf SUBTITLES_FORMAT, --subtitles-format SUBTITLES_FORMAT
                         Subtitles format (default: .srt).
 
+Input Exclude:
+  -En EXCLUDE [EXCLUDE ...], --exclude EXCLUDE [EXCLUDE ...]
+                        Exclude <name> (glob)
+  -Eu EXCLUDE_UNDERSCORE, --exclude-underscore EXCLUDE_UNDERSCORE
+                        Exclude files starts with underscore
+
 Audio Ducking:
   -sc, --side-chain, -n-sc, --no-side-chain
                         Enable audio side chain compress (ducking) (default: True)
@@ -131,7 +137,10 @@ Audio Ducking:
                         Gain during overlay in dB (default: -11)
 
 Voicer:
-  -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}, --voice {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}
+  -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,artemi
+y,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}, --voice {microsoft irina desktop - russian,microsoft zira desktop
+ - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatian
+a,victoria,vitaliy,volodymyr,yuriy}
                         SAPI voice for voice acting.
   -a ALIGN, --align ALIGN
                         Audio fit align (divisor)
@@ -147,6 +156,8 @@ FFMpeg Output:
                         Don't ask for confirmation (default: True)
   -af AUDIO_FORMAT, --audio-format AUDIO_FORMAT
                         Out audio files format (default wav)
+  -wm WATERMARK, --watermark WATERMARK
+                        Add watermark to output video
 
 Terminal Output:
   -tb, --traceback, -n-tb, --no-traceback
@@ -178,7 +189,9 @@ Translate:
   --rewrite-srt, --no-rewrite-srt
                         Rewrite input subtitles files.
                         If not, add "_" to the beginning of the original subtitle file. (default: False)
-  -ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,mglip,niutrans,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}, --translate-service {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,mglip,niutrans,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao}
+  -ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,niutrans,mglip,papago,reverso,sogou,tencent,translateCom,utibet,yandex,youdao
+}, --translate-service {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,niutrans,mglip,papago,reverso,sogou,tencent,translateCom,uti
+bet,yandex,youdao}
                         Subtitle translation service. (default google)
 ```
 
