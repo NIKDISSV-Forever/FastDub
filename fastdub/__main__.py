@@ -176,6 +176,7 @@ def main():
 
     GlobalSettings.watermark = args.watermark
     DefaultFFMpegParams.ffmpeg_log_level = args.loglevel
+
     total_time = 0
     if args.confirm:
         DefaultFFMpegParams.args += '-y',
@@ -200,8 +201,9 @@ def main():
 
     videos = dubber.Dubber.collect_videos(args.input, args.exclude_underscore, (*sum(args.exclude, []),))
 
+    translate_serv = args.translate_service if translator.SUPPORTED else None
     if translator.SUPPORTED and args.translate:
-        SrtTranslate(args.language, args.translate_service, args.rewrite_srt).translate_dir(videos, subtitles_format)
+        SrtTranslate(args.language, translate_serv, args.rewrite_srt).translate_dir(videos, subtitles_format)
 
     dubs = dubber.Dubber(args.voice, args.language, audio_format, args.side_chain, args.min_silence_len,
                          args.silence_thresh, args.gain_during_overlay, args.align, args.cleanup_audio)
@@ -212,12 +214,10 @@ def main():
         voicer.Voicer().cleanup()
 
     if fastdub.youtube.yt_upload.SUPPORTED and args.youtube_upload:
-        translate = False
-        translate_serv = None
-        if translator.SUPPORTED:
-            translate = args.youtube_upload_translate
-            translate_serv = args.translate_service
-        fastdub.youtube.yt_upload.uploader.Uploader(args.privacy_status, translate, translate_serv).upload(args.input)
+        fastdub.youtube.yt_upload.uploader.Uploader(args.privacy_status,
+                                                    translator.SUPPORTED and args.youtube_upload_translate,
+                                                    translate_serv
+                                                    ).upload(args.input)
 
     if total_time:
         rich.print(f'Total time: {PrettyViewPrefix.from_seconds(perf_counter() - total_time)}')

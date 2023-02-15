@@ -41,9 +41,9 @@ def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = T
                          "This is usually due to errors in subtitle timecodes.")
 
     with TemporaryDirectory() as tmp:
-        inp = os.path.join(tmp, 'inp.mp3')
+        inp = os.path.join(tmp, 'inp.wav')
         audio.export(inp)
-        out = os.path.join(tmp, 'out.mp3')
+        out = os.path.join(tmp, 'out.wav')
         FFMpegWrapper.convert('-i', inp,
                               '-af', calc_speed_change_ffmpeg_arg(speed_changes),
                               out, loglevel=log_level)
@@ -51,6 +51,9 @@ def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = T
 
 
 def calc_speed_change_ffmpeg_arg(speed_changes: float) -> str:
+    """
+    The given function takes in a float value representing the speed change, and returns a corresponding FFmpeg argument string for changing the speed of an audio or video file.
+    """
     if .5 <= speed_changes <= 100.:
         return f'atempo={speed_changes}'
     if .25 <= speed_changes <= 10_000.:

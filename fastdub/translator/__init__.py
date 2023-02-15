@@ -1,6 +1,8 @@
-__all__ = 'SUPPORTED',
+from __future__ import annotations
 
 from typing import Callable
+
+__all__ = ('SUPPORTED',)
 
 try:
     from translators import server

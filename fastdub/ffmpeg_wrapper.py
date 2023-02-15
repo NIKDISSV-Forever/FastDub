@@ -44,7 +44,7 @@ def _get_default_font_args() -> str:
             for walkfilename in walkfilenames:
                 walkfilename = Path(walkfilename)
                 if walkfilename.suffix == '.ttf':
-                    return f":fontfile='{Path(walkroot) / walkfilename}'"
+                    return f":fontfile='{Path(walkroot, walkfilename)}'"
     return ''
 
 

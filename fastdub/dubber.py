@@ -65,9 +65,10 @@ class Dubber:
     def dub_one(self, fn: str, target_vid: str, target_sub: str, cleanup_audio: bool = None):
         if target_vid is None and target_sub is None:
             return
-        rich.print(rich.align.Align(fn, 'center'))
-        cleanup_audio = cleanup_audio is None and self.cleanup_audio or cleanup_audio
+        if cleanup_audio is None:
+            cleanup_audio = self.cleanup_audio
 
+        rich.print(rich.align.Align(fn, 'center'))
         result_dir = Path(target_sub).parent / '_result'
         result_dir.mkdir(exist_ok=True)
         out_audio_base = result_dir / f'{fn}_{self.language}.{self.audio_format}'
@@ -90,7 +91,7 @@ class Dubber:
 
         _audio_filename_format = str(working_dir / ('{0:0>%i}.%s' % (len(str(progress_total)), audio_format))
                                      ).format
-        filenames = [_audio_filename_format(pos) for pos in range(len(subs))]
+        filenames: tuple[str] = *(_audio_filename_format(pos) for pos in range(len(subs))),
         for pos, line in tqdm(enumerate(subs[:-1]),
                               desc='Creating audio',
                               total=progress_total - 1, unit='line',
@@ -120,13 +121,13 @@ class Dubber:
             f.write('\n'.join(f"file '{fn}'" for fn in filenames))
         max_duration = ms.end
 
-        ffmpeg_concat_args = []
+        ffmpeg_concat_args = ()
         if total_duration_ms > max_duration:
             change_speed = total_duration_ms / max_duration
             rich.print(f'Changing audio speed to {change_speed:g}')
             ffmpeg_concat_args += '-af', calc_speed_change_ffmpeg_arg(change_speed)
         else:
-            ffmpeg_concat_args += ['-c', 'copy']
+            ffmpeg_concat_args += '-c', 'copy'
 
         fitted_audio_file = str(out_audio_base.with_stem(f'_{out_audio_base.stem}'))
         rich.print('Concatenating parts...', flush=True)

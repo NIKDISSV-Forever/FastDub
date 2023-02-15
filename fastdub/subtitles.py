@@ -15,42 +15,43 @@ LINE_REGEX = re.compile(r'\n\n^\d+$\n', re.M)
 
 
 def ms_to_srt_time(ms: int) -> str:
-    s, ms = ms // 1000, ms % 1000
-    m, s = s // 60, s % 60
-    h, m = m // 60, m % 60
-    return f'{h:0>2.0f}:{m:0>2.0f}:{s:0>2.0f},{ms:.0f}'
+    s, ms = divmod(ms, 1000)
+    m, s = divmod(s, 60)
+    h, m = divmod(m, 60)
+    return f'{h:0>2}:{m:0>2}:{s:0>2},{ms:0>3}'
+
+
+class TimeLabel:
+    __slots__ = ('start', 'duration', 'end', 'time_str')
+
+    def __init__(self, start: int, end: int):
+        self.duration = end - start
+        self.start = start
+        self.end = end
+        self.time_str = f'{start} --> {end}'
+
+    def __str__(self):
+        return (f"{ms_to_srt_time(self.start)}"
+                " --> "
+                f"{ms_to_srt_time(self.end)}")
 
 
 class Line:
-    __slots__ = ('ms', 'text', '_as_repr')
-
-    class TimeLabel:
-        __slots__ = ('start', 'duration', 'end', 'time_str')
-
-        def __init__(self, start: int, end: int):
-            self.duration = end - start
-            self.start = start
-            self.end = end
-            self.time_str = f'{start} --> {end}'
-
-        def __str__(self):
-            return (f"{ms_to_srt_time(self.start)}"
-                    " --> "
-                    f"{ms_to_srt_time(self.end)}")
+    __slots__ = ('ms', 'text')
 
     def __init__(self, time_labels: tuple[datetime.time], text: str):
-        self.ms: Line.TimeLabel = self.TimeLabel(*
-                                                 [int(
-                                                     label.hour * 3600000
-                                                     + label.minute * 60000
-                                                     + label.second * 1000
-                                                     + label.microsecond / 1000
-                                                 ) for label in (time_labels[0], time_labels[-1])][:2])
-        self.text: str = text
-        self._as_repr = f'Line({self.ms}, {self.text!r})'
+        self.ms: TimeLabel = TimeLabel(self._calc_ms_label(time_labels[0]), self._calc_ms_label(time_labels[-1]))
+        self.text = text
+
+    @staticmethod
+    def _calc_ms_label(label: datetime.time) -> int:
+        return int(label.hour * 3600000
+                   + label.minute * 60000
+                   + label.second * 1000
+                   + label.microsecond / 1000)
 
     def __repr__(self):
-        return self._as_repr
+        return f'{self.__class__.__qualname__}({self.ms}: {self.text!r})'
 
 
 def parse(text_or_file: str, skip_empty: bool = False) -> tuple[Line] | tuple:
