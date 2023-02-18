@@ -16,6 +16,12 @@ __all__ = ('LINE_REGEX',
 LINE_REGEX = re.compile(r'\n\n^\d+$\n', re.M)
 
 
+def _read_file(filename) -> str:
+    with open(filename, 'rb') as file:
+        rawdata = file.read().replace(b'\r\n', b'\n')
+        return rawdata.decode(detect_encoding(rawdata)['encoding'])
+
+
 def ms_to_srt_time(ms: int) -> str:
     s, ms = divmod(ms, 1000)
     m, s = divmod(s, 60)
@@ -56,12 +62,6 @@ class Line:
         return f'{self.__class__.__qualname__}({self.ms}: {self.text!r})'
 
 
-def _read_file(filename) -> str:
-    with open(filename, 'rb') as file:
-        rawdata = file.read().replace(b'\r\n', b'\n')
-        return rawdata.decode(detect_encoding(rawdata)['encoding'])
-
-
 def parse(text_or_file: str, skip_empty: bool = False) -> tuple[Line] | tuple:
     if os.path.isfile(text_or_file):
         fn, ext = os.path.splitext(text_or_file)
@@ -79,7 +79,7 @@ def parse(text_or_file: str, skip_empty: bool = False) -> tuple[Line] | tuple:
         if not text:
             continue
         subtitles += Line((*(datetime.time(k.hour, k.minute, k.second, k.microsecond) for k in
-                             [datetime.datetime.strptime(j, '%H:%M:%S,%f') for j in
+                             [datetime.datetime.strptime(j.replace('.', ','), '%H:%M:%S,%f') for j in
                               times_text[0].split(' --> ', 1)]),), text),
     return (*(line for line in subtitles if line.text.strip()),) if skip_empty else subtitles
 

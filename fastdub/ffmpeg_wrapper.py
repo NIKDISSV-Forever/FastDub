@@ -27,8 +27,8 @@ def _ignore():
 def _get_default_font_args() -> str:
     dirs = []
     if sys.platform == 'win32':
-        if windir := Path(os.environ.get('WINDIR')):
-            dirs.append(str(windir / 'fonts'))
+        if windir := os.environ.get('WINDIR'):
+            dirs.append(str(Path(windir, 'fonts')))
     elif sys.platform in {'linux', 'linux2'}:
         dirs += [os.path.join(lindir, "fonts") for lindir in
                  (os.environ.get('XDG_DATA_DIRS') or '/usr/share').split(":")]

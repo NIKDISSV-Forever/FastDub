@@ -205,9 +205,6 @@ def main():
     if translator.SUPPORTED and args.translate:
         SrtTranslate(args.language, translate_serv, args.rewrite_srt).translate_dir(videos, subtitles_format)
 
-    if args.cleanup_audio and args.export_video:
-        raise UserWarning('--export-video override the behavior of --cleanup-audio')
-
     dubs = dubber.Dubber(args.voice, args.language, audio_format, args.side_chain, args.min_silence_len,
                          args.silence_thresh, args.gain_during_overlay, args.align,
                          args.cleanup_audio, args.export_video)
