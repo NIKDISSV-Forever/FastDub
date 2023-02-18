@@ -4,6 +4,8 @@ import datetime
 import os.path
 import re
 
+from chardet import detect as detect_encoding
+
 from fastdub.ffmpeg_wrapper import FFMpegWrapper
 
 __all__ = ('LINE_REGEX',
@@ -54,6 +56,12 @@ class Line:
         return f'{self.__class__.__qualname__}({self.ms}: {self.text!r})'
 
 
+def _read_file(filename) -> str:
+    with open(filename, 'rb') as file:
+        rawdata = file.read().replace(b'\r\n', b'\n')
+        return rawdata.decode(detect_encoding(rawdata)['encoding'])
+
+
 def parse(text_or_file: str, skip_empty: bool = False) -> tuple[Line] | tuple:
     if os.path.isfile(text_or_file):
         fn, ext = os.path.splitext(text_or_file)
@@ -61,8 +69,7 @@ def parse(text_or_file: str, skip_empty: bool = False) -> tuple[Line] | tuple:
             converted = f'{fn}.srt'
             FFMpegWrapper.convert('-i', text_or_file, converted)
             text_or_file = converted
-        with open(text_or_file, encoding='UTF-8') as f:
-            text = f.read()
+        text = _read_file(text_or_file)
     else:
         text = text_or_file
     subtitles = ()
