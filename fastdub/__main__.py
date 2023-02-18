@@ -57,7 +57,7 @@ def parse_args() -> argparse.Namespace:
                                  '\t2 - Delete cache after voice acting (default)')
     arg_parser.add_argument('-ra', '--cleanup-audio', action=BooleanOptionalAction, default=True,
                             help='Remove result audio if video exists (default True)')
-
+    arg_parser.add_argument('-ev', '--export-video', action=BooleanOptionalAction, default=True)
     arg_parser.add_argument('-l', '--language', default='ru',
                             help='Subtitles language (ru)')
 
@@ -155,7 +155,6 @@ def parse_args() -> argparse.Namespace:
                                      default='google',
                                      choices=translator.SERVICES,
                                      help='Subtitle translation service. (default google)')
-
     return arg_parser.parse_args()
 
 
@@ -166,6 +165,7 @@ def banner():
 
 def main():
     args = parse_args()
+
     if args.traceback:
         rich.traceback.install(show_locals=True)
     else:
@@ -205,8 +205,12 @@ def main():
     if translator.SUPPORTED and args.translate:
         SrtTranslate(args.language, translate_serv, args.rewrite_srt).translate_dir(videos, subtitles_format)
 
+    if args.cleanup_audio and args.export_video:
+        raise UserWarning('--export-video override the behavior of --cleanup-audio')
+
     dubs = dubber.Dubber(args.voice, args.language, audio_format, args.side_chain, args.min_silence_len,
-                         args.silence_thresh, args.gain_during_overlay, args.align, args.cleanup_audio)
+                         args.silence_thresh, args.gain_during_overlay, args.align,
+                         args.cleanup_audio, args.export_video)
 
     dubs.dub_dir(videos, video_format, subtitles_format)
 

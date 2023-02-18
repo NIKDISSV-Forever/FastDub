@@ -18,7 +18,7 @@ extras_require['all'] = sum(extras_require.values(), requires)
 
 setuptools.setup(
     name="FastDub",
-    version="3.4.2",
+    version="3.5.0",
 
     description="A Python CLI package "
                 "for voice over subtitles, with the ability to embed in video, audio ducking, "

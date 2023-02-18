@@ -8,6 +8,7 @@ __all__ = ('PrettyViewPrefix', 'GlobalSettings')
 class GlobalSettings:
     __slots__ = ()
     threads_count = cpu_count()
+    export_video = True
     language = 'ru'
     watermark = ''
 

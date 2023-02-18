@@ -1,5 +1,12 @@
 ---
 
+# 3.5.0
+
+## Voiceover Process
+
+- Добавлен аргумент `--export-video` (`-ev`): `BooleanOptionalAction`, если `False` (`--no-export-video`, `-n-ev`)
+  экспортирует только аудио
+
 # 3.4.2
 
 - Незначительные улучшения и оптимизации.

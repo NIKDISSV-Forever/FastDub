@@ -19,14 +19,15 @@ VOICER = voicer.Voicer()
 
 class Dubber:
     __slots__ = (
-        'fit_align', 'language', 'audio_format', 'cleanup_audio',
+        'fit_align', 'language', 'audio_format',
+        'cleanup_audio', 'export_video',
         'ducking',
         'min_silence_len', 'silence_thresh', 'gain_during_overlay'
     )
 
     def __init__(self, voice: str, language: str, audio_format: str,
                  ducking: bool, min_silence_len: int, silence_thresh: float, gain_during_overlay: int,
-                 fit_align: float = 2., cleanup_audio: bool = True):
+                 fit_align: float = 2., cleanup_audio: bool = True, export_video: bool = True):
         self.language = language
         self.audio_format = audio_format
         self.fit_align = fit_align
@@ -39,6 +40,7 @@ class Dubber:
         self.gain_during_overlay = gain_during_overlay
 
         self.cleanup_audio = cleanup_audio
+        self.export_video = export_video
 
     @staticmethod
     def collect_videos(path_to_files: str, skip_starts_underscore: bool = True,
@@ -62,11 +64,13 @@ class Dubber:
         for fn, exts in videos.items():
             self.dub_one(fn, exts.get(video_format), exts.get(subtitles_format))
 
-    def dub_one(self, fn: str, target_vid: str, target_sub: str, cleanup_audio: bool = None):
+    def dub_one(self, fn: str, target_vid: str, target_sub: str, cleanup_audio: bool = None, export_video: bool = None):
         if target_vid is None and target_sub is None:
             return
         if cleanup_audio is None:
             cleanup_audio = self.cleanup_audio
+        if export_video is None:
+            export_video = self.export_video
 
         rich.print(rich.align.Align(fn, 'center'))
         result_dir = Path(target_sub).parent / '_result'
@@ -152,11 +156,11 @@ class Dubber:
                 audio.AudioSegment.from_file(target_vid).overlay(cur_audio,
                                                                  gain_during_overlay=self.gain_during_overlay
                                                                  ).export(result_out_audio)
-
-            FFMpegWrapper.save_result_data(target_vid, result_out_audio, target_sub,
-                                           result_dir / f'{fn}_{self.language}.mp4')
-            if cleanup_audio:
-                os.remove(result_out_audio)
+            if export_video:
+                FFMpegWrapper.save_result_data(target_vid, result_out_audio, target_sub,
+                                               result_dir / f'{fn}_{self.language}.mp4')
+                if cleanup_audio:
+                    os.remove(result_out_audio)
         else:
             cur_audio.export(result_out_audio)
         os.remove(fitted_audio_file)
