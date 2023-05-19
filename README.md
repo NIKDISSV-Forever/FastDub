@@ -85,16 +85,17 @@ _client_secrets.json_
 ```
 usage: fastdub [-h] [-rc {0,1,2}] [-ra | --cleanup-audio | -n-ra | --no-cleanup-audio] [-ev | --export-video | -n-ev | --no-export-video]
                [-l LANGUAGE] [-tc THREADS_COUNT] -i INPUT [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT] [-En EXCLUDE [EXCLUDE ...]]
-               [-Eu EXCLUDE_UNDERSCORE] [-sc | --side-chain | -n-sc | --no-side-chain] [-sc-msl MIN_SILENCE_LEN] [-sc-st SILENCE_THRESH]
-               [-sc-gdo GAIN_DURING_OVERLAY]
-               [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft david desktop - english (united sta
-tes,aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}]
+               [-Eu EXCLUDE_UNDERSCORE] [-sc | --sidechain | -n-sc | --no-sidechain] [-sc-args SIDECHAIN_FFMPEG_PARAMS]
+               [-sc-lvl SIDECHAIN_LEVEL_SC]
+               [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft david desktop - english (united s
+tates,aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,vsevolod,yuriy}]       
                [-a ALIGN] [-v-set-a VOICE_SET_ANCHOR] [-ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}]
-               [-y | --confirm | -n-y | --no-confirm] [-af AUDIO_FORMAT] [-wm WATERMARK] [-tb | --traceback | -n-tb | --no-traceback] [-yt]        
+               [-y | --confirm | -n-y | --no-confirm] [-af AUDIO_FORMAT] [-wm WATERMARK] [-tb | --traceback | -n-tb | --no-traceback] [-yt]      
                [-ak API_KEYS [API_KEYS ...]] [-yts] [-yts-l YOUTUBE_SEARCH_LIMIT] [-yts-rg YOUTUBE_SEARCH_REGION] [-ytu]
                [-ytu-ps {private,public,unlisted}] [-ytu-t] [-tr] [--rewrite-srt | --no-rewrite-srt]
-               [-ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,niutrans,mglip,papago,reverso,sogou,tencent,tr
-anslateCom,utibet,yandex,youdao}]
+               [-ts {alibaba,apertium,argos,baidu,bing,caiyun,cloudYi,deepl,elia,google,iciba,iflytek,iflyrec,itranslate,judic,languageWire,lingv
+anex,niutrans,mglip,modernMt,myMemory,papago,qqFanyi,qqTranSmart,reverso,sogou,sysTran,tilde,translateCom,translateMe,utibet,volcEngine,yandex,ye
+ekit,youdao}]
 
 fastdub is a tool for dubbing videos by subtitle files.
 
@@ -129,20 +130,18 @@ Input Exclude:
                         Exclude files starts with underscore
 
 Audio Ducking:
-  -sc, --side-chain, -n-sc, --no-side-chain
+  -sc, --sidechain, -n-sc, --no-sidechain
                         Enable audio side chain compress (ducking) (default: True)
-  -sc-msl MIN_SILENCE_LEN, --min-silence-len MIN_SILENCE_LEN, --attack MIN_SILENCE_LEN
-                        Minimum silence length in ms (default: 100)
-  -sc-st SILENCE_THRESH, --silence-thresh SILENCE_THRESH
-                        Silence threshold in dB
-  -sc-gdo GAIN_DURING_OVERLAY, --gain-during-overlay GAIN_DURING_OVERLAY
-                        Gain during overlay in dB (default: -11)
+  -sc-args SIDECHAIN_FFMPEG_PARAMS, --sidechain-ffmpeg-params SIDECHAIN_FFMPEG_PARAMS
+                        sidechain FFMpeg parameters (default '')
+  -sc-lvl SIDECHAIN_LEVEL_SC, --sidechain-level-sc SIDECHAIN_LEVEL_SC
+                        Set sidechain gain. Range is between 0.015625 and 64. (default 0.8)
 
 Voicer:
-  -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksand
-r-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}, --voice {microsoft irina deskto
-p - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,artemiy,evgeniy-e
-ng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,yuriy}
+  -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksa
+ndr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,vsevolod,yuriy}, --voice {microsoft
+ irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,ar
+temiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,vsevolod,yuriy}
                         SAPI voice for voice acting.
   -a ALIGN, --align ALIGN
                         Audio fit align (divisor)
@@ -165,15 +164,37 @@ Terminal Output:
   -tb, --traceback, -n-tb, --no-traceback
                         Show debug traceback (default: False)
 
+YouTube:
+  -yt, --youtube
+  -ak API_KEYS [API_KEYS ...], --api-keys API_KEYS [API_KEYS ...]
+                        Youtube API key/s
+
+YouTube Search:
+  -yts, --youtube-search
+                        The input data is a query for searching on YouTube. (Adds "?" at the start of input)
+  -yts-l YOUTUBE_SEARCH_LIMIT, --youtube-search-limit YOUTUBE_SEARCH_LIMIT
+                        Sets limit to the number of results. Defaults to 20.
+  -yts-rg YOUTUBE_SEARCH_REGION, --youtube-search-region YOUTUBE_SEARCH_REGION
+                        Sets the result region. Defaults to "US".
+
+YouTube Upload:
+  -ytu, --youtube-upload
+                        yt_upload video to YouTube channel after voice acting.
+  -ytu-ps {private,public,unlisted}, --privacy-status {private,public,unlisted}
+                        Video privacy status (If not private, errors are possible)
+  -ytu-t, --youtube-upload-translate
+                        Translate title and description on upload. (+ Arguments from translate argument group)
 
 Translate:
   -tr, --translate      Translate input subtitles files
   --rewrite-srt, --no-rewrite-srt
                         Rewrite input subtitles files.
                         If not, add "_" to the beginning of the original subtitle file. (default: False)
-  -ts {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,niutrans,mglip,papago,reverso,sogou,tencent,translateCom,uti
-bet,yandex,youdao}, --translate-service {alibaba,argos,baidu,bing,caiyun,deepl,google,iciba,iflytek,itranslate,lingvanex,niutrans,mglip,papago,reve
-rso,sogou,tencent,translateCom,utibet,yandex,youdao}
+  -ts {alibaba,apertium,argos,baidu,bing,caiyun,cloudYi,deepl,elia,google,iciba,iflytek,iflyrec,itranslate,judic,languageWire,lingvanex,niutrans,
+mglip,modernMt,myMemory,papago,qqFanyi,qqTranSmart,reverso,sogou,sysTran,tilde,translateCom,translateMe,utibet,volcEngine,yandex,yeekit,youdao}, 
+--translate-service {alibaba,apertium,argos,baidu,bing,caiyun,cloudYi,deepl,elia,google,iciba,iflytek,iflyrec,itranslate,judic,languageWire,lingv
+anex,niutrans,mglip,modernMt,myMemory,papago,qqFanyi,qqTranSmart,reverso,sogou,sysTran,tilde,translateCom,translateMe,utibet,volcEngine,yandex,ye
+ekit,youdao}
                         Subtitle translation service. (default google)
 ```
 

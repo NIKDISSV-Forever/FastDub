@@ -7,8 +7,8 @@ with open('requires.txt', encoding='utf-8') as f:
 with open('CHANGELOG.md', encoding='utf-8') as f:
     changelog = f.read()
 with open('README.md', encoding='utf-8') as f:
-    readme = f.read()
-readme += f'\n\n# CHANGELOG\n\n{changelog}'
+    readme = f.read().strip()
+readme += f'\n\n---\n\n# CHANGELOG\n\n{changelog}'
 
 extras_require = {}
 for require in Path('extra_requires').glob('*_*.txt'):
@@ -18,7 +18,7 @@ extras_require['all'] = sum(extras_require.values(), requires)
 
 setuptools.setup(
     name="FastDub",
-    version="3.5.2",
+    version="3.6.0",
 
     description="A Python CLI package "
                 "for voice over subtitles, with the ability to embed in video, audio ducking, "

@@ -29,7 +29,7 @@ class SrtTranslate:
         parsed = subtitles.parse(input_srt)
         for line in parsed:
             line.text = line.text.strip()
-        _pb = tqdm(parsed, 'Translating', len(parsed), unit='line', dynamic_ncols=True)
+        _pb = tqdm(parsed, 'Translating', len(parsed), unit='line', **GlobalSettings.tqdm_kwargs)
         if self.threads_count > 1:
             def handler(line: subtitles.Line):
                 line.text = self.translate_line(line.text)

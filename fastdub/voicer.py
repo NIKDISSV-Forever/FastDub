@@ -22,10 +22,14 @@ VOICES_ID = {i.id: i for i in _voices}
 del _voices
 
 
-class Voicer:
-    __slots__ = ('engine', 'cache_dir', '_update_voice_anchor')
+def _no_update_voice_anchor(_):
+    return False
 
-    def __init__(self, cache_dir: str = None, anchor: str = '!:'):
+
+class Voicer:
+    __slots__ = ('engine', 'cache_dir', '_update_voice_anchor', '_nul_file')
+
+    def __init__(self, cache_dir: str = None, anchor: str = '!:', tts_driver_name: str = None, tts_debug: bool = False):
         if anchor:
             def _update_voice_anchor(line: str) -> bool:
                 if line.startswith(anchor):
@@ -33,12 +37,18 @@ class Voicer:
                     return True
                 return False
         else:
-            def _update_voice_anchor(_: str) -> bool:
-                return False
+            _update_voice_anchor = _no_update_voice_anchor
         self._update_voice_anchor = _update_voice_anchor
-        self.cache_dir = Path(__file__).parent / '_cached_texts' if cache_dir is None else Path(cache_dir)
-        self.engine = pyttsx3.init()
-        self.cache_dir.mkdir(parents=True, exist_ok=True)
+
+        cache_dir = Path(__file__).parent / '_cached_texts' if cache_dir is None else Path(cache_dir)
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        nul_file = cache_dir / 'nul.wav'
+        if not nul_file.is_file():
+            AudioSegment.silent(0).export(nul_file, 'wav')
+        self.cache_dir = cache_dir
+        self._nul_file = str(nul_file)
+
+        self.engine = pyttsx3.init(tts_driver_name, tts_debug)
 
     def cleanup(self):
         rmtree(self.cache_dir)
@@ -52,10 +62,10 @@ class Voicer:
         if VOICES_ID.get(voice_property).name.casefold() != voice_name:
             self.engine.proxy.setProperty('voice', voice.id)
 
-    def voice(self, text: str) -> AudioSegment:
+    def voice(self, text: str) -> str:
         text = text.strip()
         if not text:
-            return AudioSegment.silent(0)
+            return self._nul_file
 
         if self._update_voice_anchor((lines := text.splitlines())[0]):
             text = '\n'.join(lines[1:])
@@ -65,4 +75,4 @@ class Voicer:
         if not isfile(cached_file):
             self.engine.save_to_file(text, cached_file, 'fastdub')
             self.engine.runAndWait()
-        return AudioSegment.from_file(cached_file, format='wav')
+        return cached_file

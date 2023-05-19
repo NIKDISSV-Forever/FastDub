@@ -1,4 +1,24 @@
----
+# 3.6.0
+
+## General
+
+- Использован пакет `logging`
+- Bugfix
+- Оптимизации
+
+## Audio Processing
+
+- sidechain теперь намного быстрее, используя FFMpeg
+
+## FFMpeg Wrapper
+
+- Более не используется библиотека `ffmpeg-imageio`, вместо этого всегда вызывается команда `ffmpeg`
+
+## CLI
+
+- Аргумент `--sidechain-ffmpeg-params` см. [FFMpeg Documentation](https://ffmpeg.org/ffmpeg-all.html#sidechaincompress)
+- Отдельный `--sidechain-level-sc` см. `level_sc` выше.
+- `-ll` теперь loglevel программы, а loglevel ffmpeg теперь `-fll`
 
 # 3.5.2
 

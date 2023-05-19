@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import argparse
+import logging
 from glob import iglob
-from math import inf
 from multiprocessing import cpu_count
 from os import getcwd
 from time import perf_counter
@@ -15,6 +15,8 @@ from fastdub.ffmpeg_wrapper import DefaultFFMpegParams
 from fastdub.translator.subs_translate import SrtTranslate
 
 __all__ = ('parse_args', 'main')
+
+THREADS_MAY_NEED = youtube.SUPPORTED or translator.SUPPORTED
 
 
 class BooleanOptionalAction(argparse.Action):
@@ -60,8 +62,11 @@ def parse_args() -> argparse.Namespace:
     arg_parser.add_argument('-ev', '--export-video', action=BooleanOptionalAction, default=True)
     arg_parser.add_argument('-l', '--language', default='ru',
                             help='Subtitles language (ru)')
+    arg_parser.add_argument('-ll', '--loglevel', default='INFO', type=str.upper,
+                            choices=logging.getLevelNamesMapping().keys(),
+                            help='Program log level')
 
-    if youtube.SUPPORTED or translator.SUPPORTED:
+    if THREADS_MAY_NEED:
         arg_parser.add_argument('-tc', '--threads-count', default=cpu_count(),
                                 type=_thread_count_type,
                                 help='Process count to download (pass to cpu count, < 2 to disable)\n'
@@ -82,14 +87,12 @@ def parse_args() -> argparse.Namespace:
                                      help='Exclude files starts with underscore')
 
     ducking_group = arg_parser.add_argument_group('Audio Ducking')
-    ducking_group.add_argument('-sc', '--side-chain', action=BooleanOptionalAction, default=True,
+    ducking_group.add_argument('-sc', '--sidechain', action=BooleanOptionalAction, default=True,
                                help='Enable audio side chain compress (ducking)')
-    ducking_group.add_argument('-sc-msl', '--min-silence-len', '--attack', default=100, type=int,
-                               help='Minimum silence length in ms (default: 100)')
-    ducking_group.add_argument('-sc-st', '--silence-thresh', default=-inf, type=float,
-                               help='Silence threshold in dB')
-    ducking_group.add_argument('-sc-gdo', '--gain-during-overlay', default=-11, type=int,
-                               help='Gain during overlay in dB (default: -11)')
+    ducking_group.add_argument('-sc-args', '--sidechain-ffmpeg-params', default=DefaultFFMpegParams.sidechain_args,
+                               help=f'sidechain FFMpeg parameters (default {DefaultFFMpegParams.sidechain_args!r})')
+    ducking_group.add_argument('-sc-lvl', '--sidechain-level-sc', type=float, default=.8,
+                               help='Set sidechain gain. Range is between 0.015625 and 64. (default 0.8)')
 
     voicer_group = arg_parser.add_argument_group('Voicer')
     voicer_group.add_argument('-v', '--voice', type=str.lower, choices=voicer.VOICES_NAMES.keys(),
@@ -102,7 +105,7 @@ def parse_args() -> argparse.Namespace:
                               help='Anchor indicating voice actor change (default "!:")')
 
     ffmpeg_group = arg_parser.add_argument_group('FFMpeg Output')
-    ffmpeg_group.add_argument('-ll', '--loglevel', default='panic',
+    ffmpeg_group.add_argument('-fll', '--ffmpeg-loglevel', default='panic',
                               choices=(
                                   'trace', 'debug', 'verbose', 'info', 'warning', 'error', 'fatal', 'panic', 'quiet'),
                               help='FFMpegWrapper loglevel')
@@ -151,7 +154,7 @@ def parse_args() -> argparse.Namespace:
         translate_group.add_argument('--rewrite-srt', action=BooleanOptionalAction, default=False,
                                      help='Rewrite input subtitles files.\n'
                                           'If not, add "_" to the beginning of the original subtitle file.')
-        translate_group.add_argument('-ts', '--translate-service', type=translator.get_service_by_name,
+        translate_group.add_argument('-ts', '--translate-service',
                                      default='google',
                                      choices=translator.SERVICES,
                                      help='Subtitle translation service. (default google)')
@@ -159,7 +162,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def banner():
-    rich.print('[b][i]FastDub[/][/]. Visit project GitHub (star it or add issues):\n'
+    rich.print('[b][i]FastDub[/][/]\n'
                'https://github.com/NIKDISSV-Forever/FastDub')
 
 
@@ -170,19 +173,24 @@ def main():
         rich.traceback.install(show_locals=True)
     else:
         rich.traceback.install(extra_lines=0, word_wrap=True)
+    logging.basicConfig(format='%(levelname)s: [%(asctime)s] %(message)s')
+    logging.getLogger().setLevel(args.loglevel)
+
     remove_cache = args.remove_cache
     if remove_cache == 1:
         dubber.VOICER.cleanup()
 
     GlobalSettings.watermark = args.watermark
-    DefaultFFMpegParams.ffmpeg_log_level = args.loglevel
+    DefaultFFMpegParams.ffmpeg_log_level = args.ffmpeg_loglevel
 
     total_time = 0
     if args.confirm:
         DefaultFFMpegParams.args += '-y',
         total_time = perf_counter()
 
-    GlobalSettings.threads_count = args.threads_count
+    if THREADS_MAY_NEED:
+        GlobalSettings.threads_count = args.threads_count
+
     if youtube.SUPPORTED and args.youtube:
         query: str = args.input
         if args.youtube_search and not query.startswith('?'):
@@ -201,15 +209,18 @@ def main():
 
     videos = dubber.Dubber.collect_videos(args.input, args.exclude_underscore, (*sum(args.exclude, []),))
 
-    translate_serv = args.translate_service if translator.SUPPORTED else None
-    if translator.SUPPORTED and args.translate:
-        SrtTranslate(args.language, translate_serv, args.rewrite_srt).translate_dir(videos, subtitles_format)
+    if translator.SUPPORTED:
+        translate_service = translator.get_service_by_name(args.translate_service)
+        if args.translate:
+            SrtTranslate(args.language, translate_service, args.rewrite_srt).translate_dir(videos, subtitles_format)
+    else:
+        translate_service = None
 
-    dubs = dubber.Dubber(args.voice, args.language, audio_format, args.side_chain, args.min_silence_len,
-                         args.silence_thresh, args.gain_during_overlay, args.align,
-                         args.cleanup_audio, args.export_video)
-
-    dubs.dub_dir(videos, video_format, subtitles_format)
+    dubber.Dubber(args.voice, args.language, audio_format,
+                  args.sidechain, args.sidechain_level_sc, args.sidechain_ffmpeg_params,
+                  args.align,
+                  args.cleanup_audio, args.export_video
+                  ).dub_dir(videos, video_format, subtitles_format)
 
     if remove_cache == 2:
         voicer.Voicer().cleanup()
@@ -217,11 +228,11 @@ def main():
     if fastdub.youtube.yt_upload.SUPPORTED and args.youtube_upload:
         fastdub.youtube.yt_upload.uploader.Uploader(args.privacy_status,
                                                     translator.SUPPORTED and args.youtube_upload_translate,
-                                                    translate_serv
+                                                    translate_service
                                                     ).upload(args.input)
 
     if total_time:
-        rich.print(f'Total time: {PrettyViewPrefix.from_seconds(perf_counter() - total_time)}')
+        logging.info(f'total time {PrettyViewPrefix.from_seconds(perf_counter() - total_time)}')
 
 
 if __name__ == '__main__':

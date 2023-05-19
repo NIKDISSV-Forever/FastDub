@@ -45,7 +45,7 @@ class DownloadYTVideo:
             query = query.removeprefix('?')
             is_youtube = True
             videos = tqdm(VideosSearch(query, search_limit, language, region).result().get('result', ()),
-                          'Video search processing', unit='video', dynamic_ncols=True, colour='white')
+                          'Video search processing', unit='video', colour='white', **GlobalSettings.tqdm_kwargs)
             playlist = (
                 *(with_api_key(lambda: pafy.new(data['id']))
                   for data in videos if data.get('type', '') == 'video'),)

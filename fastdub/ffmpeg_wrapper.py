@@ -6,8 +6,6 @@ import sys
 from pathlib import Path
 from subprocess import check_call, getoutput
 
-from imageio_ffmpeg import get_ffmpeg_exe
-
 from fastdub import GlobalSettings
 
 __all__ = ('FFMpegWrapper', 'DefaultFFMpegParams')
@@ -17,28 +15,22 @@ class DefaultFFMpegParams:
     __slots__ = ()
     ffmpeg_log_level = 'panic'
     args = ()
-    executable = get_ffmpeg_exe()
+    sidechain_args = ''
+    executable = 'ffmpeg'
 
 
-def _ignore():
-    pass
+def _ignore(): pass
 
 
 def _get_default_font_args() -> str:
-    dirs = []
+    dirs = ()
     if sys.platform == 'win32':
         if windir := os.environ.get('WINDIR'):
-            dirs.append(str(Path(windir, 'fonts')))
+            dirs = os.path.join(windir, 'fonts'),
     elif sys.platform in {'linux', 'linux2'}:
-        dirs += [os.path.join(lindir, "fonts") for lindir in
-                 (os.environ.get('XDG_DATA_DIRS') or '/usr/share').split(":")]
+        dirs = (os.path.join(dir_, "fonts") for dir_ in (os.environ.get('XDG_DATA_DIRS') or '/usr/share').split(':'))
     elif sys.platform == 'darwin':
-        dirs += [
-            '/Library/Fonts',
-            '/System/Library/Fonts',
-            os.path.expanduser('~/Library/Fonts'),
-        ]
-
+        dirs = ('/Library/Fonts', '/System/Library/Fonts', os.path.expanduser('~/Library/Fonts'))
     for directory in dirs:
         for walkroot, walkdir, walkfilenames in os.walk(directory, onerror=_ignore):
             for walkfilename in walkfilenames:
@@ -53,10 +45,11 @@ class FFMpegWrapper:
     DURATION_RE = re.compile(r'Duration: (\d\d):(\d\d):(\d\d\.\d\d)')
 
     @classmethod
-    def convert(cls, *args, loglevel=None):
+    def convert(cls, *args, loglevel=None) -> int:
         if not loglevel:
             loglevel = DefaultFFMpegParams.ffmpeg_log_level
-        check_call([str(i) for i in (DefaultFFMpegParams.executable, '-v', loglevel, *DefaultFFMpegParams.args, *args)])
+        return check_call(
+            [str(i) for i in (DefaultFFMpegParams.executable, '-v', loglevel, *DefaultFFMpegParams.args, *args)])
 
     @classmethod
     def get_video_duration_ms(cls, video_path: str | Path) -> float:
@@ -85,10 +78,10 @@ class FFMpegWrapper:
             watermark_args = cls.get_watermark_vf(GlobalSettings.watermark)
             copy_codec = '-c:a'
 
-        FFMpegWrapper.convert(
+        return cls.convert(
             *inputs, *maps,
             '-disposition:a:0', 'default', '-disposition:a:1', '0',
-            *watermark_args, copy_codec, 'copy', '-c:s', 'mov_text',
+            *watermark_args, copy_codec, 'copy',
             output_path)
 
     @classmethod
@@ -97,3 +90,21 @@ class FFMpegWrapper:
                 f"drawtext=text='{text}'{_get_default_font_args()}"
                 ":fontcolor=white@0.5:box=1:boxcolor=black@0.5"
                 ":x='mod(n,w-text_w)':y='mod(n,h-text_h)'")
+
+    @classmethod
+    def sidechain(cls, background: str, foreground: str, out: str,
+                  level_sc: float = 0.8, params: str = None):
+        if params is None:
+            params = DefaultFFMpegParams.sidechain_args
+        return cls.convert('-i', background, '-i', foreground,
+                           '-filter_complex',
+                           '[1:a]asplit=2[sc][mix];'
+                           f'[0:a][sc]sidechaincompress=level_sc={level_sc}:{params}[compr];'
+                           '[compr][mix]amix',
+                           out)
+
+    @classmethod
+    def amix(cls, *inputs: str, out: str):
+        inputs_count = len(inputs)
+        return cls.convert(*sum(zip(('-i',) * inputs_count, inputs), ()), '-filter_complex',
+                           f'amix=inputs={len(inputs)}:duration=longest', out)

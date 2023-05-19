@@ -3,6 +3,7 @@ from __future__ import annotations
 from multiprocessing import cpu_count
 
 __all__ = ('PrettyViewPrefix', 'GlobalSettings')
+__author__ = 'NIKDISSV'
 
 
 class GlobalSettings:
@@ -10,6 +11,7 @@ class GlobalSettings:
     threads_count = cpu_count()
     language = 'ru'
     watermark = ''
+    tqdm_kwargs = {'dynamic_ncols': True}
 
 
 class PrettyViewPrefix:

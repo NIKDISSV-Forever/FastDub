@@ -3,13 +3,14 @@ from __future__ import annotations
 import datetime
 import os.path
 import re
+from typing import NamedTuple
 
 from chardet import detect as detect_encoding
 
 from fastdub.ffmpeg_wrapper import FFMpegWrapper
 
 __all__ = ('LINE_REGEX',
-           'Line',
+           'Line', 'TimeLabel',
            'parse', 'unparse',
            'ms_to_srt_time')
 
@@ -29,27 +30,32 @@ def ms_to_srt_time(ms: int) -> str:
     return f'{h:0>2}:{m:0>2}:{s:0>2},{ms:0>3}'
 
 
-class TimeLabel:
-    __slots__ = ('start', 'duration', 'end', 'time_str')
-
-    def __init__(self, start: int, end: int):
-        self.duration = end - start
-        self.start = start
-        self.end = end
-        self.time_str = f'{start} --> {end}'
+class TimeLabel(NamedTuple):
+    start: int
+    end: int
+    duration: int
 
     def __str__(self):
-        return (f"{ms_to_srt_time(self.start)}"
-                " --> "
-                f"{ms_to_srt_time(self.end)}")
+        return (f'{ms_to_srt_time(self.start)}'
+                ' --> '
+                f'{ms_to_srt_time(self.end)}')
 
 
 class Line:
     __slots__ = ('ms', 'text')
+    ms: TimeLabel
+    text: str
 
-    def __init__(self, time_labels: tuple[datetime.time], text: str):
-        self.ms: TimeLabel = TimeLabel(self._calc_ms_label(time_labels[0]), self._calc_ms_label(time_labels[-1]))
+    def __init__(self, time_labels: tuple[datetime.time] | TimeLabel, text: str = ''):
         self.text = text
+        if isinstance(time_labels, TimeLabel):
+            self.ms = time_labels
+            return
+
+        self.ms: TimeLabel = TimeLabel(
+            start := self._calc_ms_label(time_labels[0]),
+            end := self._calc_ms_label(time_labels[-1]),
+            end - start)
 
     @staticmethod
     def _calc_ms_label(label: datetime.time) -> int:
