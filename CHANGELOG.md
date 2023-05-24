@@ -1,3 +1,13 @@
+# 3.7.0
+
+## General
+
+- **Изменена минимальная поддерживаемая версия Python c 3.8 на 3.9**
+
+## CLI
+
+- Исправлен баг с `logging.getLevelNamesMapping()` в `__main__.py`
+
 # 3.6.0
 
 ## General

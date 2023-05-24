@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import sys
 from glob import iglob
 from multiprocessing import cpu_count
 from os import getcwd
@@ -15,8 +16,18 @@ from fastdub.ffmpeg_wrapper import DefaultFFMpegParams
 from fastdub.translator.subs_translate import SrtTranslate
 
 __all__ = ('parse_args', 'main')
-
 THREADS_MAY_NEED = youtube.SUPPORTED or translator.SUPPORTED
+
+if hasattr(logging, '_nameToLevel'):
+    def _get_logging_level_names() -> tuple[str]:
+        # noinspection PyProtectedMember
+        return *logging._nameToLevel,
+elif sys.version_info >= (3, 11):
+    def _get_logging_level_names() -> tuple[str]:
+        return *logging.getLevelNamesMapping(),
+else:
+    def _get_logging_level_names() -> tuple[str]:
+        return 'INFO',
 
 
 class BooleanOptionalAction(argparse.Action):
@@ -63,7 +74,7 @@ def parse_args() -> argparse.Namespace:
     arg_parser.add_argument('-l', '--language', default='ru',
                             help='Subtitles language (ru)')
     arg_parser.add_argument('-ll', '--loglevel', default='INFO', type=str.upper,
-                            choices=logging.getLevelNamesMapping().keys(),
+                            choices=_get_logging_level_names(),
                             help='Program log level')
 
     if THREADS_MAY_NEED:
