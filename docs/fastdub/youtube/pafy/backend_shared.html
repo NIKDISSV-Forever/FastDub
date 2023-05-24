@@ -1,0 +1,2582 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>fastdub.youtube.pafy.backend_shared API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>fastdub.youtube.pafy.backend_shared</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import logging
+import os
+import re
+import subprocess
+import sys
+import time
+from urllib.error import HTTPError, URLError
+from urllib.parse import parse_qs, urlparse
+from urllib.request import build_opener, urlopen
+
+from . import __version__, g
+from .pafy import call_gdata
+from .playlist import get_playlist2
+from .util import xenc
+
+uni, pyver = str, 3
+early_py_version = sys.version_info[:2] &lt; (2, 7)
+dbg = logging.debug
+
+
+def extract_video_id(url):
+    &#34;&#34;&#34; Extract the video id from an url, return video id as str. &#34;&#34;&#34;
+    idregx = re.compile(r&#39;[\w-]{11}$&#39;)
+    url = str(url).strip()
+
+    if idregx.match(url):
+        return url  # ID of video
+
+    if &#39;://&#39; not in url:
+        url = &#39;//&#39; + url
+    parsedurl = urlparse(url)
+    if parsedurl.netloc in (&#39;youtube.com&#39;, &#39;www.youtube.com&#39;, &#39;m.youtube.com&#39;, &#39;gaming.youtube.com&#39;):
+        query = parse_qs(parsedurl.query)
+        if &#39;v&#39; in query and idregx.match(query[&#39;v&#39;][0]):
+            return query[&#39;v&#39;][0]
+    elif parsedurl.netloc in (&#39;youtu.be&#39;, &#39;www.youtu.be&#39;):
+        vidid = parsedurl.path.split(&#39;/&#39;)[-1] if parsedurl.path else &#39;&#39;
+        if idregx.match(vidid):
+            return vidid
+
+    err = &#34;Need 11 character video id or the URL of the video. Got %s&#34;
+    raise ValueError(err % url)
+
+
+class BasePafy(object):
+    &#34;&#34;&#34; Class to represent a YouTube video. &#34;&#34;&#34;
+
+    def __init__(self, video_url, basic=True, gdata=False,
+                 size=False, callback=None, ydl_opts=None):
+        &#34;&#34;&#34; Set initial values. &#34;&#34;&#34;
+        self.version = __version__
+        self.videoid = extract_video_id(video_url)
+        self.watchv_url = g.urls[&#39;watchv&#39;] % self.videoid
+
+        self.callback = callback
+        self._have_basic = False
+        self._have_gdata = False
+
+        self._description = None
+        self._likes = None
+        self._dislikes = None
+        self._category = None
+        self._published = None
+        self._username = None
+
+        self._streams = []
+        self._oggstreams = []
+        self._m4astreams = []
+        self._allstreams = []
+        self._videostreams = []
+        self._audiostreams = []
+
+        self._title = None
+        self._rating = None
+        self._length = None
+        self._author = None
+        self._duration = None
+        self._keywords = None
+        self._bigthumb = None
+        self._viewcount = None
+        self._bigthumbhd = None
+        self._bestthumb = None
+        self._mix_pl = None
+        self.expiry = None
+
+        if basic:
+            self._fetch_basic()
+
+        if gdata:
+            self._fetch_gdata()
+
+        if size:
+            for s in self.allstreams:
+                # pylint: disable=W0104
+                s.get_filesize()
+
+    def _fetch_basic(self):
+        &#34;&#34;&#34; Fetch basic data and streams. &#34;&#34;&#34;
+        raise NotImplementedError
+
+    def _fetch_gdata(self):
+        &#34;&#34;&#34; Extract gdata values, fetch gdata if necessary. &#34;&#34;&#34;
+        raise NotImplementedError
+
+    def _get_video_gdata(self, video_id):
+        &#34;&#34;&#34; Return json string containing video metadata from gdata api. &#34;&#34;&#34;
+        if self.callback:
+            self.callback(&#34;Fetching video gdata&#34;)
+        query = {&#39;part&#39;: &#39;id,snippet,statistics&#39;,
+                 &#39;maxResults&#39;: 1,
+                 &#39;id&#39;: video_id}
+        gdata = call_gdata(&#39;videos&#39;, query)
+        dbg(&#34;Fetched video gdata&#34;)
+        if self.callback:
+            self.callback(&#34;Fetched video gdata&#34;)
+        return gdata
+
+    def _process_streams(self):
+        &#34;&#34;&#34; Create Stream object lists from internal stream maps. &#34;&#34;&#34;
+        raise NotImplementedError
+
+    def __repr__(self):
+        &#34;&#34;&#34; Print video metadata. Return utf8 string. &#34;&#34;&#34;
+        if self._have_basic:
+            info = [(&#34;Title&#34;, self.title),
+                    (&#34;Author&#34;, self.author),
+                    (&#34;ID&#34;, self.videoid),
+                    (&#34;Duration&#34;, self.duration),
+                    (&#34;Rating&#34;, self.rating),
+                    (&#34;Views&#34;, self.viewcount),
+                    (&#34;Thumbnail&#34;, self.thumb)]
+
+            nfo = &#34;\n&#34;.join([&#34;%s: %s&#34; % i for i in info])
+
+        else:
+            nfo = &#34;Pafy object: %s [%s]&#34; % (self.videoid,
+                                            self.title[:45] + &#34;..&#34;)
+
+        return nfo.encode(&#34;utf8&#34;, &#34;replace&#34;) if pyver == 2 else nfo
+
+    @property
+    def streams(self):
+        &#34;&#34;&#34; The streams for a video. Returns list.&#34;&#34;&#34;
+        if not self._streams:
+            self._process_streams()
+
+        return self._streams
+
+    @property
+    def allstreams(self):
+        &#34;&#34;&#34; All stream types for a video. Returns list. &#34;&#34;&#34;
+        if not self._allstreams:
+            self._process_streams()
+
+        return self._allstreams
+
+    @property
+    def audiostreams(self):
+        &#34;&#34;&#34; Return a list of audio Stream objects. &#34;&#34;&#34;
+        if not self._audiostreams:
+            self._process_streams()
+
+        return self._audiostreams
+
+    @property
+    def videostreams(self):
+        &#34;&#34;&#34; The video streams for a video. Returns list. &#34;&#34;&#34;
+        if not self._videostreams:
+            self._process_streams()
+
+        return self._videostreams
+
+    @property
+    def oggstreams(self):
+        &#34;&#34;&#34; Return a list of ogg encoded Stream objects. &#34;&#34;&#34;
+        if not self._oggstreams:
+            self._process_streams()
+
+        return self._oggstreams
+
+    @property
+    def m4astreams(self):
+        &#34;&#34;&#34; Return a list of m4a encoded Stream objects. &#34;&#34;&#34;
+        if not self._m4astreams:
+            self._process_streams()
+
+        return self._m4astreams
+
+    @property
+    def title(self):
+        &#34;&#34;&#34; Return YouTube video title as a string. &#34;&#34;&#34;
+        if not self._title:
+            self._fetch_basic()
+
+        return self._title
+
+    @property
+    def author(self):
+        &#34;&#34;&#34; The uploader of the video. Returns str. &#34;&#34;&#34;
+        if not self._author:
+            self._fetch_basic()
+
+        return self._author
+
+    @property
+    def rating(self):
+        &#34;&#34;&#34; Rating for a video. Returns float. &#34;&#34;&#34;
+        if not self._rating:
+            self._fetch_basic()
+
+        return self._rating
+
+    @property
+    def length(self):
+        &#34;&#34;&#34; Length of a video in seconds. Returns int. &#34;&#34;&#34;
+        if not self._length:
+            self._fetch_basic()
+
+        return self._length
+
+    @property
+    def viewcount(self):
+        &#34;&#34;&#34; Number of views for a video. Returns int. &#34;&#34;&#34;
+        if not self._viewcount:
+            self._fetch_basic()
+
+        return self._viewcount
+
+    @property
+    def bigthumb(self):
+        &#34;&#34;&#34; Large thumbnail image url. Returns str. &#34;&#34;&#34;
+        self._fetch_basic()
+        return self._bigthumb
+
+    @property
+    def bigthumbhd(self):
+        &#34;&#34;&#34; Extra large thumbnail image url. Returns str. &#34;&#34;&#34;
+        self._fetch_basic()
+        return self._bigthumbhd
+
+    @property
+    def thumb(self):
+        &#34;&#34;&#34; Thumbnail image url. Returns str. &#34;&#34;&#34;
+        return g.urls[&#39;thumb&#39;] % self.videoid
+
+    @property
+    def duration(self):
+        &#34;&#34;&#34; Duration of a video (HH:MM:SS). Returns str. &#34;&#34;&#34;
+        if not self._length:
+            self._fetch_basic()
+
+        self._duration = time.strftime(&#39;%H:%M:%S&#39;, time.gmtime(self._length))
+        self._duration = uni(self._duration)
+
+        return self._duration
+
+    @property
+    def keywords(self):
+        &#34;&#34;&#34; Return keywords as list of str. &#34;&#34;&#34;
+        if not self._keywords:
+            self._fetch_gdata()
+
+        return self._keywords
+
+    @property
+    def category(self):
+        &#34;&#34;&#34; YouTube category of the video. Returns string. &#34;&#34;&#34;
+        if not self._category:
+            self._fetch_gdata()
+
+        return self._category
+
+    @property
+    def description(self):
+        &#34;&#34;&#34; Description of the video. Returns string. &#34;&#34;&#34;
+        if not self._description:
+            self._fetch_gdata()
+
+        return self._description
+
+    @property
+    def username(self):
+        &#34;&#34;&#34; Return the username of the uploader. &#34;&#34;&#34;
+        if not self._username:
+            self._fetch_basic()
+
+        return self._username
+
+    @property
+    def published(self):
+        &#34;&#34;&#34; The upload date and time of the video. Returns string. &#34;&#34;&#34;
+        if not self._published:
+            self._fetch_gdata()
+
+        return self._published.replace(&#34;.000Z&#34;, &#34;&#34;).replace(&#34;T&#34;, &#34; &#34;)
+
+    @property
+    def likes(self):
+        &#34;&#34;&#34; The number of likes for the video. Returns int. &#34;&#34;&#34;
+        if not self._likes:
+            self._fetch_basic()
+
+        return self._likes
+
+    @property
+    def dislikes(self):
+        &#34;&#34;&#34; The number of dislikes for the video. Returns int. &#34;&#34;&#34;
+        if not self._dislikes:
+            self._fetch_basic()
+
+        return self._dislikes
+
+    @property
+    def mix(self):
+        &#34;&#34;&#34; The playlist for the related YouTube mix. Returns a Playlist object. &#34;&#34;&#34;
+        if self._mix_pl is None:
+            try:
+                self._mix_pl = get_playlist2(&#34;RD&#34; + self.videoid)
+            except IOError:
+                return None
+        return self._mix_pl
+
+    @staticmethod
+    def _sortvideokey(x, key3d=0, keyres=0, keyftype=0, preftype=&#34;any&#34;, ftypestrict=True):
+        &#34;&#34;&#34; Sort function. &#34;&#34;&#34;
+        key3d = &#34;3D&#34; not in x.resolution
+        keyres = int(x.resolution.split(&#34;x&#34;)[0])
+        keyftype = preftype == x.extension
+        strict, nonstrict = (key3d, keyftype, keyres), (key3d, keyres, keyftype)
+        return strict if ftypestrict else nonstrict
+
+    def _getvideo(self, preftype=&#34;any&#34;, ftypestrict=True, vidonly=False, quality=&#34;max&#34;):
+        &#34;&#34;&#34;
+        Return the highest/lowest resolution video available.
+
+        Select from video-only streams if vidonly is True
+        &#34;&#34;&#34;
+        streams = self.videostreams if vidonly else self.streams
+
+        if not streams:
+            return None
+
+        if quality == &#34;max&#34;:
+            r = max(streams, key=lambda x: self._sortvideokey(x, preftype=preftype, ftypestrict=ftypestrict))
+        elif quality == &#34;min&#34;:
+            r = min(streams, key=lambda x: self._sortvideokey(x, preftype=preftype, ftypestrict=ftypestrict))
+        else:
+            return None
+
+        if ftypestrict and preftype != &#34;any&#34; and r.extension != preftype:
+            return None
+
+        else:
+            return r
+
+    def getbestvideo(self, preftype=&#34;any&#34;, ftypestrict=True):
+        &#34;&#34;&#34;
+        Return the best resolution video-only stream.
+
+        set ftypestrict to False - to return a non-preferred format if that
+        has a higher resolution
+        &#34;&#34;&#34;
+        return self._getvideo(preftype, ftypestrict, vidonly=True, quality=&#34;max&#34;)
+
+    def getworstvideo(self, preftype=&#34;any&#34;, ftypestrict=True):
+        &#34;&#34;&#34; Return the worst resolution video-only stream. &#34;&#34;&#34;
+        return self._getvideo(preftype, ftypestrict, vidonly=True, quality=&#34;min&#34;)
+
+    def getbest(self, preftype=&#34;any&#34;, ftypestrict=True):
+        &#34;&#34;&#34;
+        Return the highest resolution video+audio stream.
+
+        set ftypestrict to False - to return a non-preferred format if that
+        has a higher resolution
+        &#34;&#34;&#34;
+        return self._getvideo(preftype, ftypestrict, vidonly=False, quality=&#34;max&#34;)
+
+    def getworst(self, preftype=&#34;any&#34;, ftypestrict=True):
+        &#34;&#34;&#34; Return the lowest resolution video+audio stream. &#34;&#34;&#34;
+        return self._getvideo(preftype, ftypestrict, vidonly=False, quality=&#34;min&#34;)
+
+    @staticmethod
+    def _sortaudiokey(x, keybitrate=0, keyftype=0, preftype=&#34;any&#34;, ftypestrict=True):
+        &#34;&#34;&#34; Sort function. &#34;&#34;&#34;
+        keybitrate = int(x.rawbitrate)
+        keyftype = preftype == x.extension
+        strict, nonstrict = (keyftype, keybitrate), (keybitrate, keyftype)
+        return strict if ftypestrict else nonstrict
+
+    def getbestaudio(self, preftype=&#34;any&#34;, ftypestrict=True):
+        &#34;&#34;&#34; Return the highest bitrate audio Stream object.&#34;&#34;&#34;
+        if not self.audiostreams:
+            return None
+
+        r = max(self.audiostreams, key=lambda x: self._sortaudiokey(x, preftype=preftype, ftypestrict=ftypestrict))
+
+        if ftypestrict and preftype != &#34;any&#34; and r.extension != preftype:
+            return None
+
+        else:
+            return r
+
+    def getworstaudio(self, preftype=&#34;any&#34;, ftypestrict=True):
+        &#34;&#34;&#34; Return the lowest bitrate audio Stream object.&#34;&#34;&#34;
+        if not self.audiostreams:
+            return None
+
+        r = min(self.audiostreams, key=lambda x: self._sortaudiokey(x, preftype=preftype, ftypestrict=ftypestrict))
+
+        if ftypestrict and preftype != &#34;any&#34; and r.extension != preftype:
+            return None
+
+        else:
+            return r
+
+    @classmethod
+    def _content_available(cls, url):
+        try:
+            response = urlopen(url)
+        except HTTPError:
+            return False
+        else:
+            return response.getcode() &lt; 300
+
+    def getbestthumb(self):
+        &#34;&#34;&#34; Return the best available thumbnail.&#34;&#34;&#34;
+        if not self._bestthumb:
+            part_url = &#34;http://i.ytimg.com/vi/%s/&#34; % self.videoid
+            # Thumbnail resolution sorted in descending order
+            thumbs = (&#34;maxresdefault.jpg&#34;,
+                      &#34;sddefault.jpg&#34;,
+                      &#34;hqdefault.jpg&#34;,
+                      &#34;mqdefault.jpg&#34;,
+                      &#34;default.jpg&#34;)
+            for thumb in thumbs:
+                url = part_url + thumb
+                if self._content_available(url):
+                    return url
+
+        return self._bestthumb
+
+    def populate_from_playlist(self, pl_data):
+        &#34;&#34;&#34; Populate Pafy object with items fetched from playlist data. &#34;&#34;&#34;
+        self._title = pl_data.get(&#34;title&#34;)
+        self._author = pl_data.get(&#34;author&#34;)
+        self._length = int(pl_data.get(&#34;length_seconds&#34;, 0))
+        self._rating = pl_data.get(&#34;rating&#34;, 0.0)
+        self._viewcount = &#34;&#34;.join(re.findall(r&#34;\d&#34;, &#34;{0}&#34;.format(pl_data.get(&#34;views&#34;, &#34;0&#34;))))
+        self._viewcount = int(self._viewcount)
+        self._description = pl_data.get(&#34;description&#34;)
+
+
+class BaseStream(object):
+    &#34;&#34;&#34; YouTube video stream class. &#34;&#34;&#34;
+
+    def __init__(self, parent):
+        &#34;&#34;&#34; Set initial values. &#34;&#34;&#34;
+        self._itag = None
+        self._mediatype = None
+        self._threed = None
+        self._rawbitrate = None
+        self._resolution = None
+        self._quality = None
+        self._dimensions = None
+        self._bitrate = None
+        self._extension = None
+        self.encrypted = None
+        self._notes = None
+        self._url = None
+        self._rawurl = None
+
+        self._parent = parent
+        self._filename = None
+        self._fsize = None
+        self._active = False
+
+    def generate_filename(self, meta=False, max_length=None):
+        &#34;&#34;&#34; Generate filename. &#34;&#34;&#34;
+        ok = re.compile(r&#39;[^/]&#39;)
+
+        if os.name == &#34;nt&#34;:
+            ok = re.compile(r&#39;[^\\/:*?&#34;&lt;&gt;|]&#39;)
+
+        filename = &#34;&#34;.join(x if ok.match(x) else &#34;_&#34; for x in self.title)
+
+        if meta:
+            filename += &#34; - %s - %s&#34; % (self._parent.videoid, self.itag)
+
+        if max_length:
+            max_length = max_length + 1 + len(self.extension)
+            if len(filename) &gt; max_length:
+                filename = filename[:max_length - 3] + &#39;...&#39;
+
+        filename += &#34;.&#34; + self.extension
+        return xenc(filename)
+
+    @property
+    def rawbitrate(self):
+        &#34;&#34;&#34; Return raw bitrate value. &#34;&#34;&#34;
+        return self._rawbitrate
+
+    @property
+    def threed(self):
+        &#34;&#34;&#34; Return bool, True if stream is 3D. &#34;&#34;&#34;
+        return self._threed
+
+    @property
+    def itag(self):
+        &#34;&#34;&#34; Return itag value of stream. &#34;&#34;&#34;
+        return self._itag
+
+    @property
+    def resolution(self):
+        &#34;&#34;&#34; Return resolution of stream as str. 0x0 if audio. &#34;&#34;&#34;
+        return self._resolution
+
+    @property
+    def dimensions(self):
+        &#34;&#34;&#34; Return dimensions of stream as tuple.  (0, 0) if audio. &#34;&#34;&#34;
+        return self._dimensions
+
+    @property
+    def quality(self):
+        &#34;&#34;&#34; Return quality of stream (bitrate or resolution).
+
+        eg, 128k or 640x480 (str)
+        &#34;&#34;&#34;
+        return self._quality
+
+    @property
+    def title(self):
+        &#34;&#34;&#34; Return YouTube video title as a string. &#34;&#34;&#34;
+        return self._parent.title
+
+    @property
+    def extension(self):
+        &#34;&#34;&#34; Return appropriate file extension for stream (str).
+
+        Possible values are: 3gp, m4a, m4v, mp4, webm, ogg
+        &#34;&#34;&#34;
+        return self._extension
+
+    @property
+    def bitrate(self):
+        &#34;&#34;&#34; Return bitrate of an audio stream. &#34;&#34;&#34;
+        return self._bitrate
+
+    @property
+    def mediatype(self):
+        &#34;&#34;&#34; Return mediatype string (normal, audio or video).
+
+        (normal means a stream containing both video and audio.)
+        &#34;&#34;&#34;
+        return self._mediatype
+
+    @property
+    def notes(self):
+        &#34;&#34;&#34; Return additional notes regarding the stream format. &#34;&#34;&#34;
+        return self._notes
+
+    @property
+    def filename(self):
+        &#34;&#34;&#34; Return filename of stream; derived from title and extension. &#34;&#34;&#34;
+        if not self._filename:
+            self._filename = self.generate_filename()
+        return self._filename
+
+    @property
+    def url(self):
+        &#34;&#34;&#34; Return the url, decrypt if required. &#34;&#34;&#34;
+        return self._url
+
+    @property
+    def url_https(self):
+        &#34;&#34;&#34; Return https url. &#34;&#34;&#34;
+        return self.url.replace(&#34;http://&#34;, &#34;https://&#34;)
+
+    def __repr__(self):
+        &#34;&#34;&#34; Return string representation. &#34;&#34;&#34;
+        out = &#34;%s:%s@%s&#34; % (self.mediatype, self.extension, self.quality)
+        return out
+
+    def get_filesize(self):
+        &#34;&#34;&#34; Return filesize of the stream in bytes.  Set member variable. &#34;&#34;&#34;
+        if not self._fsize:
+
+            try:
+                dbg(&#34;Getting stream size&#34;)
+                cl = &#34;content-length&#34;
+                self._fsize = int(g.opener.open(self.url).headers[cl])
+                dbg(&#34;Got stream size&#34;)
+
+            except (AttributeError, HTTPError, URLError):
+                self._fsize = 0
+
+        return self._fsize
+
+    def cancel(self):
+        &#34;&#34;&#34; Cancel an active download. &#34;&#34;&#34;
+        if self._active:
+            self._active = False
+            return True
+
+    def download(self, filepath=&#34;&#34;, quiet=False, progress=&#34;Bytes&#34;,
+                 callback=None, meta=False, remux_audio=False):
+        &#34;&#34;&#34; Download.  Use quiet=True to supress output. Return filename.
+
+        Use meta=True to append video id and itag to generated filename
+        Use remax_audio=True to remux audio file downloads
+
+        &#34;&#34;&#34;
+        # pylint: disable=R0912,R0914
+        # Too many branches, too many local vars
+        savedir = filename = &#34;&#34;
+
+        if filepath and os.path.isdir(filepath):
+            savedir, filename = filepath, self.generate_filename(max_length=256 - len(&#39;.temp&#39;))
+
+        elif filepath:
+            savedir, filename = os.path.split(filepath)
+
+        else:
+            filename = self.generate_filename(meta=meta, max_length=256 - len(&#39;.temp&#39;))
+
+        filepath = os.path.join(savedir, filename)
+        temp_filepath = filepath + &#34;.temp&#34;
+
+        progress_available = [&#34;KB&#34;, &#34;MB&#34;, &#34;GB&#34;]
+        if progress not in progress_available:
+            progress = &#34;Bytes&#34;
+
+        status_string = get_status_string(progress)
+
+        response = g.opener.open(self.url)
+        total = int(response.info()[&#39;Content-Length&#39;].strip())
+        chunksize, bytesdone, t0 = 16384, 0, time.time()
+
+        fmode, offset = &#34;wb&#34;, 0
+
+        if os.path.exists(temp_filepath):
+            if os.stat(temp_filepath).st_size &lt; total:
+                offset = os.stat(temp_filepath).st_size
+                fmode = &#34;ab&#34;
+
+        outfh = open(temp_filepath, fmode)
+
+        if offset:
+            # partial file exists, resume download
+            resuming_opener = build_opener()
+            resuming_opener.addheaders = [(&#39;User-Agent&#39;, g.user_agent),
+                                          (&#34;Range&#34;, &#34;bytes=%s-&#34; % offset)]
+            response = resuming_opener.open(self.url)
+            bytesdone = offset
+
+        self._active = True
+
+        while self._active:
+            chunk = response.read(chunksize)
+            outfh.write(chunk)
+            elapsed = time.time() - t0
+            bytesdone += len(chunk)
+            if elapsed:
+                rate = ((float(bytesdone) - float(offset)) / 1024.0) / elapsed
+                eta = (total - bytesdone) / (rate * 1024)
+            else:  # Avoid ZeroDivisionError
+                rate = 0
+                eta = 0
+
+            progress_stats = (get_size_done(bytesdone, progress),
+                              bytesdone * 1.0 / total, rate, eta)
+
+            if not chunk:
+                outfh.close()
+                break
+
+            if not quiet:
+                status = status_string.format(*progress_stats)
+                sys.stdout.write(&#34;\r&#34; + status + &#39; &#39; * 4 + &#34;\r&#34;)
+                sys.stdout.flush()
+
+            if callback:
+                callback(total, *progress_stats)
+
+        if self._active:
+
+            if remux_audio and self.mediatype == &#34;audio&#34;:
+                remux(temp_filepath, filepath, quiet=quiet, muxer=remux_audio)
+
+            else:
+                os.rename(temp_filepath, filepath)
+
+            return filepath
+
+        else:  # download incomplete, return temp filepath
+            outfh.close()
+            return temp_filepath
+
+
+def remux(infile, outfile, quiet=False, muxer=&#34;ffmpeg&#34;):
+    &#34;&#34;&#34; Remux audio. &#34;&#34;&#34;
+    muxer = muxer if isinstance(muxer, str) else &#34;ffmpeg&#34;
+
+    for tool in {muxer, &#34;ffmpeg&#34;, &#34;avconv&#34;}:
+        cmd = [tool, &#34;-y&#34;, &#34;-i&#34;, infile, &#34;-acodec&#34;, &#34;copy&#34;, &#34;-vn&#34;, outfile]
+
+        try:
+            with open(os.devnull, &#34;w&#34;) as devnull:
+                subprocess.call(cmd, stdout=devnull, stderr=subprocess.STDOUT)
+
+        except OSError:
+            dbg(&#34;Failed to remux audio using %s&#34;, tool)
+
+        else:
+            os.unlink(infile)
+            dbg(&#34;remuxed audio file using %s&#34; % tool)
+
+            if not quiet:
+                sys.stdout.write(&#34;\nAudio remuxed.\n&#34;)
+
+            break
+
+    else:
+        logging.warning(&#34;audio remux failed&#34;)
+        os.rename(infile, outfile)
+
+
+def get_size_done(bytesdone, progress):
+    _progress_dict = {&#39;KB&#39;: 1024.0, &#39;MB&#39;: 1048576.0, &#39;GB&#39;: 1073741824.0}
+    return round(bytesdone / _progress_dict.get(progress, 1.0), 2)
+
+
+def get_status_string(progress):
+    status_string = (&#39;  {:,} &#39; + progress + &#39; [{:.2%}] received. Rate: [{:4.0f} &#39;
+                                            &#39;KB/s].  ETA: [{:.0f} secs]&#39;)
+
+    if early_py_version:
+        status_string = (&#39;  {0:} &#39; + progress + &#39; [{1:.2%}] received. Rate:&#39;
+                                                &#39; [{2:4.0f} KB/s].  ETA: [{3:.0f} secs]&#39;)
+
+    return status_string</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="fastdub.youtube.pafy.backend_shared.extract_video_id"><code class="name flex">
+<span>def <span class="ident">extract_video_id</span></span>(<span>url)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Extract the video id from an url, return video id as str.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def extract_video_id(url):
+    &#34;&#34;&#34; Extract the video id from an url, return video id as str. &#34;&#34;&#34;
+    idregx = re.compile(r&#39;[\w-]{11}$&#39;)
+    url = str(url).strip()
+
+    if idregx.match(url):
+        return url  # ID of video
+
+    if &#39;://&#39; not in url:
+        url = &#39;//&#39; + url
+    parsedurl = urlparse(url)
+    if parsedurl.netloc in (&#39;youtube.com&#39;, &#39;www.youtube.com&#39;, &#39;m.youtube.com&#39;, &#39;gaming.youtube.com&#39;):
+        query = parse_qs(parsedurl.query)
+        if &#39;v&#39; in query and idregx.match(query[&#39;v&#39;][0]):
+            return query[&#39;v&#39;][0]
+    elif parsedurl.netloc in (&#39;youtu.be&#39;, &#39;www.youtu.be&#39;):
+        vidid = parsedurl.path.split(&#39;/&#39;)[-1] if parsedurl.path else &#39;&#39;
+        if idregx.match(vidid):
+            return vidid
+
+    err = &#34;Need 11 character video id or the URL of the video. Got %s&#34;
+    raise ValueError(err % url)</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.get_size_done"><code class="name flex">
+<span>def <span class="ident">get_size_done</span></span>(<span>bytesdone, progress)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_size_done(bytesdone, progress):
+    _progress_dict = {&#39;KB&#39;: 1024.0, &#39;MB&#39;: 1048576.0, &#39;GB&#39;: 1073741824.0}
+    return round(bytesdone / _progress_dict.get(progress, 1.0), 2)</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.get_status_string"><code class="name flex">
+<span>def <span class="ident">get_status_string</span></span>(<span>progress)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_status_string(progress):
+    status_string = (&#39;  {:,} &#39; + progress + &#39; [{:.2%}] received. Rate: [{:4.0f} &#39;
+                                            &#39;KB/s].  ETA: [{:.0f} secs]&#39;)
+
+    if early_py_version:
+        status_string = (&#39;  {0:} &#39; + progress + &#39; [{1:.2%}] received. Rate:&#39;
+                                                &#39; [{2:4.0f} KB/s].  ETA: [{3:.0f} secs]&#39;)
+
+    return status_string</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.remux"><code class="name flex">
+<span>def <span class="ident">remux</span></span>(<span>infile, outfile, quiet=False, muxer='ffmpeg')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Remux audio.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remux(infile, outfile, quiet=False, muxer=&#34;ffmpeg&#34;):
+    &#34;&#34;&#34; Remux audio. &#34;&#34;&#34;
+    muxer = muxer if isinstance(muxer, str) else &#34;ffmpeg&#34;
+
+    for tool in {muxer, &#34;ffmpeg&#34;, &#34;avconv&#34;}:
+        cmd = [tool, &#34;-y&#34;, &#34;-i&#34;, infile, &#34;-acodec&#34;, &#34;copy&#34;, &#34;-vn&#34;, outfile]
+
+        try:
+            with open(os.devnull, &#34;w&#34;) as devnull:
+                subprocess.call(cmd, stdout=devnull, stderr=subprocess.STDOUT)
+
+        except OSError:
+            dbg(&#34;Failed to remux audio using %s&#34;, tool)
+
+        else:
+            os.unlink(infile)
+            dbg(&#34;remuxed audio file using %s&#34; % tool)
+
+            if not quiet:
+                sys.stdout.write(&#34;\nAudio remuxed.\n&#34;)
+
+            break
+
+    else:
+        logging.warning(&#34;audio remux failed&#34;)
+        os.rename(infile, outfile)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy"><code class="flex name class">
+<span>class <span class="ident">BasePafy</span></span>
+<span>(</span><span>video_url, basic=True, gdata=False, size=False, callback=None, ydl_opts=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class to represent a YouTube video. </p>
+<p>Set initial values.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BasePafy(object):
+    &#34;&#34;&#34; Class to represent a YouTube video. &#34;&#34;&#34;
+
+    def __init__(self, video_url, basic=True, gdata=False,
+                 size=False, callback=None, ydl_opts=None):
+        &#34;&#34;&#34; Set initial values. &#34;&#34;&#34;
+        self.version = __version__
+        self.videoid = extract_video_id(video_url)
+        self.watchv_url = g.urls[&#39;watchv&#39;] % self.videoid
+
+        self.callback = callback
+        self._have_basic = False
+        self._have_gdata = False
+
+        self._description = None
+        self._likes = None
+        self._dislikes = None
+        self._category = None
+        self._published = None
+        self._username = None
+
+        self._streams = []
+        self._oggstreams = []
+        self._m4astreams = []
+        self._allstreams = []
+        self._videostreams = []
+        self._audiostreams = []
+
+        self._title = None
+        self._rating = None
+        self._length = None
+        self._author = None
+        self._duration = None
+        self._keywords = None
+        self._bigthumb = None
+        self._viewcount = None
+        self._bigthumbhd = None
+        self._bestthumb = None
+        self._mix_pl = None
+        self.expiry = None
+
+        if basic:
+            self._fetch_basic()
+
+        if gdata:
+            self._fetch_gdata()
+
+        if size:
+            for s in self.allstreams:
+                # pylint: disable=W0104
+                s.get_filesize()
+
+    def _fetch_basic(self):
+        &#34;&#34;&#34; Fetch basic data and streams. &#34;&#34;&#34;
+        raise NotImplementedError
+
+    def _fetch_gdata(self):
+        &#34;&#34;&#34; Extract gdata values, fetch gdata if necessary. &#34;&#34;&#34;
+        raise NotImplementedError
+
+    def _get_video_gdata(self, video_id):
+        &#34;&#34;&#34; Return json string containing video metadata from gdata api. &#34;&#34;&#34;
+        if self.callback:
+            self.callback(&#34;Fetching video gdata&#34;)
+        query = {&#39;part&#39;: &#39;id,snippet,statistics&#39;,
+                 &#39;maxResults&#39;: 1,
+                 &#39;id&#39;: video_id}
+        gdata = call_gdata(&#39;videos&#39;, query)
+        dbg(&#34;Fetched video gdata&#34;)
+        if self.callback:
+            self.callback(&#34;Fetched video gdata&#34;)
+        return gdata
+
+    def _process_streams(self):
+        &#34;&#34;&#34; Create Stream object lists from internal stream maps. &#34;&#34;&#34;
+        raise NotImplementedError
+
+    def __repr__(self):
+        &#34;&#34;&#34; Print video metadata. Return utf8 string. &#34;&#34;&#34;
+        if self._have_basic:
+            info = [(&#34;Title&#34;, self.title),
+                    (&#34;Author&#34;, self.author),
+                    (&#34;ID&#34;, self.videoid),
+                    (&#34;Duration&#34;, self.duration),
+                    (&#34;Rating&#34;, self.rating),
+                    (&#34;Views&#34;, self.viewcount),
+                    (&#34;Thumbnail&#34;, self.thumb)]
+
+            nfo = &#34;\n&#34;.join([&#34;%s: %s&#34; % i for i in info])
+
+        else:
+            nfo = &#34;Pafy object: %s [%s]&#34; % (self.videoid,
+                                            self.title[:45] + &#34;..&#34;)
+
+        return nfo.encode(&#34;utf8&#34;, &#34;replace&#34;) if pyver == 2 else nfo
+
+    @property
+    def streams(self):
+        &#34;&#34;&#34; The streams for a video. Returns list.&#34;&#34;&#34;
+        if not self._streams:
+            self._process_streams()
+
+        return self._streams
+
+    @property
+    def allstreams(self):
+        &#34;&#34;&#34; All stream types for a video. Returns list. &#34;&#34;&#34;
+        if not self._allstreams:
+            self._process_streams()
+
+        return self._allstreams
+
+    @property
+    def audiostreams(self):
+        &#34;&#34;&#34; Return a list of audio Stream objects. &#34;&#34;&#34;
+        if not self._audiostreams:
+            self._process_streams()
+
+        return self._audiostreams
+
+    @property
+    def videostreams(self):
+        &#34;&#34;&#34; The video streams for a video. Returns list. &#34;&#34;&#34;
+        if not self._videostreams:
+            self._process_streams()
+
+        return self._videostreams
+
+    @property
+    def oggstreams(self):
+        &#34;&#34;&#34; Return a list of ogg encoded Stream objects. &#34;&#34;&#34;
+        if not self._oggstreams:
+            self._process_streams()
+
+        return self._oggstreams
+
+    @property
+    def m4astreams(self):
+        &#34;&#34;&#34; Return a list of m4a encoded Stream objects. &#34;&#34;&#34;
+        if not self._m4astreams:
+            self._process_streams()
+
+        return self._m4astreams
+
+    @property
+    def title(self):
+        &#34;&#34;&#34; Return YouTube video title as a string. &#34;&#34;&#34;
+        if not self._title:
+            self._fetch_basic()
+
+        return self._title
+
+    @property
+    def author(self):
+        &#34;&#34;&#34; The uploader of the video. Returns str. &#34;&#34;&#34;
+        if not self._author:
+            self._fetch_basic()
+
+        return self._author
+
+    @property
+    def rating(self):
+        &#34;&#34;&#34; Rating for a video. Returns float. &#34;&#34;&#34;
+        if not self._rating:
+            self._fetch_basic()
+
+        return self._rating
+
+    @property
+    def length(self):
+        &#34;&#34;&#34; Length of a video in seconds. Returns int. &#34;&#34;&#34;
+        if not self._length:
+            self._fetch_basic()
+
+        return self._length
+
+    @property
+    def viewcount(self):
+        &#34;&#34;&#34; Number of views for a video. Returns int. &#34;&#34;&#34;
+        if not self._viewcount:
+            self._fetch_basic()
+
+        return self._viewcount
+
+    @property
+    def bigthumb(self):
+        &#34;&#34;&#34; Large thumbnail image url. Returns str. &#34;&#34;&#34;
+        self._fetch_basic()
+        return self._bigthumb
+
+    @property
+    def bigthumbhd(self):
+        &#34;&#34;&#34; Extra large thumbnail image url. Returns str. &#34;&#34;&#34;
+        self._fetch_basic()
+        return self._bigthumbhd
+
+    @property
+    def thumb(self):
+        &#34;&#34;&#34; Thumbnail image url. Returns str. &#34;&#34;&#34;
+        return g.urls[&#39;thumb&#39;] % self.videoid
+
+    @property
+    def duration(self):
+        &#34;&#34;&#34; Duration of a video (HH:MM:SS). Returns str. &#34;&#34;&#34;
+        if not self._length:
+            self._fetch_basic()
+
+        self._duration = time.strftime(&#39;%H:%M:%S&#39;, time.gmtime(self._length))
+        self._duration = uni(self._duration)
+
+        return self._duration
+
+    @property
+    def keywords(self):
+        &#34;&#34;&#34; Return keywords as list of str. &#34;&#34;&#34;
+        if not self._keywords:
+            self._fetch_gdata()
+
+        return self._keywords
+
+    @property
+    def category(self):
+        &#34;&#34;&#34; YouTube category of the video. Returns string. &#34;&#34;&#34;
+        if not self._category:
+            self._fetch_gdata()
+
+        return self._category
+
+    @property
+    def description(self):
+        &#34;&#34;&#34; Description of the video. Returns string. &#34;&#34;&#34;
+        if not self._description:
+            self._fetch_gdata()
+
+        return self._description
+
+    @property
+    def username(self):
+        &#34;&#34;&#34; Return the username of the uploader. &#34;&#34;&#34;
+        if not self._username:
+            self._fetch_basic()
+
+        return self._username
+
+    @property
+    def published(self):
+        &#34;&#34;&#34; The upload date and time of the video. Returns string. &#34;&#34;&#34;
+        if not self._published:
+            self._fetch_gdata()
+
+        return self._published.replace(&#34;.000Z&#34;, &#34;&#34;).replace(&#34;T&#34;, &#34; &#34;)
+
+    @property
+    def likes(self):
+        &#34;&#34;&#34; The number of likes for the video. Returns int. &#34;&#34;&#34;
+        if not self._likes:
+            self._fetch_basic()
+
+        return self._likes
+
+    @property
+    def dislikes(self):
+        &#34;&#34;&#34; The number of dislikes for the video. Returns int. &#34;&#34;&#34;
+        if not self._dislikes:
+            self._fetch_basic()
+
+        return self._dislikes
+
+    @property
+    def mix(self):
+        &#34;&#34;&#34; The playlist for the related YouTube mix. Returns a Playlist object. &#34;&#34;&#34;
+        if self._mix_pl is None:
+            try:
+                self._mix_pl = get_playlist2(&#34;RD&#34; + self.videoid)
+            except IOError:
+                return None
+        return self._mix_pl
+
+    @staticmethod
+    def _sortvideokey(x, key3d=0, keyres=0, keyftype=0, preftype=&#34;any&#34;, ftypestrict=True):
+        &#34;&#34;&#34; Sort function. &#34;&#34;&#34;
+        key3d = &#34;3D&#34; not in x.resolution
+        keyres = int(x.resolution.split(&#34;x&#34;)[0])
+        keyftype = preftype == x.extension
+        strict, nonstrict = (key3d, keyftype, keyres), (key3d, keyres, keyftype)
+        return strict if ftypestrict else nonstrict
+
+    def _getvideo(self, preftype=&#34;any&#34;, ftypestrict=True, vidonly=False, quality=&#34;max&#34;):
+        &#34;&#34;&#34;
+        Return the highest/lowest resolution video available.
+
+        Select from video-only streams if vidonly is True
+        &#34;&#34;&#34;
+        streams = self.videostreams if vidonly else self.streams
+
+        if not streams:
+            return None
+
+        if quality == &#34;max&#34;:
+            r = max(streams, key=lambda x: self._sortvideokey(x, preftype=preftype, ftypestrict=ftypestrict))
+        elif quality == &#34;min&#34;:
+            r = min(streams, key=lambda x: self._sortvideokey(x, preftype=preftype, ftypestrict=ftypestrict))
+        else:
+            return None
+
+        if ftypestrict and preftype != &#34;any&#34; and r.extension != preftype:
+            return None
+
+        else:
+            return r
+
+    def getbestvideo(self, preftype=&#34;any&#34;, ftypestrict=True):
+        &#34;&#34;&#34;
+        Return the best resolution video-only stream.
+
+        set ftypestrict to False - to return a non-preferred format if that
+        has a higher resolution
+        &#34;&#34;&#34;
+        return self._getvideo(preftype, ftypestrict, vidonly=True, quality=&#34;max&#34;)
+
+    def getworstvideo(self, preftype=&#34;any&#34;, ftypestrict=True):
+        &#34;&#34;&#34; Return the worst resolution video-only stream. &#34;&#34;&#34;
+        return self._getvideo(preftype, ftypestrict, vidonly=True, quality=&#34;min&#34;)
+
+    def getbest(self, preftype=&#34;any&#34;, ftypestrict=True):
+        &#34;&#34;&#34;
+        Return the highest resolution video+audio stream.
+
+        set ftypestrict to False - to return a non-preferred format if that
+        has a higher resolution
+        &#34;&#34;&#34;
+        return self._getvideo(preftype, ftypestrict, vidonly=False, quality=&#34;max&#34;)
+
+    def getworst(self, preftype=&#34;any&#34;, ftypestrict=True):
+        &#34;&#34;&#34; Return the lowest resolution video+audio stream. &#34;&#34;&#34;
+        return self._getvideo(preftype, ftypestrict, vidonly=False, quality=&#34;min&#34;)
+
+    @staticmethod
+    def _sortaudiokey(x, keybitrate=0, keyftype=0, preftype=&#34;any&#34;, ftypestrict=True):
+        &#34;&#34;&#34; Sort function. &#34;&#34;&#34;
+        keybitrate = int(x.rawbitrate)
+        keyftype = preftype == x.extension
+        strict, nonstrict = (keyftype, keybitrate), (keybitrate, keyftype)
+        return strict if ftypestrict else nonstrict
+
+    def getbestaudio(self, preftype=&#34;any&#34;, ftypestrict=True):
+        &#34;&#34;&#34; Return the highest bitrate audio Stream object.&#34;&#34;&#34;
+        if not self.audiostreams:
+            return None
+
+        r = max(self.audiostreams, key=lambda x: self._sortaudiokey(x, preftype=preftype, ftypestrict=ftypestrict))
+
+        if ftypestrict and preftype != &#34;any&#34; and r.extension != preftype:
+            return None
+
+        else:
+            return r
+
+    def getworstaudio(self, preftype=&#34;any&#34;, ftypestrict=True):
+        &#34;&#34;&#34; Return the lowest bitrate audio Stream object.&#34;&#34;&#34;
+        if not self.audiostreams:
+            return None
+
+        r = min(self.audiostreams, key=lambda x: self._sortaudiokey(x, preftype=preftype, ftypestrict=ftypestrict))
+
+        if ftypestrict and preftype != &#34;any&#34; and r.extension != preftype:
+            return None
+
+        else:
+            return r
+
+    @classmethod
+    def _content_available(cls, url):
+        try:
+            response = urlopen(url)
+        except HTTPError:
+            return False
+        else:
+            return response.getcode() &lt; 300
+
+    def getbestthumb(self):
+        &#34;&#34;&#34; Return the best available thumbnail.&#34;&#34;&#34;
+        if not self._bestthumb:
+            part_url = &#34;http://i.ytimg.com/vi/%s/&#34; % self.videoid
+            # Thumbnail resolution sorted in descending order
+            thumbs = (&#34;maxresdefault.jpg&#34;,
+                      &#34;sddefault.jpg&#34;,
+                      &#34;hqdefault.jpg&#34;,
+                      &#34;mqdefault.jpg&#34;,
+                      &#34;default.jpg&#34;)
+            for thumb in thumbs:
+                url = part_url + thumb
+                if self._content_available(url):
+                    return url
+
+        return self._bestthumb
+
+    def populate_from_playlist(self, pl_data):
+        &#34;&#34;&#34; Populate Pafy object with items fetched from playlist data. &#34;&#34;&#34;
+        self._title = pl_data.get(&#34;title&#34;)
+        self._author = pl_data.get(&#34;author&#34;)
+        self._length = int(pl_data.get(&#34;length_seconds&#34;, 0))
+        self._rating = pl_data.get(&#34;rating&#34;, 0.0)
+        self._viewcount = &#34;&#34;.join(re.findall(r&#34;\d&#34;, &#34;{0}&#34;.format(pl_data.get(&#34;views&#34;, &#34;0&#34;))))
+        self._viewcount = int(self._viewcount)
+        self._description = pl_data.get(&#34;description&#34;)</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="fastdub.youtube.pafy.backend_internal.InternPafy" href="backend_internal.html#fastdub.youtube.pafy.backend_internal.InternPafy">InternPafy</a></li>
+<li><a title="fastdub.youtube.pafy.backend_youtube_dl.YtdlPafy" href="backend_youtube_dl.html#fastdub.youtube.pafy.backend_youtube_dl.YtdlPafy">YtdlPafy</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.allstreams"><code class="name">var <span class="ident">allstreams</span></code></dt>
+<dd>
+<div class="desc"><p>All stream types for a video. Returns list.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def allstreams(self):
+    &#34;&#34;&#34; All stream types for a video. Returns list. &#34;&#34;&#34;
+    if not self._allstreams:
+        self._process_streams()
+
+    return self._allstreams</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.audiostreams"><code class="name">var <span class="ident">audiostreams</span></code></dt>
+<dd>
+<div class="desc"><p>Return a list of audio Stream objects.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def audiostreams(self):
+    &#34;&#34;&#34; Return a list of audio Stream objects. &#34;&#34;&#34;
+    if not self._audiostreams:
+        self._process_streams()
+
+    return self._audiostreams</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.author"><code class="name">var <span class="ident">author</span></code></dt>
+<dd>
+<div class="desc"><p>The uploader of the video. Returns str.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def author(self):
+    &#34;&#34;&#34; The uploader of the video. Returns str. &#34;&#34;&#34;
+    if not self._author:
+        self._fetch_basic()
+
+    return self._author</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.bigthumb"><code class="name">var <span class="ident">bigthumb</span></code></dt>
+<dd>
+<div class="desc"><p>Large thumbnail image url. Returns str.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def bigthumb(self):
+    &#34;&#34;&#34; Large thumbnail image url. Returns str. &#34;&#34;&#34;
+    self._fetch_basic()
+    return self._bigthumb</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.bigthumbhd"><code class="name">var <span class="ident">bigthumbhd</span></code></dt>
+<dd>
+<div class="desc"><p>Extra large thumbnail image url. Returns str.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def bigthumbhd(self):
+    &#34;&#34;&#34; Extra large thumbnail image url. Returns str. &#34;&#34;&#34;
+    self._fetch_basic()
+    return self._bigthumbhd</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.category"><code class="name">var <span class="ident">category</span></code></dt>
+<dd>
+<div class="desc"><p>YouTube category of the video. Returns string.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def category(self):
+    &#34;&#34;&#34; YouTube category of the video. Returns string. &#34;&#34;&#34;
+    if not self._category:
+        self._fetch_gdata()
+
+    return self._category</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.description"><code class="name">var <span class="ident">description</span></code></dt>
+<dd>
+<div class="desc"><p>Description of the video. Returns string.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def description(self):
+    &#34;&#34;&#34; Description of the video. Returns string. &#34;&#34;&#34;
+    if not self._description:
+        self._fetch_gdata()
+
+    return self._description</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.dislikes"><code class="name">var <span class="ident">dislikes</span></code></dt>
+<dd>
+<div class="desc"><p>The number of dislikes for the video. Returns int.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def dislikes(self):
+    &#34;&#34;&#34; The number of dislikes for the video. Returns int. &#34;&#34;&#34;
+    if not self._dislikes:
+        self._fetch_basic()
+
+    return self._dislikes</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.duration"><code class="name">var <span class="ident">duration</span></code></dt>
+<dd>
+<div class="desc"><p>Duration of a video (HH:MM:SS). Returns str.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def duration(self):
+    &#34;&#34;&#34; Duration of a video (HH:MM:SS). Returns str. &#34;&#34;&#34;
+    if not self._length:
+        self._fetch_basic()
+
+    self._duration = time.strftime(&#39;%H:%M:%S&#39;, time.gmtime(self._length))
+    self._duration = uni(self._duration)
+
+    return self._duration</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.keywords"><code class="name">var <span class="ident">keywords</span></code></dt>
+<dd>
+<div class="desc"><p>Return keywords as list of str.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def keywords(self):
+    &#34;&#34;&#34; Return keywords as list of str. &#34;&#34;&#34;
+    if not self._keywords:
+        self._fetch_gdata()
+
+    return self._keywords</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.length"><code class="name">var <span class="ident">length</span></code></dt>
+<dd>
+<div class="desc"><p>Length of a video in seconds. Returns int.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def length(self):
+    &#34;&#34;&#34; Length of a video in seconds. Returns int. &#34;&#34;&#34;
+    if not self._length:
+        self._fetch_basic()
+
+    return self._length</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.likes"><code class="name">var <span class="ident">likes</span></code></dt>
+<dd>
+<div class="desc"><p>The number of likes for the video. Returns int.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def likes(self):
+    &#34;&#34;&#34; The number of likes for the video. Returns int. &#34;&#34;&#34;
+    if not self._likes:
+        self._fetch_basic()
+
+    return self._likes</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.m4astreams"><code class="name">var <span class="ident">m4astreams</span></code></dt>
+<dd>
+<div class="desc"><p>Return a list of m4a encoded Stream objects.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def m4astreams(self):
+    &#34;&#34;&#34; Return a list of m4a encoded Stream objects. &#34;&#34;&#34;
+    if not self._m4astreams:
+        self._process_streams()
+
+    return self._m4astreams</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.mix"><code class="name">var <span class="ident">mix</span></code></dt>
+<dd>
+<div class="desc"><p>The playlist for the related YouTube mix. Returns a Playlist object.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def mix(self):
+    &#34;&#34;&#34; The playlist for the related YouTube mix. Returns a Playlist object. &#34;&#34;&#34;
+    if self._mix_pl is None:
+        try:
+            self._mix_pl = get_playlist2(&#34;RD&#34; + self.videoid)
+        except IOError:
+            return None
+    return self._mix_pl</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.oggstreams"><code class="name">var <span class="ident">oggstreams</span></code></dt>
+<dd>
+<div class="desc"><p>Return a list of ogg encoded Stream objects.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def oggstreams(self):
+    &#34;&#34;&#34; Return a list of ogg encoded Stream objects. &#34;&#34;&#34;
+    if not self._oggstreams:
+        self._process_streams()
+
+    return self._oggstreams</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.published"><code class="name">var <span class="ident">published</span></code></dt>
+<dd>
+<div class="desc"><p>The upload date and time of the video. Returns string.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def published(self):
+    &#34;&#34;&#34; The upload date and time of the video. Returns string. &#34;&#34;&#34;
+    if not self._published:
+        self._fetch_gdata()
+
+    return self._published.replace(&#34;.000Z&#34;, &#34;&#34;).replace(&#34;T&#34;, &#34; &#34;)</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.rating"><code class="name">var <span class="ident">rating</span></code></dt>
+<dd>
+<div class="desc"><p>Rating for a video. Returns float.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def rating(self):
+    &#34;&#34;&#34; Rating for a video. Returns float. &#34;&#34;&#34;
+    if not self._rating:
+        self._fetch_basic()
+
+    return self._rating</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.streams"><code class="name">var <span class="ident">streams</span></code></dt>
+<dd>
+<div class="desc"><p>The streams for a video. Returns list.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def streams(self):
+    &#34;&#34;&#34; The streams for a video. Returns list.&#34;&#34;&#34;
+    if not self._streams:
+        self._process_streams()
+
+    return self._streams</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.thumb"><code class="name">var <span class="ident">thumb</span></code></dt>
+<dd>
+<div class="desc"><p>Thumbnail image url. Returns str.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def thumb(self):
+    &#34;&#34;&#34; Thumbnail image url. Returns str. &#34;&#34;&#34;
+    return g.urls[&#39;thumb&#39;] % self.videoid</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.title"><code class="name">var <span class="ident">title</span></code></dt>
+<dd>
+<div class="desc"><p>Return YouTube video title as a string.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def title(self):
+    &#34;&#34;&#34; Return YouTube video title as a string. &#34;&#34;&#34;
+    if not self._title:
+        self._fetch_basic()
+
+    return self._title</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.username"><code class="name">var <span class="ident">username</span></code></dt>
+<dd>
+<div class="desc"><p>Return the username of the uploader.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def username(self):
+    &#34;&#34;&#34; Return the username of the uploader. &#34;&#34;&#34;
+    if not self._username:
+        self._fetch_basic()
+
+    return self._username</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.videostreams"><code class="name">var <span class="ident">videostreams</span></code></dt>
+<dd>
+<div class="desc"><p>The video streams for a video. Returns list.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def videostreams(self):
+    &#34;&#34;&#34; The video streams for a video. Returns list. &#34;&#34;&#34;
+    if not self._videostreams:
+        self._process_streams()
+
+    return self._videostreams</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.viewcount"><code class="name">var <span class="ident">viewcount</span></code></dt>
+<dd>
+<div class="desc"><p>Number of views for a video. Returns int.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def viewcount(self):
+    &#34;&#34;&#34; Number of views for a video. Returns int. &#34;&#34;&#34;
+    if not self._viewcount:
+        self._fetch_basic()
+
+    return self._viewcount</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.getbest"><code class="name flex">
+<span>def <span class="ident">getbest</span></span>(<span>self, preftype='any', ftypestrict=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return the highest resolution video+audio stream.</p>
+<p>set ftypestrict to False - to return a non-preferred format if that
+has a higher resolution</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getbest(self, preftype=&#34;any&#34;, ftypestrict=True):
+    &#34;&#34;&#34;
+    Return the highest resolution video+audio stream.
+
+    set ftypestrict to False - to return a non-preferred format if that
+    has a higher resolution
+    &#34;&#34;&#34;
+    return self._getvideo(preftype, ftypestrict, vidonly=False, quality=&#34;max&#34;)</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.getbestaudio"><code class="name flex">
+<span>def <span class="ident">getbestaudio</span></span>(<span>self, preftype='any', ftypestrict=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return the highest bitrate audio Stream object.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getbestaudio(self, preftype=&#34;any&#34;, ftypestrict=True):
+    &#34;&#34;&#34; Return the highest bitrate audio Stream object.&#34;&#34;&#34;
+    if not self.audiostreams:
+        return None
+
+    r = max(self.audiostreams, key=lambda x: self._sortaudiokey(x, preftype=preftype, ftypestrict=ftypestrict))
+
+    if ftypestrict and preftype != &#34;any&#34; and r.extension != preftype:
+        return None
+
+    else:
+        return r</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.getbestthumb"><code class="name flex">
+<span>def <span class="ident">getbestthumb</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return the best available thumbnail.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getbestthumb(self):
+    &#34;&#34;&#34; Return the best available thumbnail.&#34;&#34;&#34;
+    if not self._bestthumb:
+        part_url = &#34;http://i.ytimg.com/vi/%s/&#34; % self.videoid
+        # Thumbnail resolution sorted in descending order
+        thumbs = (&#34;maxresdefault.jpg&#34;,
+                  &#34;sddefault.jpg&#34;,
+                  &#34;hqdefault.jpg&#34;,
+                  &#34;mqdefault.jpg&#34;,
+                  &#34;default.jpg&#34;)
+        for thumb in thumbs:
+            url = part_url + thumb
+            if self._content_available(url):
+                return url
+
+    return self._bestthumb</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.getbestvideo"><code class="name flex">
+<span>def <span class="ident">getbestvideo</span></span>(<span>self, preftype='any', ftypestrict=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return the best resolution video-only stream.</p>
+<p>set ftypestrict to False - to return a non-preferred format if that
+has a higher resolution</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getbestvideo(self, preftype=&#34;any&#34;, ftypestrict=True):
+    &#34;&#34;&#34;
+    Return the best resolution video-only stream.
+
+    set ftypestrict to False - to return a non-preferred format if that
+    has a higher resolution
+    &#34;&#34;&#34;
+    return self._getvideo(preftype, ftypestrict, vidonly=True, quality=&#34;max&#34;)</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.getworst"><code class="name flex">
+<span>def <span class="ident">getworst</span></span>(<span>self, preftype='any', ftypestrict=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return the lowest resolution video+audio stream.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getworst(self, preftype=&#34;any&#34;, ftypestrict=True):
+    &#34;&#34;&#34; Return the lowest resolution video+audio stream. &#34;&#34;&#34;
+    return self._getvideo(preftype, ftypestrict, vidonly=False, quality=&#34;min&#34;)</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.getworstaudio"><code class="name flex">
+<span>def <span class="ident">getworstaudio</span></span>(<span>self, preftype='any', ftypestrict=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return the lowest bitrate audio Stream object.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getworstaudio(self, preftype=&#34;any&#34;, ftypestrict=True):
+    &#34;&#34;&#34; Return the lowest bitrate audio Stream object.&#34;&#34;&#34;
+    if not self.audiostreams:
+        return None
+
+    r = min(self.audiostreams, key=lambda x: self._sortaudiokey(x, preftype=preftype, ftypestrict=ftypestrict))
+
+    if ftypestrict and preftype != &#34;any&#34; and r.extension != preftype:
+        return None
+
+    else:
+        return r</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.getworstvideo"><code class="name flex">
+<span>def <span class="ident">getworstvideo</span></span>(<span>self, preftype='any', ftypestrict=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return the worst resolution video-only stream.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getworstvideo(self, preftype=&#34;any&#34;, ftypestrict=True):
+    &#34;&#34;&#34; Return the worst resolution video-only stream. &#34;&#34;&#34;
+    return self._getvideo(preftype, ftypestrict, vidonly=True, quality=&#34;min&#34;)</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BasePafy.populate_from_playlist"><code class="name flex">
+<span>def <span class="ident">populate_from_playlist</span></span>(<span>self, pl_data)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Populate Pafy object with items fetched from playlist data.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def populate_from_playlist(self, pl_data):
+    &#34;&#34;&#34; Populate Pafy object with items fetched from playlist data. &#34;&#34;&#34;
+    self._title = pl_data.get(&#34;title&#34;)
+    self._author = pl_data.get(&#34;author&#34;)
+    self._length = int(pl_data.get(&#34;length_seconds&#34;, 0))
+    self._rating = pl_data.get(&#34;rating&#34;, 0.0)
+    self._viewcount = &#34;&#34;.join(re.findall(r&#34;\d&#34;, &#34;{0}&#34;.format(pl_data.get(&#34;views&#34;, &#34;0&#34;))))
+    self._viewcount = int(self._viewcount)
+    self._description = pl_data.get(&#34;description&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream"><code class="flex name class">
+<span>class <span class="ident">BaseStream</span></span>
+<span>(</span><span>parent)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>YouTube video stream class. </p>
+<p>Set initial values.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BaseStream(object):
+    &#34;&#34;&#34; YouTube video stream class. &#34;&#34;&#34;
+
+    def __init__(self, parent):
+        &#34;&#34;&#34; Set initial values. &#34;&#34;&#34;
+        self._itag = None
+        self._mediatype = None
+        self._threed = None
+        self._rawbitrate = None
+        self._resolution = None
+        self._quality = None
+        self._dimensions = None
+        self._bitrate = None
+        self._extension = None
+        self.encrypted = None
+        self._notes = None
+        self._url = None
+        self._rawurl = None
+
+        self._parent = parent
+        self._filename = None
+        self._fsize = None
+        self._active = False
+
+    def generate_filename(self, meta=False, max_length=None):
+        &#34;&#34;&#34; Generate filename. &#34;&#34;&#34;
+        ok = re.compile(r&#39;[^/]&#39;)
+
+        if os.name == &#34;nt&#34;:
+            ok = re.compile(r&#39;[^\\/:*?&#34;&lt;&gt;|]&#39;)
+
+        filename = &#34;&#34;.join(x if ok.match(x) else &#34;_&#34; for x in self.title)
+
+        if meta:
+            filename += &#34; - %s - %s&#34; % (self._parent.videoid, self.itag)
+
+        if max_length:
+            max_length = max_length + 1 + len(self.extension)
+            if len(filename) &gt; max_length:
+                filename = filename[:max_length - 3] + &#39;...&#39;
+
+        filename += &#34;.&#34; + self.extension
+        return xenc(filename)
+
+    @property
+    def rawbitrate(self):
+        &#34;&#34;&#34; Return raw bitrate value. &#34;&#34;&#34;
+        return self._rawbitrate
+
+    @property
+    def threed(self):
+        &#34;&#34;&#34; Return bool, True if stream is 3D. &#34;&#34;&#34;
+        return self._threed
+
+    @property
+    def itag(self):
+        &#34;&#34;&#34; Return itag value of stream. &#34;&#34;&#34;
+        return self._itag
+
+    @property
+    def resolution(self):
+        &#34;&#34;&#34; Return resolution of stream as str. 0x0 if audio. &#34;&#34;&#34;
+        return self._resolution
+
+    @property
+    def dimensions(self):
+        &#34;&#34;&#34; Return dimensions of stream as tuple.  (0, 0) if audio. &#34;&#34;&#34;
+        return self._dimensions
+
+    @property
+    def quality(self):
+        &#34;&#34;&#34; Return quality of stream (bitrate or resolution).
+
+        eg, 128k or 640x480 (str)
+        &#34;&#34;&#34;
+        return self._quality
+
+    @property
+    def title(self):
+        &#34;&#34;&#34; Return YouTube video title as a string. &#34;&#34;&#34;
+        return self._parent.title
+
+    @property
+    def extension(self):
+        &#34;&#34;&#34; Return appropriate file extension for stream (str).
+
+        Possible values are: 3gp, m4a, m4v, mp4, webm, ogg
+        &#34;&#34;&#34;
+        return self._extension
+
+    @property
+    def bitrate(self):
+        &#34;&#34;&#34; Return bitrate of an audio stream. &#34;&#34;&#34;
+        return self._bitrate
+
+    @property
+    def mediatype(self):
+        &#34;&#34;&#34; Return mediatype string (normal, audio or video).
+
+        (normal means a stream containing both video and audio.)
+        &#34;&#34;&#34;
+        return self._mediatype
+
+    @property
+    def notes(self):
+        &#34;&#34;&#34; Return additional notes regarding the stream format. &#34;&#34;&#34;
+        return self._notes
+
+    @property
+    def filename(self):
+        &#34;&#34;&#34; Return filename of stream; derived from title and extension. &#34;&#34;&#34;
+        if not self._filename:
+            self._filename = self.generate_filename()
+        return self._filename
+
+    @property
+    def url(self):
+        &#34;&#34;&#34; Return the url, decrypt if required. &#34;&#34;&#34;
+        return self._url
+
+    @property
+    def url_https(self):
+        &#34;&#34;&#34; Return https url. &#34;&#34;&#34;
+        return self.url.replace(&#34;http://&#34;, &#34;https://&#34;)
+
+    def __repr__(self):
+        &#34;&#34;&#34; Return string representation. &#34;&#34;&#34;
+        out = &#34;%s:%s@%s&#34; % (self.mediatype, self.extension, self.quality)
+        return out
+
+    def get_filesize(self):
+        &#34;&#34;&#34; Return filesize of the stream in bytes.  Set member variable. &#34;&#34;&#34;
+        if not self._fsize:
+
+            try:
+                dbg(&#34;Getting stream size&#34;)
+                cl = &#34;content-length&#34;
+                self._fsize = int(g.opener.open(self.url).headers[cl])
+                dbg(&#34;Got stream size&#34;)
+
+            except (AttributeError, HTTPError, URLError):
+                self._fsize = 0
+
+        return self._fsize
+
+    def cancel(self):
+        &#34;&#34;&#34; Cancel an active download. &#34;&#34;&#34;
+        if self._active:
+            self._active = False
+            return True
+
+    def download(self, filepath=&#34;&#34;, quiet=False, progress=&#34;Bytes&#34;,
+                 callback=None, meta=False, remux_audio=False):
+        &#34;&#34;&#34; Download.  Use quiet=True to supress output. Return filename.
+
+        Use meta=True to append video id and itag to generated filename
+        Use remax_audio=True to remux audio file downloads
+
+        &#34;&#34;&#34;
+        # pylint: disable=R0912,R0914
+        # Too many branches, too many local vars
+        savedir = filename = &#34;&#34;
+
+        if filepath and os.path.isdir(filepath):
+            savedir, filename = filepath, self.generate_filename(max_length=256 - len(&#39;.temp&#39;))
+
+        elif filepath:
+            savedir, filename = os.path.split(filepath)
+
+        else:
+            filename = self.generate_filename(meta=meta, max_length=256 - len(&#39;.temp&#39;))
+
+        filepath = os.path.join(savedir, filename)
+        temp_filepath = filepath + &#34;.temp&#34;
+
+        progress_available = [&#34;KB&#34;, &#34;MB&#34;, &#34;GB&#34;]
+        if progress not in progress_available:
+            progress = &#34;Bytes&#34;
+
+        status_string = get_status_string(progress)
+
+        response = g.opener.open(self.url)
+        total = int(response.info()[&#39;Content-Length&#39;].strip())
+        chunksize, bytesdone, t0 = 16384, 0, time.time()
+
+        fmode, offset = &#34;wb&#34;, 0
+
+        if os.path.exists(temp_filepath):
+            if os.stat(temp_filepath).st_size &lt; total:
+                offset = os.stat(temp_filepath).st_size
+                fmode = &#34;ab&#34;
+
+        outfh = open(temp_filepath, fmode)
+
+        if offset:
+            # partial file exists, resume download
+            resuming_opener = build_opener()
+            resuming_opener.addheaders = [(&#39;User-Agent&#39;, g.user_agent),
+                                          (&#34;Range&#34;, &#34;bytes=%s-&#34; % offset)]
+            response = resuming_opener.open(self.url)
+            bytesdone = offset
+
+        self._active = True
+
+        while self._active:
+            chunk = response.read(chunksize)
+            outfh.write(chunk)
+            elapsed = time.time() - t0
+            bytesdone += len(chunk)
+            if elapsed:
+                rate = ((float(bytesdone) - float(offset)) / 1024.0) / elapsed
+                eta = (total - bytesdone) / (rate * 1024)
+            else:  # Avoid ZeroDivisionError
+                rate = 0
+                eta = 0
+
+            progress_stats = (get_size_done(bytesdone, progress),
+                              bytesdone * 1.0 / total, rate, eta)
+
+            if not chunk:
+                outfh.close()
+                break
+
+            if not quiet:
+                status = status_string.format(*progress_stats)
+                sys.stdout.write(&#34;\r&#34; + status + &#39; &#39; * 4 + &#34;\r&#34;)
+                sys.stdout.flush()
+
+            if callback:
+                callback(total, *progress_stats)
+
+        if self._active:
+
+            if remux_audio and self.mediatype == &#34;audio&#34;:
+                remux(temp_filepath, filepath, quiet=quiet, muxer=remux_audio)
+
+            else:
+                os.rename(temp_filepath, filepath)
+
+            return filepath
+
+        else:  # download incomplete, return temp filepath
+            outfh.close()
+            return temp_filepath</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="fastdub.youtube.pafy.backend_internal.InternStream" href="backend_internal.html#fastdub.youtube.pafy.backend_internal.InternStream">InternStream</a></li>
+<li><a title="fastdub.youtube.pafy.backend_youtube_dl.YtdlStream" href="backend_youtube_dl.html#fastdub.youtube.pafy.backend_youtube_dl.YtdlStream">YtdlStream</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.bitrate"><code class="name">var <span class="ident">bitrate</span></code></dt>
+<dd>
+<div class="desc"><p>Return bitrate of an audio stream.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def bitrate(self):
+    &#34;&#34;&#34; Return bitrate of an audio stream. &#34;&#34;&#34;
+    return self._bitrate</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.dimensions"><code class="name">var <span class="ident">dimensions</span></code></dt>
+<dd>
+<div class="desc"><p>Return dimensions of stream as tuple.
+(0, 0) if audio.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def dimensions(self):
+    &#34;&#34;&#34; Return dimensions of stream as tuple.  (0, 0) if audio. &#34;&#34;&#34;
+    return self._dimensions</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.extension"><code class="name">var <span class="ident">extension</span></code></dt>
+<dd>
+<div class="desc"><p>Return appropriate file extension for stream (str).</p>
+<p>Possible values are: 3gp, m4a, m4v, mp4, webm, ogg</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def extension(self):
+    &#34;&#34;&#34; Return appropriate file extension for stream (str).
+
+    Possible values are: 3gp, m4a, m4v, mp4, webm, ogg
+    &#34;&#34;&#34;
+    return self._extension</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.filename"><code class="name">var <span class="ident">filename</span></code></dt>
+<dd>
+<div class="desc"><p>Return filename of stream; derived from title and extension.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def filename(self):
+    &#34;&#34;&#34; Return filename of stream; derived from title and extension. &#34;&#34;&#34;
+    if not self._filename:
+        self._filename = self.generate_filename()
+    return self._filename</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.itag"><code class="name">var <span class="ident">itag</span></code></dt>
+<dd>
+<div class="desc"><p>Return itag value of stream.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def itag(self):
+    &#34;&#34;&#34; Return itag value of stream. &#34;&#34;&#34;
+    return self._itag</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.mediatype"><code class="name">var <span class="ident">mediatype</span></code></dt>
+<dd>
+<div class="desc"><p>Return mediatype string (normal, audio or video).</p>
+<p>(normal means a stream containing both video and audio.)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def mediatype(self):
+    &#34;&#34;&#34; Return mediatype string (normal, audio or video).
+
+    (normal means a stream containing both video and audio.)
+    &#34;&#34;&#34;
+    return self._mediatype</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.notes"><code class="name">var <span class="ident">notes</span></code></dt>
+<dd>
+<div class="desc"><p>Return additional notes regarding the stream format.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def notes(self):
+    &#34;&#34;&#34; Return additional notes regarding the stream format. &#34;&#34;&#34;
+    return self._notes</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.quality"><code class="name">var <span class="ident">quality</span></code></dt>
+<dd>
+<div class="desc"><p>Return quality of stream (bitrate or resolution).</p>
+<p>eg, 128k or 640x480 (str)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def quality(self):
+    &#34;&#34;&#34; Return quality of stream (bitrate or resolution).
+
+    eg, 128k or 640x480 (str)
+    &#34;&#34;&#34;
+    return self._quality</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.rawbitrate"><code class="name">var <span class="ident">rawbitrate</span></code></dt>
+<dd>
+<div class="desc"><p>Return raw bitrate value.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def rawbitrate(self):
+    &#34;&#34;&#34; Return raw bitrate value. &#34;&#34;&#34;
+    return self._rawbitrate</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.resolution"><code class="name">var <span class="ident">resolution</span></code></dt>
+<dd>
+<div class="desc"><p>Return resolution of stream as str. 0x0 if audio.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def resolution(self):
+    &#34;&#34;&#34; Return resolution of stream as str. 0x0 if audio. &#34;&#34;&#34;
+    return self._resolution</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.threed"><code class="name">var <span class="ident">threed</span></code></dt>
+<dd>
+<div class="desc"><p>Return bool, True if stream is 3D.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def threed(self):
+    &#34;&#34;&#34; Return bool, True if stream is 3D. &#34;&#34;&#34;
+    return self._threed</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.title"><code class="name">var <span class="ident">title</span></code></dt>
+<dd>
+<div class="desc"><p>Return YouTube video title as a string.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def title(self):
+    &#34;&#34;&#34; Return YouTube video title as a string. &#34;&#34;&#34;
+    return self._parent.title</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.url"><code class="name">var <span class="ident">url</span></code></dt>
+<dd>
+<div class="desc"><p>Return the url, decrypt if required.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def url(self):
+    &#34;&#34;&#34; Return the url, decrypt if required. &#34;&#34;&#34;
+    return self._url</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.url_https"><code class="name">var <span class="ident">url_https</span></code></dt>
+<dd>
+<div class="desc"><p>Return https url.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def url_https(self):
+    &#34;&#34;&#34; Return https url. &#34;&#34;&#34;
+    return self.url.replace(&#34;http://&#34;, &#34;https://&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.cancel"><code class="name flex">
+<span>def <span class="ident">cancel</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Cancel an active download.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cancel(self):
+    &#34;&#34;&#34; Cancel an active download. &#34;&#34;&#34;
+    if self._active:
+        self._active = False
+        return True</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.download"><code class="name flex">
+<span>def <span class="ident">download</span></span>(<span>self, filepath='', quiet=False, progress='Bytes', callback=None, meta=False, remux_audio=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Download.
+Use quiet=True to supress output. Return filename.</p>
+<p>Use meta=True to append video id and itag to generated filename
+Use remax_audio=True to remux audio file downloads</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def download(self, filepath=&#34;&#34;, quiet=False, progress=&#34;Bytes&#34;,
+             callback=None, meta=False, remux_audio=False):
+    &#34;&#34;&#34; Download.  Use quiet=True to supress output. Return filename.
+
+    Use meta=True to append video id and itag to generated filename
+    Use remax_audio=True to remux audio file downloads
+
+    &#34;&#34;&#34;
+    # pylint: disable=R0912,R0914
+    # Too many branches, too many local vars
+    savedir = filename = &#34;&#34;
+
+    if filepath and os.path.isdir(filepath):
+        savedir, filename = filepath, self.generate_filename(max_length=256 - len(&#39;.temp&#39;))
+
+    elif filepath:
+        savedir, filename = os.path.split(filepath)
+
+    else:
+        filename = self.generate_filename(meta=meta, max_length=256 - len(&#39;.temp&#39;))
+
+    filepath = os.path.join(savedir, filename)
+    temp_filepath = filepath + &#34;.temp&#34;
+
+    progress_available = [&#34;KB&#34;, &#34;MB&#34;, &#34;GB&#34;]
+    if progress not in progress_available:
+        progress = &#34;Bytes&#34;
+
+    status_string = get_status_string(progress)
+
+    response = g.opener.open(self.url)
+    total = int(response.info()[&#39;Content-Length&#39;].strip())
+    chunksize, bytesdone, t0 = 16384, 0, time.time()
+
+    fmode, offset = &#34;wb&#34;, 0
+
+    if os.path.exists(temp_filepath):
+        if os.stat(temp_filepath).st_size &lt; total:
+            offset = os.stat(temp_filepath).st_size
+            fmode = &#34;ab&#34;
+
+    outfh = open(temp_filepath, fmode)
+
+    if offset:
+        # partial file exists, resume download
+        resuming_opener = build_opener()
+        resuming_opener.addheaders = [(&#39;User-Agent&#39;, g.user_agent),
+                                      (&#34;Range&#34;, &#34;bytes=%s-&#34; % offset)]
+        response = resuming_opener.open(self.url)
+        bytesdone = offset
+
+    self._active = True
+
+    while self._active:
+        chunk = response.read(chunksize)
+        outfh.write(chunk)
+        elapsed = time.time() - t0
+        bytesdone += len(chunk)
+        if elapsed:
+            rate = ((float(bytesdone) - float(offset)) / 1024.0) / elapsed
+            eta = (total - bytesdone) / (rate * 1024)
+        else:  # Avoid ZeroDivisionError
+            rate = 0
+            eta = 0
+
+        progress_stats = (get_size_done(bytesdone, progress),
+                          bytesdone * 1.0 / total, rate, eta)
+
+        if not chunk:
+            outfh.close()
+            break
+
+        if not quiet:
+            status = status_string.format(*progress_stats)
+            sys.stdout.write(&#34;\r&#34; + status + &#39; &#39; * 4 + &#34;\r&#34;)
+            sys.stdout.flush()
+
+        if callback:
+            callback(total, *progress_stats)
+
+    if self._active:
+
+        if remux_audio and self.mediatype == &#34;audio&#34;:
+            remux(temp_filepath, filepath, quiet=quiet, muxer=remux_audio)
+
+        else:
+            os.rename(temp_filepath, filepath)
+
+        return filepath
+
+    else:  # download incomplete, return temp filepath
+        outfh.close()
+        return temp_filepath</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.generate_filename"><code class="name flex">
+<span>def <span class="ident">generate_filename</span></span>(<span>self, meta=False, max_length=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generate filename.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_filename(self, meta=False, max_length=None):
+    &#34;&#34;&#34; Generate filename. &#34;&#34;&#34;
+    ok = re.compile(r&#39;[^/]&#39;)
+
+    if os.name == &#34;nt&#34;:
+        ok = re.compile(r&#39;[^\\/:*?&#34;&lt;&gt;|]&#39;)
+
+    filename = &#34;&#34;.join(x if ok.match(x) else &#34;_&#34; for x in self.title)
+
+    if meta:
+        filename += &#34; - %s - %s&#34; % (self._parent.videoid, self.itag)
+
+    if max_length:
+        max_length = max_length + 1 + len(self.extension)
+        if len(filename) &gt; max_length:
+            filename = filename[:max_length - 3] + &#39;...&#39;
+
+    filename += &#34;.&#34; + self.extension
+    return xenc(filename)</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.pafy.backend_shared.BaseStream.get_filesize"><code class="name flex">
+<span>def <span class="ident">get_filesize</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return filesize of the stream in bytes.
+Set member variable.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_filesize(self):
+    &#34;&#34;&#34; Return filesize of the stream in bytes.  Set member variable. &#34;&#34;&#34;
+    if not self._fsize:
+
+        try:
+            dbg(&#34;Getting stream size&#34;)
+            cl = &#34;content-length&#34;
+            self._fsize = int(g.opener.open(self.url).headers[cl])
+            dbg(&#34;Got stream size&#34;)
+
+        except (AttributeError, HTTPError, URLError):
+            self._fsize = 0
+
+    return self._fsize</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="fastdub.youtube.pafy" href="index.html">fastdub.youtube.pafy</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="fastdub.youtube.pafy.backend_shared.extract_video_id" href="#fastdub.youtube.pafy.backend_shared.extract_video_id">extract_video_id</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.get_size_done" href="#fastdub.youtube.pafy.backend_shared.get_size_done">get_size_done</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.get_status_string" href="#fastdub.youtube.pafy.backend_shared.get_status_string">get_status_string</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.remux" href="#fastdub.youtube.pafy.backend_shared.remux">remux</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy" href="#fastdub.youtube.pafy.backend_shared.BasePafy">BasePafy</a></code></h4>
+<ul class="">
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.allstreams" href="#fastdub.youtube.pafy.backend_shared.BasePafy.allstreams">allstreams</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.audiostreams" href="#fastdub.youtube.pafy.backend_shared.BasePafy.audiostreams">audiostreams</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.author" href="#fastdub.youtube.pafy.backend_shared.BasePafy.author">author</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.bigthumb" href="#fastdub.youtube.pafy.backend_shared.BasePafy.bigthumb">bigthumb</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.bigthumbhd" href="#fastdub.youtube.pafy.backend_shared.BasePafy.bigthumbhd">bigthumbhd</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.category" href="#fastdub.youtube.pafy.backend_shared.BasePafy.category">category</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.description" href="#fastdub.youtube.pafy.backend_shared.BasePafy.description">description</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.dislikes" href="#fastdub.youtube.pafy.backend_shared.BasePafy.dislikes">dislikes</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.duration" href="#fastdub.youtube.pafy.backend_shared.BasePafy.duration">duration</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.getbest" href="#fastdub.youtube.pafy.backend_shared.BasePafy.getbest">getbest</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.getbestaudio" href="#fastdub.youtube.pafy.backend_shared.BasePafy.getbestaudio">getbestaudio</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.getbestthumb" href="#fastdub.youtube.pafy.backend_shared.BasePafy.getbestthumb">getbestthumb</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.getbestvideo" href="#fastdub.youtube.pafy.backend_shared.BasePafy.getbestvideo">getbestvideo</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.getworst" href="#fastdub.youtube.pafy.backend_shared.BasePafy.getworst">getworst</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.getworstaudio" href="#fastdub.youtube.pafy.backend_shared.BasePafy.getworstaudio">getworstaudio</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.getworstvideo" href="#fastdub.youtube.pafy.backend_shared.BasePafy.getworstvideo">getworstvideo</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.keywords" href="#fastdub.youtube.pafy.backend_shared.BasePafy.keywords">keywords</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.length" href="#fastdub.youtube.pafy.backend_shared.BasePafy.length">length</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.likes" href="#fastdub.youtube.pafy.backend_shared.BasePafy.likes">likes</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.m4astreams" href="#fastdub.youtube.pafy.backend_shared.BasePafy.m4astreams">m4astreams</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.mix" href="#fastdub.youtube.pafy.backend_shared.BasePafy.mix">mix</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.oggstreams" href="#fastdub.youtube.pafy.backend_shared.BasePafy.oggstreams">oggstreams</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.populate_from_playlist" href="#fastdub.youtube.pafy.backend_shared.BasePafy.populate_from_playlist">populate_from_playlist</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.published" href="#fastdub.youtube.pafy.backend_shared.BasePafy.published">published</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.rating" href="#fastdub.youtube.pafy.backend_shared.BasePafy.rating">rating</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.streams" href="#fastdub.youtube.pafy.backend_shared.BasePafy.streams">streams</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.thumb" href="#fastdub.youtube.pafy.backend_shared.BasePafy.thumb">thumb</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.title" href="#fastdub.youtube.pafy.backend_shared.BasePafy.title">title</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.username" href="#fastdub.youtube.pafy.backend_shared.BasePafy.username">username</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.videostreams" href="#fastdub.youtube.pafy.backend_shared.BasePafy.videostreams">videostreams</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.viewcount" href="#fastdub.youtube.pafy.backend_shared.BasePafy.viewcount">viewcount</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream" href="#fastdub.youtube.pafy.backend_shared.BaseStream">BaseStream</a></code></h4>
+<ul class="two-column">
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.bitrate" href="#fastdub.youtube.pafy.backend_shared.BaseStream.bitrate">bitrate</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.cancel" href="#fastdub.youtube.pafy.backend_shared.BaseStream.cancel">cancel</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.dimensions" href="#fastdub.youtube.pafy.backend_shared.BaseStream.dimensions">dimensions</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.download" href="#fastdub.youtube.pafy.backend_shared.BaseStream.download">download</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.extension" href="#fastdub.youtube.pafy.backend_shared.BaseStream.extension">extension</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.filename" href="#fastdub.youtube.pafy.backend_shared.BaseStream.filename">filename</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.generate_filename" href="#fastdub.youtube.pafy.backend_shared.BaseStream.generate_filename">generate_filename</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.get_filesize" href="#fastdub.youtube.pafy.backend_shared.BaseStream.get_filesize">get_filesize</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.itag" href="#fastdub.youtube.pafy.backend_shared.BaseStream.itag">itag</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.mediatype" href="#fastdub.youtube.pafy.backend_shared.BaseStream.mediatype">mediatype</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.notes" href="#fastdub.youtube.pafy.backend_shared.BaseStream.notes">notes</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.quality" href="#fastdub.youtube.pafy.backend_shared.BaseStream.quality">quality</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.rawbitrate" href="#fastdub.youtube.pafy.backend_shared.BaseStream.rawbitrate">rawbitrate</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.resolution" href="#fastdub.youtube.pafy.backend_shared.BaseStream.resolution">resolution</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.threed" href="#fastdub.youtube.pafy.backend_shared.BaseStream.threed">threed</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.title" href="#fastdub.youtube.pafy.backend_shared.BaseStream.title">title</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.url" href="#fastdub.youtube.pafy.backend_shared.BaseStream.url">url</a></code></li>
+<li><code><a title="fastdub.youtube.pafy.backend_shared.BaseStream.url_https" href="#fastdub.youtube.pafy.backend_shared.BaseStream.url_https">url_https</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

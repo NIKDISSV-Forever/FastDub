@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>fastdub.youtube.downloader API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>fastdub.youtube.downloader</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from __future__ import annotations
+
+import multiprocessing.pool
+import re
+from pathlib import Path
+from typing import Callable, Optional, TypeVar
+from urllib.parse import urlparse
+
+import rich.live
+import rich.table
+from tqdm import tqdm
+from youtubesearchpython import VideosSearch
+
+from fastdub import GlobalSettings, PrettyViewPrefix
+from fastdub.youtube import *
+from fastdub.youtube import pafy
+from fastdub.youtube.pafy import g as pafy_g
+from fastdub.youtube.subtitles import download_srt
+
+__all__ = (&#39;DownloadYTVideo&#39;, &#39;with_api_key&#39;)
+
+_API_RET_TYPE = TypeVar(&#39;_API_RET_TYPE&#39;)
+_PATH_SUPPORTED = re.compile(r&#39;[\\/:?&#34;&lt;&gt;|]+&#39;)
+
+
+def _path_save(name: str) -&gt; str:
+    return _PATH_SUPPORTED.sub(&#39;_&#39;, name)
+
+
+class DownloadYTVideo:
+    __slots__ = (&#39;save_dir&#39;, &#39;language&#39;, &#39;playlist&#39;, &#39;api_keys&#39;,
+                 &#39;download_title&#39;,
+                 &#39;_table_data&#39;, &#39;_live_progress&#39;)
+    API_KEYS = {pafy_g.api_key, &#39;AIzaSyCHxJ84-ryessLJfWZVWldiuVCnxtf0Nm4&#39;}
+    TABLE_TITLE_TEMPLATE = &#39;Downloading from [link=%(scheme)s://%(netloc)s]%(netloc)s[/]...&#39;
+
+    def __init__(self, query: str,
+                 language: str,
+                 search_limit: int = 20,
+                 region: str = &#39;US&#39;):
+        url_parsed = urlparse(query)
+        url_path = url_parsed.path
+        is_youtube = False
+        if query.startswith(&#39;?&#39;):
+            query = query.removeprefix(&#39;?&#39;)
+            is_youtube = True
+            videos = tqdm(VideosSearch(query, search_limit, language, region).result().get(&#39;result&#39;, ()),
+                          &#39;Video search processing&#39;, unit=&#39;video&#39;, colour=&#39;white&#39;, **GlobalSettings.tqdm_kwargs)
+            playlist = (
+                *(with_api_key(lambda: pafy.new(data[&#39;id&#39;]))
+                  for data in videos if data.get(&#39;type&#39;, &#39;&#39;) == &#39;video&#39;),)
+            save_dir = query
+        elif url_path == &#39;/playlist&#39;:
+            playlist = with_api_key(lambda: pafy.get_playlist2(query))
+            save_dir = f&#39;{playlist.title} [{playlist.plid}]&#39;
+        elif (path_split := url_path.strip(&#39;/&#39;).split(&#39;/&#39;)) and path_split[0] in (&#39;c&#39;, &#39;channel&#39;):
+            playlist = with_api_key(lambda: pafy.get_channel((path_split[1:] or (query,))[0]).uploads)
+            save_dir = f&#39;{playlist.title} [{playlist.plid}]&#39;
+        else:
+            playlist = with_api_key(lambda: (pafy.new(query),))
+            playlist_0 = playlist[0]
+            save_dir = f&#39;{playlist_0.title} [{playlist_0.videoid}]&#39;
+        save_dir = Path(_path_save(&#39; &#39;.join(save_dir.split(&#39; &#39;)[:-1]) if len(save_dir) &gt; 100 else save_dir))
+        save_dir.mkdir(parents=True, exist_ok=True)
+
+        self.save_dir = save_dir
+        self.language = language
+        self.playlist = playlist
+        self.download_title = self.TABLE_TITLE_TEMPLATE % (
+            {&#39;scheme&#39;: &#39;https&#39;, &#39;netloc&#39;: &#39;www.youtube.com&#39;} if is_youtube
+            else {&#39;scheme&#39;: url_parsed.scheme, &#39;netloc&#39;: url_parsed.netloc}
+        )
+
+    def download(self, yt_dl: YtdlPafy):
+        title: str = yt_dl.title.strip()
+        if len(title) &lt;= (97 - len(yt_dl.videoid)):
+            title += f&#39; [{yt_dl.videoid}]&#39;
+        save_to = self.save_dir / title
+
+        _file = Path(save_to)
+        srt_file = _file.with_suffix(&#39;.srt&#39;)
+        if not srt_file.is_file():
+            download_srt(yt_dl.videoid, self.language, srt_file)
+        mp4_file = _file.with_suffix(&#39;.mp4&#39;)
+        if not mp4_file.is_file():
+            try:
+                with_api_key(self.mp4_downloader(yt_dl, mp4_file))
+            except OSError:
+                pass
+
+    def mp4_downloader(self, yt_dl: YtdlPafy, mp4_file: str | Path):
+        mp4_file = str(mp4_file)
+        return lambda: yt_dl.getbest(&#39;mp4&#39;).download(mp4_file,
+                                                     quiet=True,
+                                                     callback=lambda *args: self.progress_callback(mp4_file, *args))
+
+    def multiprocessing_download(self, pc: int = None):
+        self._table_data = {}
+        self._live_progress = rich.live.Live(self._generate_info_table())
+
+        if pc is None:
+            pc = GlobalSettings.threads_count
+        with self._live_progress:
+            if pc &lt; 2:
+                for yt_dl in self.playlist:
+                    self.download(yt_dl)
+                return
+            with multiprocessing.pool.ThreadPool(pc) as pool:
+                pool.map(self.download, self.playlist)
+            self._live_progress.update(f&#39;{len(self.playlist)} downloaded.&#39;)
+
+    def progress_callback(self, fn: str, total: int, downloaded: float, ratio: float, rate: float, eta: float):
+        if ratio == 1.:
+            if fn in self._table_data:
+                del self._table_data[fn]
+            return
+        self._table_data[fn] = (
+            f&#39;\r{ratio:.2%}&#39;,
+            f&#39;{PrettyViewPrefix.from_bytes(downloaded)}/{PrettyViewPrefix.from_bytes(total)}&#39;,
+            f&#39;{PrettyViewPrefix.from_bytes(rate)}/s&#39;, PrettyViewPrefix.from_seconds(eta)
+        )
+        self._live_progress.update(self._generate_info_table())
+
+    def _generate_info_table(self):
+        _download_table = rich.table.Table(title=self.download_title,
+                                           show_lines=True,
+                                           highlight=True)
+        for header in (&#39;file name&#39;, &#39;%&#39;, &#39;downloaded/total&#39;, &#39;rate&#39;, &#39;ETA&#39;):
+            _download_table.add_column(header, justify=&#39;center&#39;)
+        for fn, v in self._table_data.items():
+            _download_table.add_row(fn, *v)
+        return _download_table
+
+
+def with_api_key(func: Callable[[], _API_RET_TYPE]) -&gt; Optional[_API_RET_TYPE]:
+    for key in DownloadYTVideo.API_KEYS:
+        pafy.set_api_key(key)
+        try:
+            return func()
+        except pafy.util.GdataError:
+            continue</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="fastdub.youtube.downloader.with_api_key"><code class="name flex">
+<span>def <span class="ident">with_api_key</span></span>(<span>func: Callable[[], _API_RET_TYPE]) ‑> Optional[~_API_RET_TYPE]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def with_api_key(func: Callable[[], _API_RET_TYPE]) -&gt; Optional[_API_RET_TYPE]:
+    for key in DownloadYTVideo.API_KEYS:
+        pafy.set_api_key(key)
+        try:
+            return func()
+        except pafy.util.GdataError:
+            continue</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="fastdub.youtube.downloader.DownloadYTVideo"><code class="flex name class">
+<span>class <span class="ident">DownloadYTVideo</span></span>
+<span>(</span><span>query: str, language: str, search_limit: int = 20, region: str = 'US')</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DownloadYTVideo:
+    __slots__ = (&#39;save_dir&#39;, &#39;language&#39;, &#39;playlist&#39;, &#39;api_keys&#39;,
+                 &#39;download_title&#39;,
+                 &#39;_table_data&#39;, &#39;_live_progress&#39;)
+    API_KEYS = {pafy_g.api_key, &#39;AIzaSyCHxJ84-ryessLJfWZVWldiuVCnxtf0Nm4&#39;}
+    TABLE_TITLE_TEMPLATE = &#39;Downloading from [link=%(scheme)s://%(netloc)s]%(netloc)s[/]...&#39;
+
+    def __init__(self, query: str,
+                 language: str,
+                 search_limit: int = 20,
+                 region: str = &#39;US&#39;):
+        url_parsed = urlparse(query)
+        url_path = url_parsed.path
+        is_youtube = False
+        if query.startswith(&#39;?&#39;):
+            query = query.removeprefix(&#39;?&#39;)
+            is_youtube = True
+            videos = tqdm(VideosSearch(query, search_limit, language, region).result().get(&#39;result&#39;, ()),
+                          &#39;Video search processing&#39;, unit=&#39;video&#39;, colour=&#39;white&#39;, **GlobalSettings.tqdm_kwargs)
+            playlist = (
+                *(with_api_key(lambda: pafy.new(data[&#39;id&#39;]))
+                  for data in videos if data.get(&#39;type&#39;, &#39;&#39;) == &#39;video&#39;),)
+            save_dir = query
+        elif url_path == &#39;/playlist&#39;:
+            playlist = with_api_key(lambda: pafy.get_playlist2(query))
+            save_dir = f&#39;{playlist.title} [{playlist.plid}]&#39;
+        elif (path_split := url_path.strip(&#39;/&#39;).split(&#39;/&#39;)) and path_split[0] in (&#39;c&#39;, &#39;channel&#39;):
+            playlist = with_api_key(lambda: pafy.get_channel((path_split[1:] or (query,))[0]).uploads)
+            save_dir = f&#39;{playlist.title} [{playlist.plid}]&#39;
+        else:
+            playlist = with_api_key(lambda: (pafy.new(query),))
+            playlist_0 = playlist[0]
+            save_dir = f&#39;{playlist_0.title} [{playlist_0.videoid}]&#39;
+        save_dir = Path(_path_save(&#39; &#39;.join(save_dir.split(&#39; &#39;)[:-1]) if len(save_dir) &gt; 100 else save_dir))
+        save_dir.mkdir(parents=True, exist_ok=True)
+
+        self.save_dir = save_dir
+        self.language = language
+        self.playlist = playlist
+        self.download_title = self.TABLE_TITLE_TEMPLATE % (
+            {&#39;scheme&#39;: &#39;https&#39;, &#39;netloc&#39;: &#39;www.youtube.com&#39;} if is_youtube
+            else {&#39;scheme&#39;: url_parsed.scheme, &#39;netloc&#39;: url_parsed.netloc}
+        )
+
+    def download(self, yt_dl: YtdlPafy):
+        title: str = yt_dl.title.strip()
+        if len(title) &lt;= (97 - len(yt_dl.videoid)):
+            title += f&#39; [{yt_dl.videoid}]&#39;
+        save_to = self.save_dir / title
+
+        _file = Path(save_to)
+        srt_file = _file.with_suffix(&#39;.srt&#39;)
+        if not srt_file.is_file():
+            download_srt(yt_dl.videoid, self.language, srt_file)
+        mp4_file = _file.with_suffix(&#39;.mp4&#39;)
+        if not mp4_file.is_file():
+            try:
+                with_api_key(self.mp4_downloader(yt_dl, mp4_file))
+            except OSError:
+                pass
+
+    def mp4_downloader(self, yt_dl: YtdlPafy, mp4_file: str | Path):
+        mp4_file = str(mp4_file)
+        return lambda: yt_dl.getbest(&#39;mp4&#39;).download(mp4_file,
+                                                     quiet=True,
+                                                     callback=lambda *args: self.progress_callback(mp4_file, *args))
+
+    def multiprocessing_download(self, pc: int = None):
+        self._table_data = {}
+        self._live_progress = rich.live.Live(self._generate_info_table())
+
+        if pc is None:
+            pc = GlobalSettings.threads_count
+        with self._live_progress:
+            if pc &lt; 2:
+                for yt_dl in self.playlist:
+                    self.download(yt_dl)
+                return
+            with multiprocessing.pool.ThreadPool(pc) as pool:
+                pool.map(self.download, self.playlist)
+            self._live_progress.update(f&#39;{len(self.playlist)} downloaded.&#39;)
+
+    def progress_callback(self, fn: str, total: int, downloaded: float, ratio: float, rate: float, eta: float):
+        if ratio == 1.:
+            if fn in self._table_data:
+                del self._table_data[fn]
+            return
+        self._table_data[fn] = (
+            f&#39;\r{ratio:.2%}&#39;,
+            f&#39;{PrettyViewPrefix.from_bytes(downloaded)}/{PrettyViewPrefix.from_bytes(total)}&#39;,
+            f&#39;{PrettyViewPrefix.from_bytes(rate)}/s&#39;, PrettyViewPrefix.from_seconds(eta)
+        )
+        self._live_progress.update(self._generate_info_table())
+
+    def _generate_info_table(self):
+        _download_table = rich.table.Table(title=self.download_title,
+                                           show_lines=True,
+                                           highlight=True)
+        for header in (&#39;file name&#39;, &#39;%&#39;, &#39;downloaded/total&#39;, &#39;rate&#39;, &#39;ETA&#39;):
+            _download_table.add_column(header, justify=&#39;center&#39;)
+        for fn, v in self._table_data.items():
+            _download_table.add_row(fn, *v)
+        return _download_table</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="fastdub.youtube.downloader.DownloadYTVideo.API_KEYS"><code class="name">var <span class="ident">API_KEYS</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fastdub.youtube.downloader.DownloadYTVideo.TABLE_TITLE_TEMPLATE"><code class="name">var <span class="ident">TABLE_TITLE_TEMPLATE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="fastdub.youtube.downloader.DownloadYTVideo.api_keys"><code class="name">var <span class="ident">api_keys</span></code></dt>
+<dd>
+<div class="desc"><p>Return an attribute of instance, which is of type owner.</p></div>
+</dd>
+<dt id="fastdub.youtube.downloader.DownloadYTVideo.download_title"><code class="name">var <span class="ident">download_title</span></code></dt>
+<dd>
+<div class="desc"><p>Return an attribute of instance, which is of type owner.</p></div>
+</dd>
+<dt id="fastdub.youtube.downloader.DownloadYTVideo.language"><code class="name">var <span class="ident">language</span></code></dt>
+<dd>
+<div class="desc"><p>Return an attribute of instance, which is of type owner.</p></div>
+</dd>
+<dt id="fastdub.youtube.downloader.DownloadYTVideo.playlist"><code class="name">var <span class="ident">playlist</span></code></dt>
+<dd>
+<div class="desc"><p>Return an attribute of instance, which is of type owner.</p></div>
+</dd>
+<dt id="fastdub.youtube.downloader.DownloadYTVideo.save_dir"><code class="name">var <span class="ident">save_dir</span></code></dt>
+<dd>
+<div class="desc"><p>Return an attribute of instance, which is of type owner.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="fastdub.youtube.downloader.DownloadYTVideo.download"><code class="name flex">
+<span>def <span class="ident">download</span></span>(<span>self, yt_dl: YtdlPafy)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def download(self, yt_dl: YtdlPafy):
+    title: str = yt_dl.title.strip()
+    if len(title) &lt;= (97 - len(yt_dl.videoid)):
+        title += f&#39; [{yt_dl.videoid}]&#39;
+    save_to = self.save_dir / title
+
+    _file = Path(save_to)
+    srt_file = _file.with_suffix(&#39;.srt&#39;)
+    if not srt_file.is_file():
+        download_srt(yt_dl.videoid, self.language, srt_file)
+    mp4_file = _file.with_suffix(&#39;.mp4&#39;)
+    if not mp4_file.is_file():
+        try:
+            with_api_key(self.mp4_downloader(yt_dl, mp4_file))
+        except OSError:
+            pass</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.downloader.DownloadYTVideo.mp4_downloader"><code class="name flex">
+<span>def <span class="ident">mp4_downloader</span></span>(<span>self, yt_dl: YtdlPafy, mp4_file: str | Path)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def mp4_downloader(self, yt_dl: YtdlPafy, mp4_file: str | Path):
+    mp4_file = str(mp4_file)
+    return lambda: yt_dl.getbest(&#39;mp4&#39;).download(mp4_file,
+                                                 quiet=True,
+                                                 callback=lambda *args: self.progress_callback(mp4_file, *args))</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.downloader.DownloadYTVideo.multiprocessing_download"><code class="name flex">
+<span>def <span class="ident">multiprocessing_download</span></span>(<span>self, pc: int = None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def multiprocessing_download(self, pc: int = None):
+    self._table_data = {}
+    self._live_progress = rich.live.Live(self._generate_info_table())
+
+    if pc is None:
+        pc = GlobalSettings.threads_count
+    with self._live_progress:
+        if pc &lt; 2:
+            for yt_dl in self.playlist:
+                self.download(yt_dl)
+            return
+        with multiprocessing.pool.ThreadPool(pc) as pool:
+            pool.map(self.download, self.playlist)
+        self._live_progress.update(f&#39;{len(self.playlist)} downloaded.&#39;)</code></pre>
+</details>
+</dd>
+<dt id="fastdub.youtube.downloader.DownloadYTVideo.progress_callback"><code class="name flex">
+<span>def <span class="ident">progress_callback</span></span>(<span>self, fn: str, total: int, downloaded: float, ratio: float, rate: float, eta: float)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def progress_callback(self, fn: str, total: int, downloaded: float, ratio: float, rate: float, eta: float):
+    if ratio == 1.:
+        if fn in self._table_data:
+            del self._table_data[fn]
+        return
+    self._table_data[fn] = (
+        f&#39;\r{ratio:.2%}&#39;,
+        f&#39;{PrettyViewPrefix.from_bytes(downloaded)}/{PrettyViewPrefix.from_bytes(total)}&#39;,
+        f&#39;{PrettyViewPrefix.from_bytes(rate)}/s&#39;, PrettyViewPrefix.from_seconds(eta)
+    )
+    self._live_progress.update(self._generate_info_table())</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="fastdub.youtube" href="index.html">fastdub.youtube</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="fastdub.youtube.downloader.with_api_key" href="#fastdub.youtube.downloader.with_api_key">with_api_key</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="fastdub.youtube.downloader.DownloadYTVideo" href="#fastdub.youtube.downloader.DownloadYTVideo">DownloadYTVideo</a></code></h4>
+<ul class="">
+<li><code><a title="fastdub.youtube.downloader.DownloadYTVideo.API_KEYS" href="#fastdub.youtube.downloader.DownloadYTVideo.API_KEYS">API_KEYS</a></code></li>
+<li><code><a title="fastdub.youtube.downloader.DownloadYTVideo.TABLE_TITLE_TEMPLATE" href="#fastdub.youtube.downloader.DownloadYTVideo.TABLE_TITLE_TEMPLATE">TABLE_TITLE_TEMPLATE</a></code></li>
+<li><code><a title="fastdub.youtube.downloader.DownloadYTVideo.api_keys" href="#fastdub.youtube.downloader.DownloadYTVideo.api_keys">api_keys</a></code></li>
+<li><code><a title="fastdub.youtube.downloader.DownloadYTVideo.download" href="#fastdub.youtube.downloader.DownloadYTVideo.download">download</a></code></li>
+<li><code><a title="fastdub.youtube.downloader.DownloadYTVideo.download_title" href="#fastdub.youtube.downloader.DownloadYTVideo.download_title">download_title</a></code></li>
+<li><code><a title="fastdub.youtube.downloader.DownloadYTVideo.language" href="#fastdub.youtube.downloader.DownloadYTVideo.language">language</a></code></li>
+<li><code><a title="fastdub.youtube.downloader.DownloadYTVideo.mp4_downloader" href="#fastdub.youtube.downloader.DownloadYTVideo.mp4_downloader">mp4_downloader</a></code></li>
+<li><code><a title="fastdub.youtube.downloader.DownloadYTVideo.multiprocessing_download" href="#fastdub.youtube.downloader.DownloadYTVideo.multiprocessing_download">multiprocessing_download</a></code></li>
+<li><code><a title="fastdub.youtube.downloader.DownloadYTVideo.playlist" href="#fastdub.youtube.downloader.DownloadYTVideo.playlist">playlist</a></code></li>
+<li><code><a title="fastdub.youtube.downloader.DownloadYTVideo.progress_callback" href="#fastdub.youtube.downloader.DownloadYTVideo.progress_callback">progress_callback</a></code></li>
+<li><code><a title="fastdub.youtube.downloader.DownloadYTVideo.save_dir" href="#fastdub.youtube.downloader.DownloadYTVideo.save_dir">save_dir</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
