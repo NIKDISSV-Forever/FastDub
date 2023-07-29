@@ -1,20 +1,21 @@
 from __future__ import annotations
 
+import logging
 import multiprocessing.pool
 import re
 from pathlib import Path
 from typing import Callable, Optional, TypeVar
 from urllib.parse import urlparse
 
+import pafy
 import rich.live
 import rich.table
+from pafy import g as pafy_g
 from tqdm import tqdm
 from youtubesearchpython import VideosSearch
 
 from fastdub import GlobalSettings, PrettyViewPrefix
 from fastdub.youtube import *
-from fastdub.youtube import pafy
-from fastdub.youtube.pafy import g as pafy_g
 from fastdub.youtube.subtitles import download_srt
 
 __all__ = ('DownloadYTVideo', 'with_api_key')
@@ -80,13 +81,17 @@ class DownloadYTVideo:
         _file = Path(save_to)
         srt_file = _file.with_suffix('.srt')
         if not srt_file.is_file():
-            download_srt(yt_dl.videoid, self.language, srt_file)
+            try:
+                download_srt(yt_dl.videoid, self.language, srt_file)
+            except KeyError as e:
+                logging.error(e)
+                return
         mp4_file = _file.with_suffix('.mp4')
         if not mp4_file.is_file():
             try:
                 with_api_key(self.mp4_downloader(yt_dl, mp4_file))
-            except OSError:
-                pass
+            except OSError as e:
+                logging.error(e)
 
     def mp4_downloader(self, yt_dl: YtdlPafy, mp4_file: str | Path):
         mp4_file = str(mp4_file)

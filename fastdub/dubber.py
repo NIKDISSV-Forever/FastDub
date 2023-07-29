@@ -6,12 +6,11 @@ import shutil
 from pathlib import Path
 from typing import Sequence
 
-import rich.align
 from tqdm import tqdm
 
 from fastdub import audio, subtitles, voicer, GlobalSettings
 from fastdub.audio import AudioSegment, calc_speed_change_ffmpeg_arg
-from fastdub.ffmpeg_wrapper import FFMpegWrapper
+from fastdub.ffmpeg_wrapper import FFmpegWrapper
 
 __all__ = ('Dubber', 'VOICER')
 
@@ -82,7 +81,7 @@ class Dubber:
         subs = subtitles.parse(target_sub)
         default_right_border = 0
         if target_vid and subs:
-            default_right_border = FFMpegWrapper.get_video_duration_ms(target_vid)
+            default_right_border = FFmpegWrapper.get_video_duration_ms(target_vid)
         default_right_border = max(default_right_border, end := subs[-1].ms.end)
         subs += Line(TimeLabel(default_right_border, end, end - default_right_border)),
 
@@ -133,7 +132,7 @@ class Dubber:
 
         temp_audio_file = str(out_audio_base.with_stem(f'_{out_audio_base.stem}'))
         logging.info('concatenating parts...')
-        FFMpegWrapper.convert('-f', 'concat', '-safe', '0', '-i', list_file, *ffmpeg_concat_args,
+        FFmpegWrapper.convert('-f', 'concat', '-safe', '0', '-i', list_file, *ffmpeg_concat_args,
                               temp_audio_file)
         cur_audio = audio.AudioSegment.from_file(temp_audio_file)
         shutil.rmtree(working_dir, ignore_errors=True)
@@ -148,17 +147,17 @@ class Dubber:
             cur_audio.export(temp_audio_file, format='wav')
             if self.ducking:
                 logging.info('sidechain')
-                FFMpegWrapper.sidechain(target_vid,
+                FFmpegWrapper.sidechain(target_vid,
                                         temp_audio_file,
                                         result_out_audio,
                                         self.sidechain_level_sc,
                                         self.sidechain_ffmpeg_params)
             else:
                 logging.info('amix')
-                FFMpegWrapper.amix(target_vid, temp_audio_file, out=result_out_audio)
+                FFmpegWrapper.amix(target_vid, temp_audio_file, out=result_out_audio)
                 # audio.AudioSegment.from_file(target_vid).overlay(cur_audio).export(result_out_audio)
             if export_video:
-                FFMpegWrapper.save_result_data(target_vid, result_out_audio, target_sub,
+                FFmpegWrapper.save_result_data(target_vid, result_out_audio, target_sub,
                                                result_dir / f'{fn}_{self.language}.mkv')
                 if cleanup_audio:
                     os.remove(result_out_audio)

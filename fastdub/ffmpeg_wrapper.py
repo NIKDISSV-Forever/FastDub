@@ -8,10 +8,10 @@ from subprocess import check_call, getoutput
 
 from fastdub import GlobalSettings
 
-__all__ = ('FFMpegWrapper', 'DefaultFFMpegParams')
+__all__ = ('FFmpegWrapper', 'DefaultFFmpegParams')
 
 
-class DefaultFFMpegParams:
+class DefaultFFmpegParams:
     __slots__ = ()
     ffmpeg_log_level = 'panic'
     args = ()
@@ -40,16 +40,16 @@ def _get_default_font_args() -> str:
     return ''
 
 
-class FFMpegWrapper:
+class FFmpegWrapper:
     __slots__ = ()
     DURATION_RE = re.compile(r'Duration: (\d\d):(\d\d):(\d\d\.\d\d)')
 
     @classmethod
     def convert(cls, *args, loglevel=None) -> int:
         if not loglevel:
-            loglevel = DefaultFFMpegParams.ffmpeg_log_level
+            loglevel = DefaultFFmpegParams.ffmpeg_log_level
         return check_call(
-            [str(i) for i in (DefaultFFMpegParams.executable, '-v', loglevel, *DefaultFFMpegParams.args, *args)])
+            [str(i) for i in (DefaultFFmpegParams.executable, '-v', loglevel, *DefaultFFmpegParams.args, *args)])
 
     @classmethod
     def get_video_duration_ms(cls, video_path: str | Path) -> float:
@@ -57,7 +57,7 @@ class FFMpegWrapper:
 
     @classmethod
     def get_video_duration_s(cls, video_path: str | Path) -> float:
-        found = cls.DURATION_RE.search(getoutput(f'{DefaultFFMpegParams.executable} -i {video_path}'))
+        found = cls.DURATION_RE.search(getoutput(f'{DefaultFFmpegParams.executable} -i {video_path}'))
         if not found:
             return 0.
         groups = found.groups()
@@ -95,7 +95,7 @@ class FFMpegWrapper:
     def sidechain(cls, background: str, foreground: str, out: str,
                   level_sc: float = 0.8, params: str = None):
         if params is None:
-            params = DefaultFFMpegParams.sidechain_args
+            params = DefaultFFmpegParams.sidechain_args
         return cls.convert('-i', background, '-i', foreground,
                            '-filter_complex',
                            '[1:a]asplit=2[sc][mix];'

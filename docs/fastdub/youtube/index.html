@@ -30,9 +30,10 @@
 
 __all__ = (&#39;SUPPORTED&#39;,)
 try:
+    from pafy.backend_youtube_dl import YtdlPafy
+
     from fastdub.youtube import downloader
     from fastdub.youtube import subtitles
-    from fastdub.youtube.pafy.backend_youtube_dl import YtdlPafy
 except ImportError as e:
     from typing import Any as YtdlPafy
 
@@ -46,10 +47,6 @@ else:
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
 <dt><code class="name"><a title="fastdub.youtube.downloader" href="downloader.html">fastdub.youtube.downloader</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="fastdub.youtube.pafy" href="pafy/index.html">fastdub.youtube.pafy</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -110,8 +107,8 @@ else:
         self._rating = self._ydl_info[&#39;average_rating&#39;]
         self._length = self._ydl_info[&#39;duration&#39;]
         self._viewcount = self._ydl_info[&#39;view_count&#39;]
-        self._likes = self._ydl_info.get(&#39;like_count&#39;, 0)
-        self._dislikes = self._ydl_info.get(&#39;dislike_count&#39;, 0)
+        self._likes = self._ydl_info[&#39;like_count&#39;]
+        self._dislikes = self._ydl_info[&#39;dislike_count&#39;]
         self._username = self._ydl_info[&#39;uploader_id&#39;]
         self._category = self._ydl_info[&#39;categories&#39;][0] if self._ydl_info[&#39;categories&#39;] else &#39;&#39;
         self._bestthumb = self._ydl_info[&#39;thumbnails&#39;][0][&#39;url&#39;]
@@ -150,45 +147,7 @@ else:
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="fastdub.youtube.pafy.backend_shared.BasePafy" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy">BasePafy</a></li>
-</ul>
-<h3>Inherited members</h3>
-<ul class="hlist">
-<li><code><b><a title="fastdub.youtube.pafy.backend_shared.BasePafy" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy">BasePafy</a></b></code>:
-<ul class="hlist">
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.allstreams" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.allstreams">allstreams</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.audiostreams" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.audiostreams">audiostreams</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.author" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.author">author</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.bigthumb" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.bigthumb">bigthumb</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.bigthumbhd" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.bigthumbhd">bigthumbhd</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.category" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.category">category</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.description" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.description">description</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.dislikes" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.dislikes">dislikes</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.duration" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.duration">duration</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.getbest" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.getbest">getbest</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.getbestaudio" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.getbestaudio">getbestaudio</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.getbestthumb" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.getbestthumb">getbestthumb</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.getbestvideo" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.getbestvideo">getbestvideo</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.getworst" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.getworst">getworst</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.getworstaudio" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.getworstaudio">getworstaudio</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.getworstvideo" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.getworstvideo">getworstvideo</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.keywords" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.keywords">keywords</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.length" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.length">length</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.likes" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.likes">likes</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.m4astreams" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.m4astreams">m4astreams</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.mix" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.mix">mix</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.oggstreams" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.oggstreams">oggstreams</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.populate_from_playlist" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.populate_from_playlist">populate_from_playlist</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.published" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.published">published</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.rating" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.rating">rating</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.streams" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.streams">streams</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.thumb" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.thumb">thumb</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.title" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.title">title</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.username" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.username">username</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.videostreams" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.videostreams">videostreams</a></code></li>
-<li><code><a title="fastdub.youtube.pafy.backend_shared.BasePafy.viewcount" href="pafy/backend_shared.html#fastdub.youtube.pafy.backend_shared.BasePafy.viewcount">viewcount</a></code></li>
-</ul>
-</li>
+<li>pafy.backend_shared.BasePafy</li>
 </ul>
 </dd>
 </dl>
@@ -208,7 +167,6 @@ else:
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
 <li><code><a title="fastdub.youtube.downloader" href="downloader.html">fastdub.youtube.downloader</a></code></li>
-<li><code><a title="fastdub.youtube.pafy" href="pafy/index.html">fastdub.youtube.pafy</a></code></li>
 <li><code><a title="fastdub.youtube.subtitles" href="subtitles.html">fastdub.youtube.subtitles</a></code></li>
 <li><code><a title="fastdub.youtube.yt_upload" href="yt_upload/index.html">fastdub.youtube.yt_upload</a></code></li>
 </ul>

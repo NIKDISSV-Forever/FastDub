@@ -7,7 +7,7 @@ from typing import NamedTuple
 
 from chardet import detect as detect_encoding
 
-from fastdub.ffmpeg_wrapper import FFMpegWrapper
+from fastdub.ffmpeg_wrapper import FFmpegWrapper
 
 __all__ = ('LINE_REGEX',
            'Line', 'TimeLabel',
@@ -73,7 +73,7 @@ def parse(text_or_file: str, skip_empty: bool = False) -> tuple[Line] | tuple:
         fn, ext = os.path.splitext(text_or_file)
         if ext != '.srt':
             converted = f'{fn}.srt'
-            FFMpegWrapper.convert('-i', text_or_file, converted)
+            FFmpegWrapper.convert('-i', text_or_file, converted)
             text_or_file = converted
         text = _read_file(text_or_file)
     else:

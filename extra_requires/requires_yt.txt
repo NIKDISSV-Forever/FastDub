@@ -1,3 +1,4 @@
 download-youtube-subtitle
 youtube-search-python
 youtube-dl
+pafy

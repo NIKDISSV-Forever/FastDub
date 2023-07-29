@@ -1,7 +1,9 @@
+import logging
 from pathlib import Path
 from typing import Callable
 
-from fastdub.youtube import pafy
+import pafy
+
 from fastdub.youtube.downloader import with_api_key
 from fastdub.youtube.yt_upload.upload_video import upload
 
@@ -27,8 +29,8 @@ class Uploader:
             ytdl = None
             try:
                 ytdl = with_api_key(lambda: pafy.new(name))
-            except (OSError, ValueError):
-                pass
+            except (OSError, ValueError) as e:
+                logging.error(e)
             if ytdl:
                 title = ytdl.title
                 description = ytdl.description

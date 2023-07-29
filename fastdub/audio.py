@@ -7,7 +7,7 @@ from tempfile import TemporaryDirectory
 
 import pydub.silence
 
-from fastdub.ffmpeg_wrapper import FFMpegWrapper
+from fastdub.ffmpeg_wrapper import FFmpegWrapper
 
 __all__ = ('AudioSegment',
            'speed_change', 'calc_speed_change_ffmpeg_arg',
@@ -41,7 +41,7 @@ def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = T
         inp = os.path.join(tmp, 'inp.wav')
         audio.export(inp)
         out = os.path.join(tmp, 'out.wav')
-        FFMpegWrapper.convert('-i', inp,
+        FFmpegWrapper.convert('-i', inp,
                               '-af', calc_speed_change_ffmpeg_arg(speed_changes),
                               out, loglevel=log_level)
         return AudioSegment.from_file(out)
@@ -50,7 +50,7 @@ def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = T
 def calc_speed_change_ffmpeg_arg(speed_changes: float) -> str:
     """
     The given function takes in a float value representing the speed change
-    and returns a corresponding FFMpeg argument string for changing the speed of an audio or video file.
+    and returns a corresponding FFmpeg argument string for changing the speed of an audio or video file.
     """
     if .5 <= speed_changes <= 100.:
         return f'atempo={speed_changes}'

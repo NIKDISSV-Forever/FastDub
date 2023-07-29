@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import time
 from math import modf
 from pathlib import Path
@@ -16,8 +17,8 @@ def find_caption_num(video_id: str, lang_code: str) -> int | None:
     video_id = down_yt_subs.parseVideoID(video_id)[0]
     try:
         caption_tracks = down_yt_subs.get_tracks_title(video_id)[0]
-    except Exception:
-        down_yt_subs.perr("can't retrive caption")
+    except Exception as e:
+        logging.error(e)
         raise
     for i, caption in enumerate(caption_tracks):
         if caption.get('languageCode') == lang_code:

@@ -1,3 +1,5 @@
+# FastDub
+
 Package for voice over subtitles:
 
 * with the ability to embed in video,
@@ -84,22 +86,19 @@ _client_secrets.json_
 
 ```
 usage: fastdub [-h] [-rc {0,1,2}] [-ra | --cleanup-audio | -n-ra | --no-cleanup-audio] [-ev | --export-video | -n-ev | --no-export-video]
-               [-l LANGUAGE] [-tc THREADS_COUNT] -i INPUT [-vf VIDEO_FORMAT] [-sf SUBTITLES_FORMAT] [-En EXCLUDE [EXCLUDE ...]]
-               [-Eu EXCLUDE_UNDERSCORE] [-sc | --sidechain | -n-sc | --no-sidechain] [-sc-args SIDECHAIN_FFMPEG_PARAMS]
-               [-sc-lvl SIDECHAIN_LEVEL_SC]
-               [-v {microsoft irina desktop - russian,microsoft zira desktop - english united states),microsoft david desktop - english (united s
-tates,aleksandr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,vsevolod,yuriy}]       
-               [-a ALIGN] [-v-set-a VOICE_SET_ANCHOR] [-ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}]
+               [-l LANGUAGE] [-ll {CRITICAL,FATAL,ERROR,WARN,WARNING,INFO,DEBUG,NOTSET}] [-tc THREADS_COUNT] -i INPUT [-vf VIDEO_FORMAT]
+               [-sf SUBTITLES_FORMAT] [-En EXCLUDE [EXCLUDE ...]] [-Eu EXCLUDE_UNDERSCORE] [-sc | --sidechain | -n-sc | --no-sidechain]
+               [-sc-args SIDECHAIN_FFMPEG_PARAMS] [-sc-lvl SIDECHAIN_LEVEL_SC]
+               [-v {...}]
+               [-a ALIGN] [-v-set-a VOICE_SET_ANCHOR] [-fll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}]
                [-y | --confirm | -n-y | --no-confirm] [-af AUDIO_FORMAT] [-wm WATERMARK] [-tb | --traceback | -n-tb | --no-traceback] [-yt]      
                [-ak API_KEYS [API_KEYS ...]] [-yts] [-yts-l YOUTUBE_SEARCH_LIMIT] [-yts-rg YOUTUBE_SEARCH_REGION] [-ytu]
                [-ytu-ps {private,public,unlisted}] [-ytu-t] [-tr] [--rewrite-srt | --no-rewrite-srt]
-               [-ts {alibaba,apertium,argos,baidu,bing,caiyun,cloudYi,deepl,elia,google,iciba,iflytek,iflyrec,itranslate,judic,languageWire,lingv
-anex,niutrans,mglip,modernMt,myMemory,papago,qqFanyi,qqTranSmart,reverso,sogou,sysTran,tilde,translateCom,translateMe,utibet,volcEngine,yandex,ye
-ekit,youdao}]
+               [-ts {...}]
 
 fastdub is a tool for dubbing videos by subtitle files.
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -rc {0,1,2}, --remove-cache {0,1,2}
                         Remove all cache (_cached_texts directory) files
@@ -111,6 +110,8 @@ options:
   -ev, --export-video, -n-ev, --no-export-video
   -l LANGUAGE, --language LANGUAGE
                         Subtitles language (ru)
+  -ll {CRITICAL,FATAL,ERROR,WARN,WARNING,INFO,DEBUG,NOTSET}, --loglevel {CRITICAL,FATAL,ERROR,WARN,WARNING,INFO,DEBUG,NOTSET}
+                        Program log level
   -tc THREADS_COUNT, --threads-count THREADS_COUNT
                         Process count to download (pass to cpu count, < 2 to disable)
                                 *N = N * cpu count
@@ -133,15 +134,12 @@ Audio Ducking:
   -sc, --sidechain, -n-sc, --no-sidechain
                         Enable audio side chain compress (ducking) (default: True)
   -sc-args SIDECHAIN_FFMPEG_PARAMS, --sidechain-ffmpeg-params SIDECHAIN_FFMPEG_PARAMS
-                        sidechain FFMpeg parameters (default '')
+                        sidechain FFmpeg parameters (default '')
   -sc-lvl SIDECHAIN_LEVEL_SC, --sidechain-level-sc SIDECHAIN_LEVEL_SC
                         Set sidechain gain. Range is between 0.015625 and 64. (default 0.8)
 
 Voicer:
-  -v {microsoft irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksa
-ndr-hq,arina,artemiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,vsevolod,yuriy}, --voice {microsoft
- irina desktop - russian,microsoft zira desktop - english (united states),microsoft david desktop - english (united states),aleksandr-hq,arina,ar
-temiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vitaliy,volodymyr,vsevolod,yuriy}
+  -v {...}, --voice {...}
                         SAPI voice for voice acting.
   -a ALIGN, --align ALIGN
                         Audio fit align (divisor)
@@ -150,9 +148,9 @@ temiy,evgeniy-eng,evgeniy-rus,lyubov,marianna,mikhail,pavel,tatiana,victoria,vit
   -v-set-a VOICE_SET_ANCHOR, --voice-set-anchor VOICE_SET_ANCHOR
                         Anchor indicating voice actor change (default "!:")
 
-FFMpeg Output:
-  -ll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}, --loglevel {trace,debug,verbose,info,warning,error,fatal,panic,quiet}
-                        FFMpegWrapper loglevel
+FFmpeg Output:
+  -fll {trace,debug,verbose,info,warning,error,fatal,panic,quiet}, --ffmpeg-loglevel {trace,debug,verbose,info,warning,error,fatal,panic,quiet}  
+                        FFmpegWrapper loglevel
   -y, --confirm, -n-y, --no-confirm
                         Don't ask for confirmation (default: True)
   -af AUDIO_FORMAT, --audio-format AUDIO_FORMAT
@@ -190,11 +188,7 @@ Translate:
   --rewrite-srt, --no-rewrite-srt
                         Rewrite input subtitles files.
                         If not, add "_" to the beginning of the original subtitle file. (default: False)
-  -ts {alibaba,apertium,argos,baidu,bing,caiyun,cloudYi,deepl,elia,google,iciba,iflytek,iflyrec,itranslate,judic,languageWire,lingvanex,niutrans,
-mglip,modernMt,myMemory,papago,qqFanyi,qqTranSmart,reverso,sogou,sysTran,tilde,translateCom,translateMe,utibet,volcEngine,yandex,yeekit,youdao}, 
---translate-service {alibaba,apertium,argos,baidu,bing,caiyun,cloudYi,deepl,elia,google,iciba,iflytek,iflyrec,itranslate,judic,languageWire,lingv
-anex,niutrans,mglip,modernMt,myMemory,papago,qqFanyi,qqTranSmart,reverso,sogou,sysTran,tilde,translateCom,translateMe,utibet,volcEngine,yandex,ye
-ekit,youdao}
+  -ts {...}, --translate-service {...}
                         Subtitle translation service. (default google)
 ```
 
@@ -231,7 +225,5 @@ Default service is Google.
 ## Other
 
 ### The `fastdub.utils` module stores helper functions.
-
-### python -m pydoc -w fastdub
 
 ### You can write your issues on [GitHub](https://github.com/NIKDISSV-Forever/fastdub/issues) in English or in Russian.

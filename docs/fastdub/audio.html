@@ -35,7 +35,7 @@ from tempfile import TemporaryDirectory
 
 import pydub.silence
 
-from fastdub.ffmpeg_wrapper import FFMpegWrapper
+from fastdub.ffmpeg_wrapper import FFmpegWrapper
 
 __all__ = (&#39;AudioSegment&#39;,
            &#39;speed_change&#39;, &#39;calc_speed_change_ffmpeg_arg&#39;,
@@ -69,7 +69,7 @@ def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = T
         inp = os.path.join(tmp, &#39;inp.wav&#39;)
         audio.export(inp)
         out = os.path.join(tmp, &#39;out.wav&#39;)
-        FFMpegWrapper.convert(&#39;-i&#39;, inp,
+        FFmpegWrapper.convert(&#39;-i&#39;, inp,
                               &#39;-af&#39;, calc_speed_change_ffmpeg_arg(speed_changes),
                               out, loglevel=log_level)
         return AudioSegment.from_file(out)
@@ -78,7 +78,7 @@ def speed_change(audio: AudioSegment, speed_changes: float, allow_copy: bool = T
 def calc_speed_change_ffmpeg_arg(speed_changes: float) -&gt; str:
     &#34;&#34;&#34;
     The given function takes in a float value representing the speed change
-    and returns a corresponding FFMpeg argument string for changing the speed of an audio or video file.
+    and returns a corresponding FFmpeg argument string for changing the speed of an audio or video file.
     &#34;&#34;&#34;
     if .5 &lt;= speed_changes &lt;= 100.:
         return f&#39;atempo={speed_changes}&#39;
@@ -113,7 +113,7 @@ def fit(audio: AudioSegment,
 </code></dt>
 <dd>
 <div class="desc"><p>The given function takes in a float value representing the speed change
-and returns a corresponding FFMpeg argument string for changing the speed of an audio or video file.</p></div>
+and returns a corresponding FFmpeg argument string for changing the speed of an audio or video file.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -121,7 +121,7 @@ and returns a corresponding FFMpeg argument string for changing the speed of an 
 <pre><code class="python">def calc_speed_change_ffmpeg_arg(speed_changes: float) -&gt; str:
     &#34;&#34;&#34;
     The given function takes in a float value representing the speed change
-    and returns a corresponding FFMpeg argument string for changing the speed of an audio or video file.
+    and returns a corresponding FFmpeg argument string for changing the speed of an audio or video file.
     &#34;&#34;&#34;
     if .5 &lt;= speed_changes &lt;= 100.:
         return f&#39;atempo={speed_changes}&#39;
@@ -173,7 +173,7 @@ and returns a corresponding FFMpeg argument string for changing the speed of an 
         inp = os.path.join(tmp, &#39;inp.wav&#39;)
         audio.export(inp)
         out = os.path.join(tmp, &#39;out.wav&#39;)
-        FFMpegWrapper.convert(&#39;-i&#39;, inp,
+        FFmpegWrapper.convert(&#39;-i&#39;, inp,
                               &#39;-af&#39;, calc_speed_change_ffmpeg_arg(speed_changes),
                               out, loglevel=log_level)
         return AudioSegment.from_file(out)</code></pre>

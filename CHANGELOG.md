@@ -1,149 +1,171 @@
+# 3.8.0
+
+## General
+
+- `changelog` has been translated into English.
+- Added `logging.error`
+
+## FFmpeg Wrapper
+
+- `ffmpeg_wrapper` module objects renamed according to PEP-8
+  (`FFMpeg` to `FFmpeg`)
+
+## Translator
+
+- `translator.get_service_by_name` is now a valid function even if required dependencies are not installed, in which
+  case if call it will raise `KeyError`
+
+## YouTube
+
+- dependency `pafy` added to `extra_requires/requires_yt.txt`
+
 # 3.7.0
 
 ## General
 
-- **Изменена минимальная поддерживаемая версия Python c 3.8 на 3.9**
+- **Changed minimum supported Python version from 3.8 to 3.9**
 
 ## CLI
 
-- Исправлен баг с `logging.getLevelNamesMapping()` в `__main__.py`
+- Fixed bug with `logging.getLevelNamesMapping()` in `__main__.py`
 
 # 3.6.0
 
 ## General
 
-- Использован пакет `logging`
+- Package `logging` used
 - Bugfix
-- Оптимизации
+- optimization
 
 ## Audio Processing
 
-- sidechain теперь намного быстрее, используя FFMpeg
+- `sidechain` is now much faster using `ffmpeg`
 
-## FFMpeg Wrapper
+## FFmpeg Wrapper
 
-- Более не используется библиотека `ffmpeg-imageio`, вместо этого всегда вызывается команда `ffmpeg`
+- The `ffmpeg-imageio` library is no longer used, instead the `ffmpeg` command is always called
 
 ## CLI
 
-- Аргумент `--sidechain-ffmpeg-params` см. [FFMpeg Documentation](https://ffmpeg.org/ffmpeg-all.html#sidechaincompress)
-- Отдельный `--sidechain-level-sc` см. `level_sc` выше.
-- `-ll` теперь loglevel программы, а loglevel ffmpeg теперь `-fll`
+- Argument `--sidechain-ffmpeg-params` see [FFmpeg Documentation](https://ffmpeg.org/ffmpeg-all.html#sidechaincompress)
+- Separate `--sidechain-level-sc` see `level_sc` higher.
+- `-ll` is now program loglevel and ffmpeg loglevel is now `-fll`
 
 # 3.5.2
 
 ## Translator
 
-- Теперь не вызовет ошибки при отсутствии интернета.
+- Now it will not cause an error in the absence of the Internet.
 
 ## Subtitles
 
-- Исправлены возможные различия формата .srt (возможная `.` вместо `,`)
+- Fixed possible .srt format differences (now `.` is allowed instead of `,`)
 
 # 3.5.1
 
 ## Subtitles
 
-- Исправлены возможные проблемы с разными кодировками (добавлен модуль `chardet`)
+- Fixed possible problems with different encodings (added `chardet` module)
 
 # 3.5.0
 
 ## Voiceover Process
 
-- Добавлен аргумент `--export-video` (`-ev`): `BooleanOptionalAction`, если `False` (`--no-export-video`, `-n-ev`)
-  экспортирует только аудио
+- Added argument `--export-video` (`-ev`): `BooleanOptionalAction` if `False` (`--no-export-video`, `-n-ev`)
+  only exports audio
 
 # 3.4.2
 
-- Незначительные улучшения и оптимизации.
+- Minor improvements and optimizations.
 
 ## Subtitles
 
-- Класс `TimeLabel` теперь не является подклассом `Line`
+- The `TimeLabel` class is no longer a subclass of `Line`
 
 # 3.4.1
 
-- Исправлена документация
+- Fixed documentation
 
 # 3.4.0
 
 ## General
 
-- Добавлена возможность накладывания водяного знака на видео (см. аргумент `--watermark`)
+- Added the ability to apply a watermark to the video (see the `--watermark` argument)
 
 ## CLI
 
 - Bugfix
-- Аргумент `--watermark`. В него передаётся текст водяного знака.
-- Теперь, при запуске с консоли, показывается мини-баннер FastDub.
+- The `--watermark` argument. The text of the watermark is passed to it.
+- Now, when launched from the console, the FastDub mini-banner is shown.
 
 ## Voiceover Process
 
 - Bugfix
-- Теперь подогнанное аудио (которое начинается на '_') всегда удаляется, т.к это временный файл
+- Now fitted audio (which starts with '_') is always deleted as it's a temporary file
 
-## FFMpeg Wrapper
+## FFmpeg Wrapper
 
-- Добавлен метод класса `FFMpegWrapper.get_video_duration_s`, который используется
-  в `FFMpegWrapper.get_video_duration_ms`
-- В видео результат включаются: озвученное аудио, оригинальное аудио, субтитры, оригинальные субтитры (если есть)
+- Added class method `FFmpegWrapper.get_video_duration_s`
+  which is used in `FFmpegWrapper.get_video_duration_ms`
+- The video result includes: dubbed audio, original audio, subtitles, original subtitles (if any)
 
 ## Submodules
 
 ### Translator
 
-- Теперь используется последняя версия модула translators
+- The latest version of the translators module is now used
 
 # 3.3.0
 
 ## General
 
-- Реализован класс `GlobalSettings`
+- Implemented class `GlobalSettings`
 
 ## Audio Processing
 
-- Функция `calc_speed_change_ffmpeg_arg` по расчету аргумента `-af` ffmpeg для изменения скорости изменена.
+- The `calc_speed_change_ffmpeg_arg` function for calculating the `-af` ffmpeg argument
+  for speed change has been changed.
 
-  Значительно ускорена с применением другого алгоритма.
+- Significantly accelerated using a different algorithm.
 
-- Оптимизирована функция `side_chain`.
+- Optimized `side_chain` function.
 
 ## Voiceover Process
 
-- Подгон длины аудио и TTS теперь объеденины в один процесс для увеличения производительности.
-- Теперь создаётся подпапка `_result/_working_dir` в которой сохраняются отдельные уже подогнанные строки субтитров.
-  После чего все части склеиваются ffmpeg-ом.
-  Значительно уменьшено потребление памяти.
-- `moviepy` больше не является зависимость, вместо этого парсится вывод ffmpeg
+- Audio length trimming and TTS are now combined into one process to increase performance.
+- Now a subfolder `_result_working_dir` is created in which separate already fitted subtitle lines are saved, after
+  which all parts are glued together with ffmpeg.
+  Due to this, memory consumption is significantly reduced.
+- `moviepy` is no longer a dependency, ffmpeg output is parsed instead
 
-## FFMpeg Wrapper
+## FFmpeg Wrapper
 
-- Теперь все аргументы преобразуются в строки перед вызовом `check_call`
+- Now all arguments are converted to strings before calling `check_call`
 
 # 3.2.0
 
 ## CLI
 
-- Опущены необязательные `type=str` аргументы.
-- Изменена логика `BooleanOptionalAction`, теперь доступно как `--no-` так и `-n-` отрицание.
-- Аргумент `--cleanup-audio` теперь `BooleanOptionalAction` (по умолчанию `True`), `--cleanup-level` удалён.
-- Аргумент `--voice-set-anchor` (по умолчанию так же `!:`).
-- Аргумент `--audio-format` для выходного аудио (по умолчанию `wav`).
-- Аргумент `--sidechain` переименован в `--side-chain`.
-- Добавлено сокращение аргументу `--traceback` - `-tb`.
+- Omitted optional `type=str` arguments.
+- Changed `BooleanOptionalAction` logic, both `--no-` and `-n-` negation are now available.
+- The `--cleanup-audio` argument is now `BooleanOptionalAction` (default `True`), `--cleanup-level` has been removed.
+- Argument `--voice-set-anchor` (also `!:` by default).
+- `--audio-format` argument for output audio (default `wav`).
+- The `--sidechain` argument has been renamed to `--side-chain`.
+- Added shorthand to `--traceback` argument - `-tb`.
 
 ## Voiceover Process
 
 - Bugfix.
-- Оптимизация подгона длительности дорожек (Fitting-а).
+- Optimization of track length fitting (Fitting).
 
 ## TTS
 
-- `anchor` аргумент (см. `--voice-set-anchor`).
-- Оптимизация смены голосов.
+- `anchor` argument (see `--voice-set-anchor`).
+- Voice change optimization.
 
 ## Submodules
 
 ### YouTube
 
-- При multi-загрузке полностью загруженные видео удаляются с экрана (чтоб не занимать зря место).
+- When multi-loading, fully loaded videos are removed from the screen (so as not to take up space in vain).

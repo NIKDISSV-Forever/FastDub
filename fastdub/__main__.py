@@ -12,7 +12,7 @@ import rich.traceback
 
 import fastdub.youtube
 from fastdub import GlobalSettings, PrettyViewPrefix, dubber, translator, voicer, youtube
-from fastdub.ffmpeg_wrapper import DefaultFFMpegParams
+from fastdub.ffmpeg_wrapper import DefaultFFmpegParams
 from fastdub.translator.subs_translate import SrtTranslate
 
 __all__ = ('parse_args', 'main')
@@ -100,8 +100,8 @@ def parse_args() -> argparse.Namespace:
     ducking_group = arg_parser.add_argument_group('Audio Ducking')
     ducking_group.add_argument('-sc', '--sidechain', action=BooleanOptionalAction, default=True,
                                help='Enable audio side chain compress (ducking)')
-    ducking_group.add_argument('-sc-args', '--sidechain-ffmpeg-params', default=DefaultFFMpegParams.sidechain_args,
-                               help=f'sidechain FFMpeg parameters (default {DefaultFFMpegParams.sidechain_args!r})')
+    ducking_group.add_argument('-sc-args', '--sidechain-ffmpeg-params', default=DefaultFFmpegParams.sidechain_args,
+                               help=f'sidechain FFmpeg parameters (default {DefaultFFmpegParams.sidechain_args!r})')
     ducking_group.add_argument('-sc-lvl', '--sidechain-level-sc', type=float, default=.8,
                                help='Set sidechain gain. Range is between 0.015625 and 64. (default 0.8)')
 
@@ -115,11 +115,11 @@ def parse_args() -> argparse.Namespace:
     voicer_group.add_argument('-v-set-a', '--voice-set-anchor', default='!:',
                               help='Anchor indicating voice actor change (default "!:")')
 
-    ffmpeg_group = arg_parser.add_argument_group('FFMpeg Output')
+    ffmpeg_group = arg_parser.add_argument_group('FFmpeg Output')
     ffmpeg_group.add_argument('-fll', '--ffmpeg-loglevel', default='panic',
                               choices=(
                                   'trace', 'debug', 'verbose', 'info', 'warning', 'error', 'fatal', 'panic', 'quiet'),
-                              help='FFMpegWrapper loglevel')
+                              help='FFmpegWrapper loglevel')
     ffmpeg_group.add_argument('-y', '--confirm', action=BooleanOptionalAction, default=True,
                               help="Don't ask for confirmation")
     ffmpeg_group.add_argument('-af', '--audio-format', default='wav',
@@ -192,11 +192,11 @@ def main():
         dubber.VOICER.cleanup()
 
     GlobalSettings.watermark = args.watermark
-    DefaultFFMpegParams.ffmpeg_log_level = args.ffmpeg_loglevel
+    DefaultFFmpegParams.ffmpeg_log_level = args.ffmpeg_loglevel
 
     total_time = 0
     if args.confirm:
-        DefaultFFMpegParams.args += '-y',
+        DefaultFFmpegParams.args += '-y',
         total_time = perf_counter()
 
     if THREADS_MAY_NEED:
